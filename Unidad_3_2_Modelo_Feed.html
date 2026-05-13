@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modelo Feed up / Feed back / Feed forward - Unidad 3.2</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f4f8; color: #2d3748; line-height: 1.6; }
+        .container { max-width: 940px; margin: 0 auto; padding: 20px; }
+
+        .header {
+            background: linear-gradient(135deg, #2b6cb0, #553c9a);
+            color: white; padding: 36px; border-radius: 16px;
+            text-align: center; margin-bottom: 30px;
+        }
+        .header h1 { font-size: 1.7em; margin-bottom: 8px; }
+        .header p { font-size: 0.92em; opacity: 0.9; }
+
+        .section { background: white; border-radius: 14px; padding: 28px; margin-bottom: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); }
+        .section h2 { font-size: 1.3em; margin-bottom: 16px; color: #2b6cb0; }
+
+        /* Cycle diagram */
+        .cycle-container {
+            display: flex; justify-content: center; align-items: center;
+            gap: 0; margin: 24px 0; flex-wrap: wrap;
+        }
+        .cycle-phase {
+            width: 260px; padding: 24px 20px; border-radius: 14px;
+            text-align: center; color: white; position: relative;
+        }
+        .cycle-phase h3 { font-size: 1.15em; margin-bottom: 4px; }
+        .cycle-phase .question { font-size: 1em; font-style: italic; opacity: 0.9; margin-bottom: 8px; }
+        .cycle-phase .desc { font-size: 0.82em; opacity: 0.88; }
+
+        .phase-feedup { background: linear-gradient(135deg, #2b6cb0, #3182ce); }
+        .phase-feedback { background: linear-gradient(135deg, #276749, #38a169); }
+        .phase-feedforward { background: linear-gradient(135deg, #553c9a, #805ad5); }
+
+        .cycle-arrow {
+            font-size: 2em; color: #718096; padding: 0 8px;
+            display: flex; align-items: center;
+        }
+
+        /* Template section */
+        .template-container {
+            display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px;
+            margin: 20px 0;
+        }
+        .template-box {
+            border-radius: 12px; padding: 20px; min-height: 140px;
+        }
+        .template-feedup {
+            background: #ebf8ff; border: 2px dashed #3182ce;
+        }
+        .template-feedup .tpl-title { color: #2b6cb0; }
+        .template-feedback {
+            background: #f0fff4; border: 2px dashed #38a169;
+        }
+        .template-feedback .tpl-title { color: #276749; }
+        .template-feedforward {
+            background: #faf5ff; border: 2px dashed #805ad5;
+        }
+        .template-feedforward .tpl-title { color: #553c9a; }
+
+        .tpl-title { font-weight: 700; font-size: 0.95em; margin-bottom: 8px; }
+        .tpl-formula { font-size: 0.82em; color: #4a5568; font-style: italic; margin-bottom: 8px; }
+        .tpl-space {
+            background: white; border-radius: 6px; padding: 10px;
+            font-size: 0.8em; color: #a0aec0; min-height: 50px;
+            border: 1px solid #e2e8f0;
+        }
+
+        /* Discipline examples */
+        .discipline-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+        .discipline-card {
+            border-radius: 12px; padding: 20px;
+            background: white; border: 1px solid #e2e8f0;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+        }
+        .discipline-card h4 {
+            font-size: 0.95em; margin-bottom: 12px; padding-bottom: 8px;
+            border-bottom: 2px solid;
+        }
+        .disc-ciencias h4 { border-color: #38a169; color: #276749; }
+        .disc-humanidades h4 { border-color: #3182ce; color: #2b6cb0; }
+        .disc-ingenieria h4 { border-color: #805ad5; color: #553c9a; }
+
+        .feed-item { margin-bottom: 10px; font-size: 0.82em; }
+        .feed-item .feed-label {
+            font-weight: 700; font-size: 0.78em; text-transform: uppercase;
+            display: inline-block; padding: 2px 8px; border-radius: 4px;
+            color: white; margin-bottom: 3px;
+        }
+        .label-up { background: #3182ce; }
+        .label-back { background: #38a169; }
+        .label-forward { background: #805ad5; }
+
+        /* Action verbs */
+        .verbs-table { width: 100%; border-collapse: separate; border-spacing: 0; border-radius: 10px; overflow: hidden; }
+        .verbs-table th {
+            padding: 12px 16px; text-align: left; font-size: 0.85em;
+        }
+        .verbs-table th:first-child { background: #fff5f5; color: #9b2c2c; }
+        .verbs-table th:last-child { background: #f0fff4; color: #276749; }
+        .verbs-table td { padding: 10px 16px; font-size: 0.82em; border-top: 1px solid #e2e8f0; }
+        .verbs-table tr:nth-child(even) { background: #f7fafc; }
+
+        .footer {
+            text-align: center; padding: 20px; font-size: 0.78em; color: #718096;
+        }
+
+        @media (max-width: 768px) {
+            .cycle-container { flex-direction: column; gap: 8px; }
+            .cycle-phase { width: 100%; }
+            .cycle-arrow { transform: rotate(90deg); justify-content: center; }
+            .template-container, .discipline-grid { grid-template-columns: 1fr; }
+            .container { padding: 12px; }
+            .header { padding: 24px 16px; }
+            .header h1 { font-size: 1.3em; }
+            .section { padding: 20px 16px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <!-- Header -->
+        <div class="header">
+            <h1>Feed up / Feed back / Feed forward</h1>
+            <p>Tres preguntas para estructurar retroalimentacion efectiva — Unidad 3.2 | Modulo 3</p>
+        </div>
+
+        <!-- Cycle Diagram -->
+        <div class="section">
+            <h2>El ciclo de la retroalimentacion efectiva</h2>
+
+            <div class="cycle-container">
+                <div class="cycle-phase phase-feedup">
+                    <h3>Feed up</h3>
+                    <div class="question">¿Hacia donde voy?</div>
+                    <div class="desc">Clarifica la meta, criterios de exito y estandar de referencia. Sin destino claro, no hay retroalimentacion posible.</div>
+                </div>
+                <div class="cycle-arrow">&rarr;</div>
+                <div class="cycle-phase phase-feedback">
+                    <h3>Feed back</h3>
+                    <div class="question">¿Como voy?</div>
+                    <div class="desc">Diagnostica la brecha entre el desempeno actual y la meta. Basado en evidencia especifica del trabajo, no juicios generales.</div>
+                </div>
+                <div class="cycle-arrow">&rarr;</div>
+                <div class="cycle-phase phase-feedforward">
+                    <h3>Feed forward</h3>
+                    <div class="question">¿Que sigue?</div>
+                    <div class="desc">Orienta la accion futura con estrategias concretas y accionables. Es el componente mas transformador y el mas olvidado.</div>
+                </div>
+            </div>
+
+            <div style="text-align:center; margin-top:16px;">
+                <div style="display:inline-block; background:#faf5ff; border:1px solid #d6bcfa; border-radius:10px; padding:12px 24px; font-size:0.85em; color:#553c9a;">
+                    <strong>Analogia del GPS:</strong> Feed up = destino | Feed back = ubicacion actual | Feed forward = "En 200 m, gire a la derecha"
+                </div>
+            </div>
+        </div>
+
+        <!-- Template -->
+        <div class="section">
+            <h2>Plantilla visual: escriba su retroalimentacion</h2>
+            <p style="font-size:0.88em; color:#718096; margin-bottom:16px;">Use esta estructura para cada comentario que escriba. Cada componente responde a una pregunta fundamental.</p>
+
+            <div class="template-container">
+                <div class="template-box template-feedup">
+                    <div class="tpl-title">Feed up</div>
+                    <div class="tpl-formula">"En relacion con [criterio/expectativa]..."</div>
+                    <div class="tpl-space">Escriba aqui el criterio o meta que evalua...</div>
+                </div>
+                <div class="template-box template-feedback">
+                    <div class="tpl-title">Feed back</div>
+                    <div class="tpl-formula">"Observo que en [seccion especifica]..."</div>
+                    <div class="tpl-space">Escriba aqui lo que observa con evidencia...</div>
+                </div>
+                <div class="template-box template-feedforward">
+                    <div class="tpl-title">Feed forward</div>
+                    <div class="tpl-formula">"Para mejorar, te sugiero: (1)... (2)..."</div>
+                    <div class="tpl-space">Escriba aqui 1-3 acciones concretas...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Discipline Examples -->
+        <div class="section">
+            <h2>Ejemplos por disciplina</h2>
+
+            <div class="discipline-grid">
+                <!-- Ciencias -->
+                <div class="discipline-card disc-ciencias">
+                    <h4>Ciencias</h4>
+                    <div class="feed-item">
+                        <span class="feed-label label-up">Feed up</span><br>
+                        El informe debia incluir hipotesis falsificable, procedimiento replicable y analisis estadistico.
+                    </div>
+                    <div class="feed-item">
+                        <span class="feed-label label-back">Feed back</span><br>
+                        Hipotesis clara. El procedimiento omite condiciones de control. No calculas desviacion estandar.
+                    </div>
+                    <div class="feed-item">
+                        <span class="feed-label label-forward">Feed forward</span><br>
+                        (1) Agrega seccion de condiciones controladas. (2) Calcula desviacion estandar y agrega barras de error.
+                    </div>
+                </div>
+
+                <!-- Humanidades -->
+                <div class="discipline-card disc-humanidades">
+                    <h4>Humanidades</h4>
+                    <div class="feed-item">
+                        <span class="feed-label label-up">Feed up</span><br>
+                        El ensayo debia presentar tesis original, 3 fuentes academicas y un contraargumento.
+                    </div>
+                    <div class="feed-item">
+                        <span class="feed-label label-back">Feed back</span><br>
+                        Tesis clara. Fuente 3 (parrafo 4) queda desconectada. No hay contraargumento explicito.
+                    </div>
+                    <div class="feed-item">
+                        <span class="feed-label label-forward">Feed forward</span><br>
+                        (1) Agrega analisis despues de la cita del parrafo 4. (2) Incorpora un parrafo con la objecion mas fuerte a tu tesis.
+                    </div>
+                </div>
+
+                <!-- Ingenieria -->
+                <div class="discipline-card disc-ingenieria">
+                    <h4>Ingenieria</h4>
+                    <div class="feed-item">
+                        <span class="feed-label label-up">Feed up</span><br>
+                        El diseno debia cumplir requisitos funcionales, respetar presupuesto e incluir analisis de viabilidad.
+                    </div>
+                    <div class="feed-item">
+                        <span class="feed-label label-back">Feed back</span><br>
+                        Cumple 4/5 requisitos (falta carga maxima). Presupuesto sin desglose de mano de obra.
+                    </div>
+                    <div class="feed-item">
+                        <span class="feed-label label-forward">Feed forward</span><br>
+                        (1) Calcula carga maxima con formula del modulo 2. (2) Desglosa presupuesto. (3) Agrega tabla de riesgos.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Verb transformation -->
+        <div class="section">
+            <h2>Verbos que transforman: de juicio a accion</h2>
+            <table class="verbs-table">
+                <thead>
+                    <tr>
+                        <th style="width:50%;">En lugar de... (pasivo)</th>
+                        <th style="width:50%;">Pruebe con... (accionable)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>"Falta profundidad"</td>
+                        <td>"<strong>Agrega</strong> un ejemplo concreto en el parrafo 2"</td>
+                    </tr>
+                    <tr>
+                        <td>"Buena introduccion"</td>
+                        <td>"Tu introduccion cumple — <strong>manten</strong> esta estructura"</td>
+                    </tr>
+                    <tr>
+                        <td>"Revisa la bibliografia"</td>
+                        <td>"<strong>Reemplaza</strong> las 2 fuentes de blogs por articulos academicos"</td>
+                    </tr>
+                    <tr>
+                        <td>"Mejora la redaccion"</td>
+                        <td>"<strong>Lee</strong> en voz alta los parrafos 3 y 5; donde respires, <strong>coloca</strong> un punto"</td>
+                    </tr>
+                    <tr>
+                        <td>"Buen trabajo"</td>
+                        <td>"Tu uso de datos es una fortaleza — <strong>aplica</strong>lo en la seccion 3"</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="footer">
+            Curso: Evaluacion Formativa en Educacion Superior | Modulo 3, Unidad 3.2<br>
+            Basado en: Hattie, J. & Timperley, H. (2007); Sadler, D.R. (1989).
+        </div>
+
+    </div>
+</body>
+</html>

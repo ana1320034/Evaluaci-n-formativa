@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="es" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Infografia educativa interactiva - Tecnicas de Evaluacion en el Aula (CATs) Parte I: One-Minute Paper, Muddiest Point, Exit Ticket">
+<title>Unidad 2.1 - Tecnicas de Evaluacion en el Aula (CATs) - Referencia Rapida</title>
+<style>
+/* ========== RESET & BASE ========== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; scroll-behavior: smooth; }
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #e8f4fd 0%, #f0f9f4 50%, #e8f4fd 100%);
+  color: #1a2a3a;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* ========== ACCESSIBILITY: Skip Link ========== */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 0;
+  background: #0d47a1;
+  color: #fff;
+  padding: 0.75rem 1.5rem;
+  z-index: 1000;
+  font-size: 1rem;
+  text-decoration: none;
+  border-radius: 0 0 8px 0;
+}
+.skip-link:focus { top: 0; }
+
+/* ========== FOCUS STYLES (Accessibility) ========== */
+*:focus-visible {
+  outline: 3px solid #1565c0;
+  outline-offset: 3px;
+}
+
+/* ========== CONTAINER ========== */
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+/* ========== HEADER ========== */
+.header {
+  background: linear-gradient(135deg, #0d47a1 0%, #1565c0 40%, #1976d2 100%);
+  color: #ffffff;
+  padding: 2.5rem 2rem 2rem;
+  border-radius: 16px;
+  margin-bottom: 2rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(13, 71, 161, 0.3);
+}
+.header::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -20%;
+  width: 400px;
+  height: 400px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 50%;
+}
+.header-breadcrumb {
+  font-size: 0.85rem;
+  opacity: 0.85;
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.5px;
+}
+.header-breadcrumb span { margin: 0 0.3rem; }
+.header h1 {
+  font-size: clamp(1.5rem, 4vw, 2.2rem);
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+.header-subtitle {
+  font-size: clamp(1rem, 2.5vw, 1.2rem);
+  font-weight: 400;
+  opacity: 0.9;
+  margin-bottom: 1rem;
+}
+.header-badge {
+  display: inline-block;
+  background: rgba(255,255,255,0.2);
+  border: 1px solid rgba(255,255,255,0.3);
+  padding: 0.35rem 1rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  backdrop-filter: blur(4px);
+}
+
+/* ========== SECTION TITLES ========== */
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: clamp(1.2rem, 3vw, 1.5rem);
+  font-weight: 700;
+  color: #0d47a1;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 3px solid #bbdefb;
+}
+.section-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  font-size: 1.3rem;
+  flex-shrink: 0;
+}
+
+/* ========== SECTION WRAPPER ========== */
+.section {
+  margin-bottom: 2rem;
+}
+
+/* ========== CAT CARDS ========== */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+.cat-card {
+  background: #ffffff;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: default;
+}
+.cat-card:hover, .cat-card:focus-within {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.14);
+}
+.card-header-omp { background: linear-gradient(135deg, #1565c0, #1e88e5); }
+.card-header-mp { background: linear-gradient(135deg, #0d47a1, #1565c0); }
+.card-header-et { background: linear-gradient(135deg, #0a3d91, #0d47a1); }
+.card-header {
+  color: #fff;
+  padding: 1.25rem 1.5rem;
+  position: relative;
+}
+.card-number {
+  position: absolute;
+  top: 0.75rem;
+  right: 1rem;
+  background: rgba(255,255,255,0.2);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+.card-header h3 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+.card-header p {
+  font-size: 0.85rem;
+  opacity: 0.9;
+}
+.card-body {
+  padding: 1.25rem 1.5rem;
+}
+.card-field {
+  margin-bottom: 1rem;
+}
+.card-field:last-child { margin-bottom: 0; }
+.card-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: #1565c0;
+  margin-bottom: 0.25rem;
+}
+.card-value {
+  font-size: 0.92rem;
+  color: #2c3e50;
+  line-height: 1.5;
+}
+.time-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: #e8f5e9;
+  color: #2e7d32;
+  padding: 0.3rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+/* ========== COMPARATIVE TABLE ========== */
+.table-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+}
+.compare-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  min-width: 650px;
+}
+.compare-table thead th {
+  padding: 1rem;
+  text-align: center;
+  font-size: 0.9rem;
+  font-weight: 700;
+  border-bottom: 3px solid #bbdefb;
+}
+.compare-table thead th:first-child {
+  text-align: left;
+  background: #f5f5f5;
+  color: #37474f;
+}
+.compare-table thead th:nth-child(2) { background: #e3f2fd; color: #1565c0; }
+.compare-table thead th:nth-child(3) { background: #e3f2fd; color: #0d47a1; }
+.compare-table thead th:nth-child(4) { background: #e3f2fd; color: #0a3d91; }
+.compare-table tbody td {
+  padding: 0.85rem 1rem;
+  font-size: 0.88rem;
+  border-bottom: 1px solid #eceff1;
+  vertical-align: top;
+}
+.compare-table tbody td:first-child {
+  font-weight: 700;
+  color: #37474f;
+  background: #fafafa;
+  white-space: nowrap;
+}
+.compare-table tbody tr:hover { background: #f1f8fe; }
+.compare-table tbody tr:last-child td { border-bottom: none; }
+.table-cell-icon { margin-right: 0.35rem; }
+
+/* ========== FLOWCHART ========== */
+.flowchart {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  padding: 1.5rem 0;
+}
+.flow-node {
+  text-align: center;
+  max-width: 480px;
+  width: 100%;
+}
+.flow-start {
+  background: linear-gradient(135deg, #1565c0, #1976d2);
+  color: #fff;
+  padding: 1rem 2rem;
+  border-radius: 50px;
+  font-weight: 700;
+  font-size: 1rem;
+  box-shadow: 0 4px 12px rgba(21,101,192,0.3);
+}
+.flow-decision {
+  background: #fff;
+  border: 3px solid #1976d2;
+  padding: 1rem 1.5rem;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: #0d47a1;
+  position: relative;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+.flow-arrow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #90a4ae;
+  font-size: 0.8rem;
+  padding: 0.3rem 0;
+}
+.flow-arrow::after {
+  content: '';
+  width: 2px;
+  height: 16px;
+  background: #90a4ae;
+}
+.flow-arrow-label {
+  font-weight: 600;
+  color: #546e7a;
+  font-size: 0.78rem;
+}
+.flow-result {
+  padding: 0.85rem 1.5rem;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: #fff;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+}
+.flow-result-omp { background: linear-gradient(135deg, #1565c0, #1e88e5); }
+.flow-result-mp { background: linear-gradient(135deg, #0d47a1, #1565c0); }
+.flow-result-et { background: linear-gradient(135deg, #0a3d91, #0d47a1); }
+
+.flow-branch {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  width: 100%;
+  max-width: 600px;
+  flex-wrap: wrap;
+}
+.flow-branch-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  flex: 1;
+  min-width: 160px;
+}
+
+/* ========== TIPS SECTION ========== */
+.tips-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+}
+.tip-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 1.25rem;
+  display: flex;
+  gap: 0.85rem;
+  align-items: flex-start;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+  border-left: 4px solid transparent;
+  transition: transform 0.2s ease;
+}
+.tip-card:hover { transform: translateX(4px); }
+.tip-do { border-left-color: #2e7d32; }
+.tip-warn { border-left-color: #e65100; }
+.tip-icon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+}
+.tip-do .tip-icon { background: #e8f5e9; }
+.tip-warn .tip-icon { background: #fff3e0; }
+.tip-content h4 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin-bottom: 0.2rem;
+}
+.tip-do .tip-content h4 { color: #2e7d32; }
+.tip-warn .tip-content h4 { color: #e65100; }
+.tip-content p {
+  font-size: 0.85rem;
+  color: #546e7a;
+  line-height: 1.5;
+}
+
+/* ========== FOOTER ========== */
+.footer {
+  background: #263238;
+  color: #b0bec5;
+  padding: 1.5rem 2rem;
+  border-radius: 12px;
+  text-align: center;
+  margin-top: 1rem;
+  font-size: 0.82rem;
+  line-height: 1.7;
+}
+.footer strong { color: #e3f2fd; }
+.footer-divider {
+  width: 60px;
+  height: 2px;
+  background: #1565c0;
+  margin: 0.75rem auto;
+  border-radius: 2px;
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 768px) {
+  .container { padding: 0.75rem; }
+  .header { padding: 1.5rem 1rem; border-radius: 12px; }
+  .cards-grid { grid-template-columns: 1fr; }
+  .flow-branch { flex-direction: column; align-items: center; }
+  .tips-grid { grid-template-columns: 1fr; }
+}
+
+/* ========== PRINT STYLES ========== */
+@media print {
+  body { background: #fff; }
+  .cat-card, .tip-card { break-inside: avoid; box-shadow: none; border: 1px solid #ddd; }
+  .header { background: #0d47a1 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
+
+/* ========== REDUCED MOTION ========== */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    transition: none !important;
+    animation: none !important;
+  }
+  html { scroll-behavior: auto; }
+}
+
+/* ========== HIGH CONTRAST ========== */
+@media (prefers-contrast: high) {
+  .card-value, .tip-content p { color: #000; }
+  .compare-table tbody td { border-bottom: 2px solid #000; }
+}
+</style>
+</head>
+<body>
+
+<!-- Skip Link for Accessibility -->
+<a href="#main-content" class="skip-link">Saltar al contenido principal</a>
+
+<div class="container">
+
+  <!-- ============================================================ -->
+  <!-- HEADER -->
+  <!-- ============================================================ -->
+  <header class="header" role="banner">
+    <nav class="header-breadcrumb" aria-label="Ubicacion del modulo">
+      Curso: Evaluacion Formativa en Educacion Superior
+      <span aria-hidden="true">&#9654;</span>
+      Modulo 2
+      <span aria-hidden="true">&#9654;</span>
+      Unidad 2.1
+    </nav>
+    <h1>Tecnicas de Evaluacion en el Aula (CATs)</h1>
+    <p class="header-subtitle">Tabla de Referencia Rapida: One-Minute Paper &bull; Muddiest Point &bull; Exit Ticket</p>
+    <span class="header-badge" aria-label="Modulo 2, Unidad 2.1">Modulo 2 &mdash; Unidad 2.1 &mdash; Parte I</span>
+  </header>
+
+  <!-- ============================================================ -->
+  <!-- MAIN CONTENT -->
+  <!-- ============================================================ -->
+  <main id="main-content">
+
+    <!-- SECTION 1: CAT Cards -->
+    <section class="section" aria-labelledby="sec-cards-title">
+      <h2 class="section-title" id="sec-cards-title">
+        <span class="section-icon" style="background:#e3f2fd;color:#1565c0;" aria-hidden="true">&#128218;</span>
+        Las 3 Tecnicas CAT
+      </h2>
+      <div class="cards-grid">
+
+        <!-- Card 1: One-Minute Paper -->
+        <article class="cat-card" tabindex="0" aria-label="Tecnica One-Minute Paper">
+          <div class="card-header card-header-omp">
+            <span class="card-number" aria-hidden="true">1</span>
+            <h3>One-Minute Paper</h3>
+            <p>Reflexion rapida al cierre</p>
+          </div>
+          <div class="card-body">
+            <div class="card-field">
+              <div class="card-label">Que es</div>
+              <div class="card-value">Los estudiantes responden brevemente a una o dos preguntas sobre lo mas importante aprendido en la sesion o lo que aun les genera dudas.</div>
+            </div>
+            <div class="card-field">
+              <div class="card-label">Cuando usarla</div>
+              <div class="card-value">Al finalizar una clase, conferencia o actividad para verificar la comprension general y detectar vacios de aprendizaje.</div>
+            </div>
+            <div class="card-field">
+              <div class="card-label">Como procesarla</div>
+              <div class="card-value">Revisar las respuestas, categorizar temas recurrentes y abordar los puntos debiles al inicio de la siguiente sesion.</div>
+            </div>
+            <div class="card-field">
+              <div class="card-label">Tiempo requerido</div>
+              <div class="time-badge">
+                <span aria-hidden="true">&#9201;</span> 1-3 minutos en aula &bull; 10-15 min revision
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 2: Muddiest Point -->
+        <article class="cat-card" tabindex="0" aria-label="Tecnica Muddiest Point">
+          <div class="card-header card-header-mp">
+            <span class="card-number" aria-hidden="true">2</span>
+            <h3>Muddiest Point</h3>
+            <p>El punto mas confuso</p>
+          </div>
+          <div class="card-body">
+            <div class="card-field">
+              <div class="card-label">Que es</div>
+              <div class="card-value">Los estudiantes identifican y escriben el concepto, idea o proceso que les resulto mas confuso o dificil de entender durante la sesion.</div>
+            </div>
+            <div class="card-field">
+              <div class="card-label">Cuando usarla</div>
+              <div class="card-value">Despues de presentar contenido complejo, nuevo o conceptualmente denso, especialmente en temas con alta carga teorica.</div>
+            </div>
+            <div class="card-field">
+              <div class="card-label">Como procesarla</div>
+              <div class="card-value">Agrupar confusiones comunes, priorizar por frecuencia y re-ensenar los conceptos mas problematicos con estrategias diferentes.</div>
+            </div>
+            <div class="card-field">
+              <div class="card-label">Tiempo requerido</div>
+              <div class="time-badge">
+                <span aria-hidden="true">&#9201;</span> 2-3 minutos en aula &bull; 10-15 min revision
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 3: Exit Ticket -->
+        <article class="cat-card" tabindex="0" aria-label="Tecnica Exit Ticket">
+          <div class="card-header card-header-et">
+            <span class="card-number" aria-hidden="true">3</span>
+            <h3>Exit Ticket</h3>
+            <p>Boleto de salida</p>
+          </div>
+          <div class="card-body">
+            <div class="card-field">
+              <div class="card-label">Que es</div>
+              <div class="card-value">Una pregunta especifica y breve (a menudo cerrada o de aplicacion) que los estudiantes responden antes de salir del aula, vinculada directamente al objetivo de la sesion.</div>
+            </div>
+            <div class="card-field">
+              <div class="card-label">Cuando usarla</div>
+              <div class="card-value">Al final de la clase para evaluar el logro de un objetivo de aprendizaje especifico y tomar decisiones sobre la clase siguiente.</div>
+            </div>
+            <div class="card-field">
+              <div class="card-label">Como procesarla</div>
+              <div class="card-value">Clasificar respuestas en correctas/parciales/incorrectas, calcular porcentajes de logro y ajustar la planificacion de la proxima sesion.</div>
+            </div>
+            <div class="card-field">
+              <div class="card-label">Tiempo requerido</div>
+              <div class="time-badge">
+                <span aria-hidden="true">&#9201;</span> 3-5 minutos en aula &bull; 15-20 min revision
+              </div>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- SECTION 2: Comparative Table -->
+    <section class="section" aria-labelledby="sec-table-title">
+      <h2 class="section-title" id="sec-table-title">
+        <span class="section-icon" style="background:#e8f5e9;color:#2e7d32;" aria-hidden="true">&#128202;</span>
+        Tabla Comparativa Rapida
+      </h2>
+      <div class="table-wrapper" role="region" aria-label="Tabla comparativa de las tres tecnicas CAT" tabindex="0">
+        <table class="compare-table">
+          <thead>
+            <tr>
+              <th scope="col">Dimension</th>
+              <th scope="col">One-Minute Paper</th>
+              <th scope="col">Muddiest Point</th>
+              <th scope="col">Exit Ticket</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="table-cell-icon" aria-hidden="true">&#127919;</span>Proposito</td>
+              <td>Verificar comprension general y captar percepciones del estudiante</td>
+              <td>Identificar confusiones y obstaculos especificos de aprendizaje</td>
+              <td>Medir logro de un objetivo de aprendizaje concreto</td>
+            </tr>
+            <tr>
+              <td><span class="table-cell-icon" aria-hidden="true">&#128340;</span>Momento de la clase</td>
+              <td>Ultimos 2-3 minutos de la sesion</td>
+              <td>Despues de un bloque de contenido denso (puede ser a mitad o final)</td>
+              <td>Ultimos 3-5 minutos, como cierre</td>
+            </tr>
+            <tr>
+              <td><span class="table-cell-icon" aria-hidden="true">&#9997;&#65039;</span>Tipo de respuesta</td>
+              <td>Abierta, reflexiva (1-2 oraciones)</td>
+              <td>Abierta, focalizada en dificultades (1 oracion o frase)</td>
+              <td>Cerrada o semi-abierta, vinculada al objetivo (respuesta breve o seleccion)</td>
+            </tr>
+            <tr>
+              <td><span class="table-cell-icon" aria-hidden="true">&#128101;</span>Grupo ideal</td>
+              <td>Cualquier tamano (funciona bien hasta 150+ estudiantes)</td>
+              <td>Cualquier tamano (muy eficaz en grupos grandes)</td>
+              <td>Pequeno a mediano (ideal hasta 60 estudiantes para analisis rapido)</td>
+            </tr>
+            <tr>
+              <td><span class="table-cell-icon" aria-hidden="true">&#9881;&#65039;</span>Complejidad</td>
+              <td style="text-align:center;">
+                <span style="display:inline-block;background:#e8f5e9;color:#2e7d32;padding:0.2rem 0.7rem;border-radius:12px;font-weight:700;font-size:0.82rem;">Baja</span>
+              </td>
+              <td style="text-align:center;">
+                <span style="display:inline-block;background:#e8f5e9;color:#2e7d32;padding:0.2rem 0.7rem;border-radius:12px;font-weight:700;font-size:0.82rem;">Baja</span>
+              </td>
+              <td style="text-align:center;">
+                <span style="display:inline-block;background:#fff8e1;color:#e65100;padding:0.2rem 0.7rem;border-radius:12px;font-weight:700;font-size:0.82rem;">Media</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- SECTION 3: Decision Flowchart -->
+    <section class="section" aria-labelledby="sec-flow-title">
+      <h2 class="section-title" id="sec-flow-title">
+        <span class="section-icon" style="background:#e3f2fd;color:#1565c0;" aria-hidden="true">&#128268;</span>
+        Que CAT uso? &mdash; Diagrama de Decision
+      </h2>
+
+      <div class="flowchart" role="img" aria-label="Diagrama de flujo para decidir que tecnica CAT usar. Paso 1: preguntarse cual es el objetivo. Si se quiere conocer la percepcion general, usar One-Minute Paper. Si se quiere detectar confusiones, usar Muddiest Point. Si se quiere medir un objetivo especifico, usar Exit Ticket.">
+
+        <!-- Start -->
+        <div class="flow-node">
+          <div class="flow-start">Necesito retroalimentacion rapida de mis estudiantes</div>
+        </div>
+
+        <div class="flow-arrow">
+          <span class="flow-arrow-label" aria-hidden="true">&#9660;</span>
+        </div>
+
+        <!-- Decision 1 -->
+        <div class="flow-node">
+          <div class="flow-decision">Cual es mi objetivo principal?</div>
+        </div>
+
+        <div class="flow-arrow">
+          <span class="flow-arrow-label" aria-hidden="true">&#9660;</span>
+        </div>
+
+        <!-- Three branches -->
+        <div class="flow-branch">
+          <!-- Branch 1 -->
+          <div class="flow-branch-item">
+            <div class="flow-decision" style="font-size:0.85rem;padding:0.75rem 1rem;">
+              Quiero saber que captaron en general
+            </div>
+            <div class="flow-arrow"><span class="flow-arrow-label" aria-hidden="true">&#9660;</span></div>
+            <div class="flow-result flow-result-omp">One-Minute Paper</div>
+          </div>
+
+          <!-- Branch 2 -->
+          <div class="flow-branch-item">
+            <div class="flow-decision" style="font-size:0.85rem;padding:0.75rem 1rem;">
+              Quiero detectar donde se confunden
+            </div>
+            <div class="flow-arrow"><span class="flow-arrow-label" aria-hidden="true">&#9660;</span></div>
+            <div class="flow-result flow-result-mp">Muddiest Point</div>
+          </div>
+
+          <!-- Branch 3 -->
+          <div class="flow-branch-item">
+            <div class="flow-decision" style="font-size:0.85rem;padding:0.75rem 1rem;">
+              Quiero medir un objetivo especifico
+            </div>
+            <div class="flow-arrow"><span class="flow-arrow-label" aria-hidden="true">&#9660;</span></div>
+            <div class="flow-result flow-result-et">Exit Ticket</div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SECTION 4: Tips -->
+    <section class="section" aria-labelledby="sec-tips-title">
+      <h2 class="section-title" id="sec-tips-title">
+        <span class="section-icon" style="background:#e8f5e9;color:#2e7d32;" aria-hidden="true">&#128161;</span>
+        Tips y Advertencias para la Implementacion
+      </h2>
+      <div class="tips-grid">
+
+        <div class="tip-card tip-do">
+          <div class="tip-icon" aria-hidden="true">&#9989;</div>
+          <div class="tip-content">
+            <h4>Demuestra que los lees</h4>
+            <p>Siempre comparte con los estudiantes un resumen de sus respuestas en la clase siguiente. Si no ven impacto, dejaran de responder con seriedad.</p>
+          </div>
+        </div>
+
+        <div class="tip-card tip-do">
+          <div class="tip-icon" aria-hidden="true">&#9989;</div>
+          <div class="tip-content">
+            <h4>Empieza con una sola tecnica</h4>
+            <p>No intentes aplicar las tres a la vez. Domina una, establece la rutina con tus estudiantes y luego incorpora otra progresivamente.</p>
+          </div>
+        </div>
+
+        <div class="tip-card tip-do">
+          <div class="tip-icon" aria-hidden="true">&#9989;</div>
+          <div class="tip-content">
+            <h4>Anonimato opcional</h4>
+            <p>Permitir respuestas anonimas aumenta la honestidad, especialmente en Muddiest Point. Usa herramientas digitales (Google Forms, Mentimeter) para facilitar esto.</p>
+          </div>
+        </div>
+
+        <div class="tip-card tip-warn">
+          <div class="tip-icon" aria-hidden="true">&#9888;&#65039;</div>
+          <div class="tip-content">
+            <h4>No lo uses como calificacion</h4>
+            <p>Las CATs son formativas, no sumativas. Si asignas nota, los estudiantes responderan lo que creen que quieres oir, no lo que realmente piensan.</p>
+          </div>
+        </div>
+
+        <div class="tip-card tip-warn">
+          <div class="tip-icon" aria-hidden="true">&#9888;&#65039;</div>
+          <div class="tip-content">
+            <h4>Evita preguntas demasiado amplias</h4>
+            <p>En el Exit Ticket, preguntas como "Que aprendiste hoy?" generan respuestas vagas. Formula preguntas especificas vinculadas al objetivo de la sesion.</p>
+          </div>
+        </div>
+
+        <div class="tip-card tip-warn">
+          <div class="tip-icon" aria-hidden="true">&#9888;&#65039;</div>
+          <div class="tip-content">
+            <h4>No sobrecargues a los estudiantes</h4>
+            <p>Usar CATs en cada sesion puede generar fatiga. Alterna entre tecnicas y sesiones para mantener el interes y la calidad de las respuestas.</p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ============================================================ -->
+  <!-- FOOTER -->
+  <!-- ============================================================ -->
+  <footer class="footer" role="contentinfo">
+    <strong>Evaluacion Formativa en Educacion Superior</strong>
+    <br>
+    Modulo 2: Estrategias y Tecnicas de Evaluacion Formativa
+    <br>
+    Unidad 2.1: Tecnicas de Evaluacion en el Aula (CATs) &mdash; Parte I
+    <div class="footer-divider" aria-hidden="true"></div>
+    Material de referencia rapida &bull; Basado en Angelo &amp; Cross (1993), Classroom Assessment Techniques
+    <br>
+    Infografia educativa &mdash; Uso exclusivamente academico
+  </footer>
+
+</div>
+
+</body>
+</html>

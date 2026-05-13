@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa Conceptual Integrador - Modulo 3</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f4f8; color: #2d3748; line-height: 1.6; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+
+        .header {
+            background: linear-gradient(135deg, #2b6cb0, #553c9a);
+            color: white; padding: 36px; border-radius: 16px;
+            text-align: center; margin-bottom: 30px;
+        }
+        .header h1 { font-size: 1.7em; margin-bottom: 8px; }
+        .header p { font-size: 0.92em; opacity: 0.9; }
+
+        /* Map layout */
+        .map-container {
+            position: relative; min-height: 900px;
+            background: white; border-radius: 16px;
+            padding: 30px; margin-bottom: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+            overflow: hidden;
+        }
+
+        /* SVG connections */
+        .map-svg {
+            position: absolute; top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none; z-index: 0;
+        }
+
+        /* Nodes */
+        .node {
+            position: absolute; border-radius: 12px; padding: 14px 18px;
+            text-align: center; z-index: 1;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+        .node:hover { transform: scale(1.04); }
+
+        .node-central {
+            width: 240px; top: 50px; left: 50%; transform: translateX(-50%);
+            background: linear-gradient(135deg, #2b6cb0, #553c9a);
+            color: white; font-weight: 700; font-size: 1.1em;
+            padding: 22px; border-radius: 50%;
+            width: 200px; height: 200px;
+            display: flex; align-items: center; justify-content: center;
+            flex-direction: column;
+        }
+        .node-central:hover { transform: translateX(-50%) scale(1.04); }
+        .node-central .node-sub { font-size: 0.7em; font-weight: 400; opacity: 0.85; margin-top: 4px; }
+
+        /* Branch nodes - Level 1 */
+        .node-branch {
+            width: 200px; font-weight: 600; font-size: 0.88em; color: white;
+        }
+
+        .branch-hattie { background: linear-gradient(135deg, #2b6cb0, #3182ce); top: 310px; left: 5%; }
+        .branch-feed { background: linear-gradient(135deg, #276749, #38a169); top: 310px; left: 50%; transform: translateX(-50%); }
+        .branch-eficiencia { background: linear-gradient(135deg, #c05621, #dd6b20); top: 310px; right: 5%; }
+
+        /* Sub-nodes - Level 2 */
+        .node-sub-item {
+            width: 170px; font-size: 0.78em; padding: 10px 14px;
+            border-radius: 10px; border: 2px solid;
+            background: white;
+        }
+
+        /* Hattie sub-nodes */
+        .sub-autoreg { border-color: #276749; color: #276749; top: 440px; left: 1%; }
+        .sub-proceso { border-color: #2b6cb0; color: #2b6cb0; top: 520px; left: 1%; }
+        .sub-tarea { border-color: #c05621; color: #c05621; top: 600px; left: 1%; }
+        .sub-yo { border-color: #e53e3e; color: #e53e3e; top: 680px; left: 1%; }
+
+        /* Feed sub-nodes */
+        .sub-feedup { border-color: #3182ce; color: #2b6cb0; top: 440px; left: 50%; transform: translateX(-50%); }
+        .sub-feedback { border-color: #38a169; color: #276749; top: 530px; left: 50%; transform: translateX(-50%); }
+        .sub-feedforward { border-color: #805ad5; color: #553c9a; top: 620px; left: 50%; transform: translateX(-50%); }
+
+        /* Eficiencia sub-nodes */
+        .sub-grupal { border-color: #dd6b20; color: #c05621; top: 440px; right: 1%; }
+        .sub-rubrica { border-color: #dd6b20; color: #c05621; top: 510px; right: 1%; }
+        .sub-audio { border-color: #dd6b20; color: #c05621; top: 580px; right: 1%; }
+        .sub-selectiva { border-color: #dd6b20; color: #c05621; top: 650px; right: 1%; }
+        .sub-pares { border-color: #dd6b20; color: #c05621; top: 720px; right: 1%; }
+
+        /* Transversal connections */
+        .node-transversal {
+            width: 220px; font-size: 0.82em; padding: 14px 16px;
+            border-radius: 12px; background: #faf5ff;
+            border: 2px solid #d6bcfa; color: #553c9a;
+        }
+        .trans-formativa { top: 800px; left: 5%; }
+        .trans-protocolo { top: 800px; left: 50%; transform: translateX(-50%); }
+        .trans-modulos { top: 800px; right: 5%; }
+
+        .node-label { font-weight: 700; font-size: 0.82em; margin-bottom: 3px; }
+
+        /* Legend */
+        .legend {
+            background: white; border-radius: 14px; padding: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.07); margin-bottom: 24px;
+        }
+        .legend h2 { font-size: 1.1em; margin-bottom: 12px; color: #4a5568; }
+        .legend-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+        .legend-item { display: flex; align-items: center; gap: 8px; font-size: 0.82em; }
+        .legend-dot {
+            width: 14px; height: 14px; border-radius: 50%; flex-shrink: 0;
+        }
+
+        .footer {
+            text-align: center; padding: 20px; font-size: 0.78em; color: #718096;
+        }
+
+        /* Mobile: linearize */
+        @media (max-width: 768px) {
+            .map-container {
+                position: static; min-height: auto;
+                display: flex; flex-direction: column; gap: 12px;
+                padding: 20px 16px;
+            }
+            .map-svg { display: none; }
+            .node {
+                position: static !important;
+                transform: none !important;
+                width: 100% !important;
+            }
+            .node-central {
+                border-radius: 14px; width: 100% !important;
+                height: auto; padding: 20px;
+            }
+            .legend-grid { grid-template-columns: 1fr 1fr; }
+            .container { padding: 12px; }
+            .header { padding: 24px 16px; }
+            .header h1 { font-size: 1.3em; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <!-- Header -->
+        <div class="header">
+            <h1>Mapa Conceptual Integrador — Modulo 3</h1>
+            <p>Retroalimentacion Efectiva para el Aprendizaje | Evaluacion Formativa en Educacion Superior</p>
+        </div>
+
+        <!-- Legend -->
+        <div class="legend">
+            <h2>Leyenda del mapa</h2>
+            <div class="legend-grid">
+                <div class="legend-item">
+                    <div class="legend-dot" style="background: linear-gradient(135deg, #2b6cb0, #553c9a);"></div>
+                    Concepto central
+                </div>
+                <div class="legend-item">
+                    <div class="legend-dot" style="background: #2b6cb0;"></div>
+                    4 Niveles de Hattie (U3.1)
+                </div>
+                <div class="legend-item">
+                    <div class="legend-dot" style="background: #38a169;"></div>
+                    Modelo Feed (U3.2)
+                </div>
+                <div class="legend-item">
+                    <div class="legend-dot" style="background: #dd6b20;"></div>
+                    Estrategias de eficiencia (U3.3)
+                </div>
+            </div>
+        </div>
+
+        <!-- Concept Map -->
+        <div class="map-container">
+
+            <!-- SVG Lines -->
+            <svg class="map-svg" viewBox="0 0 1000 900" preserveAspectRatio="none">
+                <!-- Central to branches -->
+                <line x1="500" y1="250" x2="150" y2="330" stroke="#2b6cb0" stroke-width="3" stroke-dasharray="8,4" opacity="0.4"/>
+                <line x1="500" y1="250" x2="500" y2="330" stroke="#38a169" stroke-width="3" stroke-dasharray="8,4" opacity="0.4"/>
+                <line x1="500" y1="250" x2="850" y2="330" stroke="#dd6b20" stroke-width="3" stroke-dasharray="8,4" opacity="0.4"/>
+
+                <!-- Hattie to subnodes -->
+                <line x1="150" y1="390" x2="100" y2="455" stroke="#2b6cb0" stroke-width="2" opacity="0.3"/>
+                <line x1="150" y1="390" x2="100" y2="535" stroke="#2b6cb0" stroke-width="2" opacity="0.3"/>
+                <line x1="150" y1="390" x2="100" y2="615" stroke="#2b6cb0" stroke-width="2" opacity="0.3"/>
+                <line x1="150" y1="390" x2="100" y2="695" stroke="#2b6cb0" stroke-width="2" opacity="0.3"/>
+
+                <!-- Feed to subnodes -->
+                <line x1="500" y1="390" x2="500" y2="455" stroke="#38a169" stroke-width="2" opacity="0.3"/>
+                <line x1="500" y1="390" x2="500" y2="545" stroke="#38a169" stroke-width="2" opacity="0.3"/>
+                <line x1="500" y1="390" x2="500" y2="635" stroke="#38a169" stroke-width="2" opacity="0.3"/>
+
+                <!-- Eficiencia to subnodes -->
+                <line x1="850" y1="390" x2="900" y2="455" stroke="#dd6b20" stroke-width="2" opacity="0.3"/>
+                <line x1="850" y1="390" x2="900" y2="525" stroke="#dd6b20" stroke-width="2" opacity="0.3"/>
+                <line x1="850" y1="390" x2="900" y2="595" stroke="#dd6b20" stroke-width="2" opacity="0.3"/>
+                <line x1="850" y1="390" x2="900" y2="665" stroke="#dd6b20" stroke-width="2" opacity="0.3"/>
+                <line x1="850" y1="390" x2="900" y2="735" stroke="#dd6b20" stroke-width="2" opacity="0.3"/>
+
+                <!-- Transversal connections -->
+                <line x1="150" y1="750" x2="150" y2="815" stroke="#805ad5" stroke-width="2" stroke-dasharray="5,3" opacity="0.3"/>
+                <line x1="500" y1="680" x2="500" y2="815" stroke="#805ad5" stroke-width="2" stroke-dasharray="5,3" opacity="0.3"/>
+                <line x1="850" y1="775" x2="850" y2="815" stroke="#805ad5" stroke-width="2" stroke-dasharray="5,3" opacity="0.3"/>
+
+                <!-- Cross connections -->
+                <line x1="200" y1="455" x2="430" y2="455" stroke="#805ad5" stroke-width="1.5" stroke-dasharray="4,4" opacity="0.2"/>
+                <line x1="570" y1="635" x2="780" y2="525" stroke="#805ad5" stroke-width="1.5" stroke-dasharray="4,4" opacity="0.2"/>
+            </svg>
+
+            <!-- Central Node -->
+            <div class="node node-central">
+                Retroalimentacion Efectiva
+                <span class="node-sub">d = 0.70 (Hattie, 2009)</span>
+            </div>
+
+            <!-- Branch 1: Hattie -->
+            <div class="node node-branch branch-hattie">
+                <div class="node-label">4 Niveles de Hattie</div>
+                Unidad 3.1
+            </div>
+
+            <!-- Branch 2: Feed -->
+            <div class="node node-branch branch-feed">
+                <div class="node-label">Modelo Feed</div>
+                Unidad 3.2
+            </div>
+
+            <!-- Branch 3: Eficiencia -->
+            <div class="node node-branch branch-eficiencia">
+                <div class="node-label">Estrategias de Eficiencia</div>
+                Unidad 3.3
+            </div>
+
+            <!-- Hattie sub-nodes -->
+            <div class="node node-sub-item sub-autoreg">
+                <strong>Autorregulacion</strong><br>
+                Monitoreo del propio aprendizaje — Efectividad muy alta
+            </div>
+            <div class="node node-sub-item sub-proceso">
+                <strong>Proceso</strong><br>
+                Estrategias y procedimientos — Efectividad alta
+            </div>
+            <div class="node node-sub-item sub-tarea">
+                <strong>Tarea</strong><br>
+                Correcto/incorrecto — Efectividad media
+            </div>
+            <div class="node node-sub-item sub-yo">
+                <strong>Yo (Persona)</strong><br>
+                Elogios generales — Efectividad baja o negativa
+            </div>
+
+            <!-- Feed sub-nodes -->
+            <div class="node node-sub-item sub-feedup">
+                <strong>Feed up</strong><br>
+                ¿Hacia donde voy? Clarificar metas y criterios
+            </div>
+            <div class="node node-sub-item sub-feedback">
+                <strong>Feed back</strong><br>
+                ¿Como voy? Diagnosticar la brecha con evidencia
+            </div>
+            <div class="node node-sub-item sub-feedforward">
+                <strong>Feed forward</strong><br>
+                ¿Que sigue? Acciones concretas de mejora
+            </div>
+
+            <!-- Eficiencia sub-nodes -->
+            <div class="node node-sub-item sub-grupal">
+                <strong>Grupal</strong><br>
+                Patrones comunes en video/documento
+            </div>
+            <div class="node node-sub-item sub-rubrica">
+                <strong>Rubricas modulares</strong><br>
+                Banco de comentarios predefinidos
+            </div>
+            <div class="node node-sub-item sub-audio">
+                <strong>Audio / Video</strong><br>
+                Mas rapido y personal
+            </div>
+            <div class="node node-sub-item sub-selectiva">
+                <strong>Selectiva</strong><br>
+                1-2 criterios por entrega, rotacion
+            </div>
+            <div class="node node-sub-item sub-pares">
+                <strong>Entre pares</strong><br>
+                Con protocolo estructurado
+            </div>
+
+            <!-- Transversal nodes -->
+            <div class="node node-transversal trans-formativa">
+                <div class="node-label">Evaluacion formativa</div>
+                La retroalimentacion es el corazon de la evaluacion formativa (Modulos 1-2). Informa, orienta y transforma.
+            </div>
+            <div class="node node-transversal trans-protocolo">
+                <div class="node-label">Protocolo integrado</div>
+                Combina autoevaluacion + coevaluacion + docente. Sostenible, equitativo y promotor de autonomia.
+            </div>
+            <div class="node node-transversal trans-modulos">
+                <div class="node-label">Hacia el Modulo 4</div>
+                Diseno de sistemas de evaluacion formativa completos que integren retroalimentacion efectiva.
+            </div>
+
+        </div>
+
+        <!-- Key relationships -->
+        <div style="background:white; border-radius:14px; padding:24px; margin-bottom:24px; box-shadow: 0 2px 8px rgba(0,0,0,0.07);">
+            <h2 style="font-size:1.2em; color:#553c9a; margin-bottom:16px;">Conexiones clave del mapa</h2>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+                <div style="background:#f7fafc; border-radius:10px; padding:16px; font-size:0.85em;">
+                    <strong style="color:#2b6cb0;">Niveles + Modelo Feed:</strong> La retroalimentacion de autorregulacion (nivel 3) se activa a traves del Feed forward, que ensena al estudiante a planificar su propia mejora.
+                </div>
+                <div style="background:#f7fafc; border-radius:10px; padding:16px; font-size:0.85em;">
+                    <strong style="color:#276749;">Modelo Feed + Eficiencia:</strong> El Feed up claro (rubricas anticipadas) reduce el tiempo de retroalimentacion porque el estudiante ya conoce los criterios.
+                </div>
+                <div style="background:#f7fafc; border-radius:10px; padding:16px; font-size:0.85em;">
+                    <strong style="color:#c05621;">Eficiencia + Niveles:</strong> La retroalimentacion entre pares opera en los niveles de tarea y proceso. El docente se reserva el nivel de autorregulacion.
+                </div>
+                <div style="background:#f7fafc; border-radius:10px; padding:16px; font-size:0.85em;">
+                    <strong style="color:#553c9a;">Modulo 3 + Modulos 1-2:</strong> La evaluacion formativa (M1) usa estrategias (M2) cuyo motor es la retroalimentacion efectiva (M3). Todo se integrara en el diseno de sistemas (M4).
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            Curso: Evaluacion Formativa en Educacion Superior | Modulo 3: Retroalimentacion Efectiva para el Aprendizaje<br>
+            Mapa conceptual integrador — Sintesis de las Unidades 3.1, 3.2 y 3.3
+        </div>
+
+    </div>
+</body>
+</html>

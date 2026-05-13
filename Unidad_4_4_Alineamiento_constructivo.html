@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alineamiento Constructivo - Unidad 4.4</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f4f8; color: #2d3748; line-height: 1.6; }
+        .container { max-width: 940px; margin: 0 auto; padding: 20px; }
+        .header { background: linear-gradient(135deg, #2b6cb0, #e53e3e); color: white; padding: 36px; border-radius: 16px; text-align: center; margin-bottom: 30px; }
+        .header h1 { font-size: 1.7em; margin-bottom: 8px; }
+        .header p { font-size: 0.92em; opacity: 0.92; }
+        .section { background: white; border-radius: 14px; padding: 28px; margin-bottom: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); }
+        .section h2 { font-size: 1.25em; color: #2b6cb0; margin-bottom: 18px; border-bottom: 2px solid #bee3f8; padding-bottom: 8px; }
+        .section h3 { font-size: 1.05em; margin-bottom: 10px; }
+
+        /* Diagrama de alineamiento */
+        .alignment-diagram { display: flex; align-items: center; justify-content: center; gap: 0; flex-wrap: wrap; margin: 20px 0; }
+        .align-box { border-radius: 14px; padding: 20px 18px; text-align: center; min-width: 170px; flex: 1; }
+        .align-box h4 { font-size: 0.92em; margin-bottom: 6px; }
+        .align-box p { font-size: 0.78em; }
+        .ab-ra { background: linear-gradient(135deg, #ebf8ff, #bee3f8); border: 3px solid #3182ce; }
+        .ab-ra h4 { color: #2b6cb0; }
+        .ab-act { background: linear-gradient(135deg, #f0fff4, #c6f6d5); border: 3px solid #38a169; }
+        .ab-act h4 { color: #276749; }
+        .ab-eval { background: linear-gradient(135deg, #faf5ff, #e9d8fd); border: 3px solid #805ad5; }
+        .ab-eval h4 { color: #553c9a; }
+        .ab-inst { background: linear-gradient(135deg, #fffaf0, #feebc8); border: 3px solid #dd6b20; }
+        .ab-inst h4 { color: #c05621; }
+        .align-arrow { font-size: 1.8em; color: #38a169; font-weight: 700; padding: 0 6px; flex-shrink: 0; }
+
+        /* Casos de desalineamiento */
+        .case { border-radius: 12px; margin-bottom: 20px; overflow: hidden; border: 2px solid #e2e8f0; }
+        .case:last-child { margin-bottom: 0; }
+        .case-header { padding: 14px 18px; font-weight: 700; font-size: 0.92em; display: flex; align-items: center; gap: 10px; }
+        .case-header .case-type { padding: 3px 10px; border-radius: 20px; font-size: 0.82em; }
+        .case-body { display: grid; grid-template-columns: 1fr 1fr; }
+        .case-col { padding: 16px 18px; }
+        .case-col h4 { font-size: 0.88em; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+        .case-col ul { list-style: none; font-size: 0.82em; }
+        .case-col ul li { padding: 6px 0; border-bottom: 1px solid #f0f0f0; display: flex; align-items: flex-start; gap: 8px; }
+        .case-col ul li:last-child { border-bottom: none; }
+        .col-bad { background: #fff5f5; }
+        .col-bad h4 { color: #9b2c2c; }
+        .col-good { background: #f0fff4; }
+        .col-good h4 { color: #276749; }
+        .badge-red { background: #fed7d7; color: #9b2c2c; }
+        .badge-green { background: #c6f6d5; color: #276749; }
+        .icon-red { color: #e53e3e; font-weight: 700; flex-shrink: 0; }
+        .icon-green { color: #38a169; font-weight: 700; flex-shrink: 0; }
+
+        /* Checklist interactivo */
+        .checklist { margin-top: 16px; }
+        .checklist-item { display: flex; align-items: flex-start; gap: 12px; padding: 12px 16px; border-radius: 10px; margin-bottom: 8px; cursor: pointer; transition: background 0.2s; font-size: 0.88em; background: #f7fafc; border: 1px solid #e2e8f0; }
+        .checklist-item:hover { background: #ebf8ff; }
+        .checklist-item input[type="checkbox"] { margin-top: 3px; width: 18px; height: 18px; accent-color: #38a169; cursor: pointer; flex-shrink: 0; }
+        .checklist-item label { cursor: pointer; }
+        .checklist-item.checked { background: #f0fff4; border-color: #9ae6b4; }
+        .check-counter { text-align: center; margin-top: 16px; padding: 14px; border-radius: 10px; font-weight: 700; font-size: 0.92em; transition: all 0.3s; }
+
+        .footer { text-align: center; padding: 20px; color: #718096; font-size: 0.78em; }
+
+        @media (max-width: 768px) {
+            .alignment-diagram { flex-direction: column; gap: 0; }
+            .align-arrow { transform: rotate(90deg); padding: 6px 0; }
+            .case-body { grid-template-columns: 1fr; }
+            .header { padding: 24px 16px; }
+            .section { padding: 20px 16px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <p style="opacity:0.8; font-size:0.82em;">Modulo 4 &middot; Unidad 4.4</p>
+            <h1>Alineamiento Constructivo</h1>
+            <p>Verificacion y correccion: del RA al instrumento, todo debe ser coherente</p>
+        </div>
+
+        <!-- Diagrama de alineamiento -->
+        <div class="section">
+            <h2>La Cadena de Alineamiento</h2>
+            <p style="font-size:0.88em; color:#4a5568; margin-bottom:16px;">Los cuatro elementos deben operar en el mismo nivel cognitivo y apuntar al mismo objeto de aprendizaje.</p>
+            <div class="alignment-diagram">
+                <div class="align-box ab-ra">
+                    <h4>Resultado de Aprendizaje</h4>
+                    <p>Verbo (Bloom) + objeto + contexto</p>
+                </div>
+                <div class="align-arrow">&#8594;</div>
+                <div class="align-box ab-act">
+                    <h4>Actividad de E-A</h4>
+                    <p>Prepara al estudiante para el desempeno</p>
+                </div>
+                <div class="align-arrow">&#8594;</div>
+                <div class="align-box ab-eval">
+                    <h4>Tarea de Evaluacion</h4>
+                    <p>Exige demostrar el RA en contexto</p>
+                </div>
+                <div class="align-arrow">&#8594;</div>
+                <div class="align-box ab-inst">
+                    <h4>Instrumento</h4>
+                    <p>Captura todas las dimensiones del RA</p>
+                </div>
+            </div>
+            <div style="text-align:center; margin-top:16px; padding:14px; background:#ebf8ff; border-radius:10px; border:2px solid #90cdf4;">
+                <strong style="color:#2b6cb0;">Regla de oro:</strong> <span style="font-size:0.88em;">El RA manda. Cuando hay desalineamiento, se ajustan la actividad, la evaluacion y el instrumento al RA, nunca al reves.</span>
+            </div>
+        </div>
+
+        <!-- 4 Tipos de desalineamiento -->
+        <div class="section">
+            <h2>4 Casos de Desalineamiento y su Correccion</h2>
+
+            <!-- Caso 1 -->
+            <div class="case">
+                <div class="case-header" style="background:#fff5f5; border-bottom:2px solid #feb2b2;">
+                    <span class="case-type badge-red">Tipo 1</span>
+                    Desalineamiento del nivel cognitivo
+                </div>
+                <div class="case-body">
+                    <div class="case-col col-bad">
+                        <h4><span class="icon-red">&#10006;</span> Desalineado</h4>
+                        <ul>
+                            <li><span class="icon-red">&#9679;</span> <strong>RA:</strong> Evalua criticamente propuestas (E5)</li>
+                            <li><span class="icon-red">&#9679;</span> <strong>Actividad:</strong> Clase magistral (R1)</li>
+                            <li><span class="icon-red">&#9679;</span> <strong>Evaluacion:</strong> Examen opcion multiple (R1)</li>
+                            <li><span class="icon-red">&#9679;</span> <strong>Instrumento:</strong> Clave de respuestas</li>
+                        </ul>
+                    </div>
+                    <div class="case-col col-good">
+                        <h4><span class="icon-green">&#10004;</span> Corregido</h4>
+                        <ul>
+                            <li><span class="icon-green">&#9679;</span> <strong>RA:</strong> Evalua criticamente propuestas (E5)</li>
+                            <li><span class="icon-green">&#9679;</span> <strong>Actividad:</strong> Analisis grupal con criterios (E5)</li>
+                            <li><span class="icon-green">&#9679;</span> <strong>Evaluacion:</strong> Informe de evaluacion critica (E5)</li>
+                            <li><span class="icon-green">&#9679;</span> <strong>Instrumento:</strong> Rubrica con criterio de rigor</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Caso 2 -->
+            <div class="case">
+                <div class="case-header" style="background:#fffaf0; border-bottom:2px solid #fbd38d;">
+                    <span class="case-type" style="background:#feebc8; color:#c05621;">Tipo 2</span>
+                    Desalineamiento del objeto de aprendizaje
+                </div>
+                <div class="case-body">
+                    <div class="case-col col-bad">
+                        <h4><span class="icon-red">&#10006;</span> Desalineado</h4>
+                        <ul>
+                            <li><span class="icon-red">&#9679;</span> <strong>RA:</strong> Analiza la <u>efectividad</u> de retroalimentacion</li>
+                            <li><span class="icon-red">&#9679;</span> <strong>Actividad:</strong> Lectura sobre modelos</li>
+                            <li><span class="icon-red">&#9679;</span> <strong>Evaluacion:</strong> Ensayo sobre la <u>importancia</u></li>
+                            <li><span class="icon-red">&#9679;</span> <strong>Instrumento:</strong> Rubrica de calidad argumentativa</li>
+                        </ul>
+                    </div>
+                    <div class="case-col col-good">
+                        <h4><span class="icon-green">&#10004;</span> Corregido</h4>
+                        <ul>
+                            <li><span class="icon-green">&#9679;</span> <strong>RA:</strong> Analiza la <u>efectividad</u> de retroalimentacion</li>
+                            <li><span class="icon-green">&#9679;</span> <strong>Actividad:</strong> Micropracticas + analisis de resultados</li>
+                            <li><span class="icon-green">&#9679;</span> <strong>Evaluacion:</strong> Informe de analisis de <u>efectividad</u></li>
+                            <li><span class="icon-green">&#9679;</span> <strong>Instrumento:</strong> Rubrica de analisis de efectividad</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Caso 3 -->
+            <div class="case">
+                <div class="case-header" style="background:#faf5ff; border-bottom:2px solid #d6bcfa;">
+                    <span class="case-type" style="background:#e9d8fd; color:#553c9a;">Tipo 3</span>
+                    Desalineamiento actividad-evaluacion
+                </div>
+                <div class="case-body">
+                    <div class="case-col col-bad">
+                        <h4><span class="icon-red">&#10006;</span> Desalineado</h4>
+                        <ul>
+                            <li><span class="icon-red">&#9679;</span> <strong>RA:</strong> Disena rubricas analiticas (Cr6)</li>
+                            <li><span class="icon-red">&#9679;</span> <strong>Actividad:</strong> Taller de diseno en grupo (Cr6)</li>
+                            <li><span class="icon-red">&#9679;</span> <strong>Evaluacion:</strong> Examen: describir pasos (C2)</li>
+                            <li><span class="icon-red">&#9679;</span> <strong>Instrumento:</strong> Pauta de correccion</li>
+                        </ul>
+                    </div>
+                    <div class="case-col col-good">
+                        <h4><span class="icon-green">&#10004;</span> Corregido</h4>
+                        <ul>
+                            <li><span class="icon-green">&#9679;</span> <strong>RA:</strong> Disena rubricas analiticas (Cr6)</li>
+                            <li><span class="icon-green">&#9679;</span> <strong>Actividad:</strong> Taller de diseno en grupo (Cr6)</li>
+                            <li><span class="icon-green">&#9679;</span> <strong>Evaluacion:</strong> Entrega de rubrica disenada (Cr6)</li>
+                            <li><span class="icon-green">&#9679;</span> <strong>Instrumento:</strong> Meta-rubrica de calidad</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Caso 4 -->
+            <div class="case">
+                <div class="case-header" style="background:#ebf8ff; border-bottom:2px solid #90cdf4;">
+                    <span class="case-type" style="background:#bee3f8; color:#2b6cb0;">Tipo 4</span>
+                    Desalineamiento instrumento-tarea
+                </div>
+                <div class="case-body">
+                    <div class="case-col col-bad">
+                        <h4><span class="icon-red">&#10006;</span> Desalineado</h4>
+                        <ul>
+                            <li><span class="icon-red">&#9679;</span> <strong>RA:</strong> Elabora listas con indicadores observables</li>
+                            <li><span class="icon-red">&#9679;</span> <strong>Actividad:</strong> Taller de diseno (correcto)</li>
+                            <li><span class="icon-red">&#9679;</span> <strong>Evaluacion:</strong> Entrega de lista (correcto)</li>
+                            <li><span class="icon-red">&#9679;</span> <strong>Instrumento:</strong> Holistica: satisfactorio/insatisfactorio</li>
+                        </ul>
+                    </div>
+                    <div class="case-col col-good">
+                        <h4><span class="icon-green">&#10004;</span> Corregido</h4>
+                        <ul>
+                            <li><span class="icon-green">&#9679;</span> <strong>RA:</strong> Elabora listas con indicadores observables</li>
+                            <li><span class="icon-green">&#9679;</span> <strong>Actividad:</strong> Taller de diseno (se mantiene)</li>
+                            <li><span class="icon-green">&#9679;</span> <strong>Evaluacion:</strong> Entrega de lista (se mantiene)</li>
+                            <li><span class="icon-green">&#9679;</span> <strong>Instrumento:</strong> Rubrica con criterios especificos del RA</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Checklist interactivo -->
+        <div class="section">
+            <h2>Checklist de Verificacion de Alineamiento</h2>
+            <p style="font-size:0.88em; color:#4a5568; margin-bottom:16px;">Marque cada elemento que su diseno cumple. Los 7 deben estar verificados antes de finalizar.</p>
+            <div class="checklist" id="checklist">
+                <div class="checklist-item" onclick="toggleCheck(this)">
+                    <input type="checkbox" id="c1">
+                    <label for="c1">El verbo del RA y el verbo de la tarea de evaluacion estan en el mismo nivel Bloom</label>
+                </div>
+                <div class="checklist-item" onclick="toggleCheck(this)">
+                    <input type="checkbox" id="c2">
+                    <label for="c2">El objeto del RA es el mismo que se evalua en la tarea</label>
+                </div>
+                <div class="checklist-item" onclick="toggleCheck(this)">
+                    <input type="checkbox" id="c3">
+                    <label for="c3">La actividad de E-A prepara al estudiante para el tipo de desempeno que la evaluacion exige</label>
+                </div>
+                <div class="checklist-item" onclick="toggleCheck(this)">
+                    <input type="checkbox" id="c4">
+                    <label for="c4">El instrumento tiene criterios que corresponden a cada aspecto del RA</label>
+                </div>
+                <div class="checklist-item" onclick="toggleCheck(this)">
+                    <input type="checkbox" id="c5">
+                    <label for="c5">Los descriptores del instrumento reflejan el nivel cognitivo del RA</label>
+                </div>
+                <div class="checklist-item" onclick="toggleCheck(this)">
+                    <input type="checkbox" id="c6">
+                    <label for="c6">Un estudiante que aprueba segun el instrumento necesariamente ha logrado el RA</label>
+                </div>
+                <div class="checklist-item" onclick="toggleCheck(this)">
+                    <input type="checkbox" id="c7">
+                    <label for="c7">Un estudiante que logra el RA necesariamente aprueba segun el instrumento</label>
+                </div>
+            </div>
+            <div class="check-counter" id="counter" style="background:#fff5f5; color:#9b2c2c; border:2px solid #feb2b2;">
+                0 de 7 verificados — Revise su diseno
+            </div>
+        </div>
+
+        <div class="footer">
+            Curso: Evaluacion Formativa en Educacion Superior &middot; Modulo 4 &middot; Unidad 4.4<br>
+            Infografia complementaria al texto de lectura
+        </div>
+    </div>
+
+    <script>
+        function toggleCheck(item) {
+            var cb = item.querySelector('input[type="checkbox"]');
+            cb.checked = !cb.checked;
+            item.classList.toggle('checked', cb.checked);
+            updateCounter();
+        }
+
+        function updateCounter() {
+            var checks = document.querySelectorAll('#checklist input[type="checkbox"]');
+            var count = 0;
+            for (var i = 0; i < checks.length; i++) {
+                if (checks[i].checked) count++;
+            }
+            var counter = document.getElementById('counter');
+            if (count === 7) {
+                counter.style.background = '#f0fff4';
+                counter.style.color = '#276749';
+                counter.style.borderColor = '#9ae6b4';
+                counter.textContent = '7 de 7 verificados — Su diseno esta alineado';
+            } else if (count >= 4) {
+                counter.style.background = '#fffaf0';
+                counter.style.color = '#c05621';
+                counter.style.borderColor = '#fbd38d';
+                counter.textContent = count + ' de 7 verificados — Revise los elementos faltantes';
+            } else {
+                counter.style.background = '#fff5f5';
+                counter.style.color = '#9b2c2c';
+                counter.style.borderColor = '#feb2b2';
+                counter.textContent = count + ' de 7 verificados — Revise su diseno';
+            }
+        }
+    </script>
+</body>
+</html>

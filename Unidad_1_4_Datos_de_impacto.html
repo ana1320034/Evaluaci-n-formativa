@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infografía - Impacto de la Evaluación Formativa: La Evidencia</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f4f8; color: #2d3748; }
+        .container { max-width: 940px; margin: 0 auto; padding: 20px; }
+
+        .header { background: linear-gradient(135deg, #1a365d, #2a4365, #2b6cb0); color: white; padding: 40px; border-radius: 16px; text-align: center; margin-bottom: 30px; }
+        .header h1 { font-size: 1.9em; margin-bottom: 8px; }
+        .header p { opacity: 0.9; font-size: 1.05em; }
+
+        .section { background: white; border-radius: 14px; padding: 28px; margin-bottom: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); }
+        .section h2 { color: #1a365d; font-size: 1.3em; margin-bottom: 16px; border-left: 4px solid #3182ce; padding-left: 12px; }
+
+        /* Hero Stats */
+        .hero-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 28px; }
+        .hero-card { border-radius: 14px; padding: 24px 16px; text-align: center; color: white; position: relative; overflow: hidden; }
+        .hero-card::after { content: ''; position: absolute; top: -30px; right: -30px; width: 80px; height: 80px; border-radius: 50%; background: rgba(255,255,255,0.1); }
+        .hc1 { background: linear-gradient(135deg, #2b6cb0, #3182ce); }
+        .hc2 { background: linear-gradient(135deg, #276749, #38a169); }
+        .hc3 { background: linear-gradient(135deg, #9b2c2c, #e53e3e); }
+        .hc4 { background: linear-gradient(135deg, #744210, #dd6b20); }
+        .hero-card .big-num { font-size: 2.4em; font-weight: 800; line-height: 1; }
+        .hero-card .unit { font-size: 0.9em; opacity: 0.9; }
+        .hero-card .desc { font-size: 0.78em; margin-top: 8px; opacity: 0.85; line-height: 1.3; }
+
+        /* Effect Size Visual */
+        .effect-container { margin: 20px 0; }
+        .effect-bar-wrapper { margin-bottom: 16px; }
+        .effect-label { display: flex; justify-content: space-between; margin-bottom: 4px; font-size: 0.88em; }
+        .effect-label span:first-child { font-weight: 600; }
+        .effect-label span:last-child { color: #718096; }
+        .effect-bar-bg { height: 36px; background: #edf2f7; border-radius: 18px; position: relative; overflow: hidden; }
+        .effect-bar { height: 100%; border-radius: 18px; display: flex; align-items: center; justify-content: flex-end; padding-right: 12px; color: white; font-weight: 700; font-size: 0.9em; transition: width 1s ease; }
+        .eb1 { width: 87.5%; background: linear-gradient(90deg, #3182ce, #63b3ed); }
+        .eb2 { width: 60%; background: linear-gradient(90deg, #38a169, #68d391); }
+        .eb3 { width: 50%; background: linear-gradient(90deg, #dd6b20, #f6ad55); }
+        .eb4 { width: 25%; background: linear-gradient(90deg, #e53e3e, #fc8181); }
+        .threshold { position: absolute; left: 50%; top: -6px; bottom: -6px; width: 2px; background: #e53e3e; z-index: 2; }
+        .threshold-label { position: absolute; left: 50%; top: -22px; transform: translateX(-50%); font-size: 0.7em; color: #e53e3e; font-weight: 600; white-space: nowrap; }
+
+        /* Impact Areas */
+        .impact-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: 16px 0; }
+        .impact-card { border-radius: 12px; padding: 22px; border-top: 5px solid; background: white; }
+        .impact-card h3 { font-size: 1em; margin-bottom: 10px; }
+        .imp1 { border-color: #3182ce; }
+        .imp1 h3 { color: #2b6cb0; }
+        .imp2 { border-color: #38a169; }
+        .imp2 h3 { color: #276749; }
+        .imp3 { border-color: #805ad5; }
+        .imp3 h3 { color: #553c9a; }
+        .impact-card ul { list-style: none; padding: 0; }
+        .impact-card li { padding: 5px 0 5px 22px; position: relative; font-size: 0.85em; color: #4a5568; line-height: 1.5; }
+        .impact-card li::before { content: '▸'; position: absolute; left: 4px; font-weight: bold; }
+        .imp1 li::before { color: #3182ce; }
+        .imp2 li::before { color: #38a169; }
+        .imp3 li::before { color: #805ad5; }
+
+        /* Equity highlight */
+        .equity-box { background: linear-gradient(135deg, #faf5ff, #ebf8ff); border: 2px solid #805ad5; border-radius: 14px; padding: 24px; margin: 20px 0; display: flex; gap: 20px; align-items: center; }
+        .equity-icon { font-size: 3em; flex-shrink: 0; }
+        .equity-content h3 { color: #553c9a; font-size: 1.1em; margin-bottom: 6px; }
+        .equity-content p { font-size: 0.92em; color: #4a5568; line-height: 1.6; }
+
+        /* What works / doesn't */
+        .works-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 16px 0; }
+        .works-card { border-radius: 12px; padding: 22px; }
+        .works-yes { background: #f0fff4; border: 2px solid #68d391; }
+        .works-no { background: #fff5f5; border: 2px solid #fc8181; }
+        .works-card h3 { margin-bottom: 12px; font-size: 1em; }
+        .works-yes h3 { color: #276749; }
+        .works-no h3 { color: #9b2c2c; }
+        .works-card ul { padding-left: 0; list-style: none; }
+        .works-card li { padding: 5px 0 5px 24px; position: relative; font-size: 0.85em; color: #4a5568; line-height: 1.5; }
+        .works-yes li::before { content: '✓'; position: absolute; left: 2px; color: #38a169; font-weight: bold; }
+        .works-no li::before { content: '✗'; position: absolute; left: 2px; color: #e53e3e; font-weight: bold; }
+
+        /* Sources table */
+        .sources { width: 100%; border-collapse: separate; border-spacing: 0; border-radius: 10px; overflow: hidden; font-size: 0.85em; }
+        .sources th { background: #2a4365; color: white; padding: 10px 14px; text-align: left; }
+        .sources td { padding: 8px 14px; border-bottom: 1px solid #e2e8f0; }
+        .sources tr:nth-child(even) td { background: #f7fafc; }
+        .sources .highlight-cell { font-weight: 700; color: #2b6cb0; }
+
+        .footer { text-align: center; padding: 20px; color: #a0aec0; font-size: 0.85em; }
+
+        @media (max-width: 768px) {
+            .hero-stats { grid-template-columns: repeat(2, 1fr); }
+            .impact-grid { grid-template-columns: 1fr; }
+            .works-grid { grid-template-columns: 1fr; }
+            .equity-box { flex-direction: column; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Impacto de la Evaluación Formativa</h1>
+            <p>La evidencia de investigación en cifras | Unidad 1.4</p>
+        </div>
+
+        <!-- HERO STATS -->
+        <div class="hero-stats">
+            <div class="hero-card hc1">
+                <div class="big-num">d=0.70</div>
+                <div class="unit">tamaño del efecto</div>
+                <div class="desc">Retroalimentación (Hattie) — Top 10 de 150+ intervenciones</div>
+            </div>
+            <div class="hero-card hc2">
+                <div class="big-num">250+</div>
+                <div class="unit">estudios revisados</div>
+                <div class="desc">Black y Wiliam (1998) — evidencia masiva de impacto</div>
+            </div>
+            <div class="hero-card hc3">
+                <div class="big-num">20-35%</div>
+                <div class="unit">reducción</div>
+                <div class="desc">En tasas de reprobación con evaluación formativa sistemática</div>
+            </div>
+            <div class="hero-card hc4">
+                <div class="big-num">800+</div>
+                <div class="unit">metaanálisis</div>
+                <div class="desc">Sintetizados en Visible Learning (millones de estudiantes)</div>
+            </div>
+        </div>
+
+        <!-- TAMAÑOS DEL EFECTO -->
+        <div class="section">
+            <h2>Tamaños del efecto comparados</h2>
+            <p style="font-size:0.88em; color:#718096; margin-bottom:14px;">El tamaño del efecto (d de Cohen) mide cuánto impacta una intervención. d=0.40 se considera el umbral de efecto significativo.</p>
+            <div class="effect-container">
+                <div class="effect-bar-wrapper">
+                    <div class="effect-label"><span>Retroalimentación (Hattie)</span><span>d = 0.70</span></div>
+                    <div class="effect-bar-bg">
+                        <div class="effect-bar eb1">0.70</div>
+                        <div class="threshold"></div>
+                        <div class="threshold-label">d=0.40 umbral</div>
+                    </div>
+                </div>
+                <div class="effect-bar-wrapper">
+                    <div class="effect-label"><span>Evaluación formativa (Black y Wiliam)</span><span>d = 0.40-0.70</span></div>
+                    <div class="effect-bar-bg"><div class="effect-bar eb2">0.40-0.70</div></div>
+                </div>
+                <div class="effect-bar-wrapper">
+                    <div class="effect-label"><span>Evaluación formativa (Kingston y Nash, criterios estrictos)</span><span>d = 0.20</span></div>
+                    <div class="effect-bar-bg"><div class="effect-bar eb4">0.20</div></div>
+                </div>
+                <div class="effect-bar-wrapper">
+                    <div class="effect-label"><span>Media de TODAS las intervenciones educativas</span><span>d = 0.40</span></div>
+                    <div class="effect-bar-bg"><div class="effect-bar eb3">0.40</div></div>
+                </div>
+            </div>
+            <p style="font-size:0.82em; color:#718096; margin-top:8px; font-style:italic;">Un efecto de d=0.70 equivale a que un estudiante promedio (percentil 50) pase al percentil 76.</p>
+        </div>
+
+        <!-- ÁREAS DE IMPACTO -->
+        <div class="section">
+            <h2>Tres áreas de impacto documentado</h2>
+            <div class="impact-grid">
+                <div class="impact-card imp1">
+                    <h3>Rendimiento Académico</h3>
+                    <ul>
+                        <li>Reducción del 20-35% en tasas de reprobación</li>
+                        <li>Mejora de 0.5-1 punto en calificaciones (escala 1-5)</li>
+                        <li>Impacto especialmente fuerte en STEM (cálculo, física, química)</li>
+                        <li>Efecto acumulativo: crece con implementación sostenida</li>
+                    </ul>
+                </div>
+                <div class="impact-card imp2">
+                    <h3>Motivación y Compromiso</h3>
+                    <ul>
+                        <li>Reducción de ansiedad evaluativa</li>
+                        <li>Aumento de motivación intrínseca</li>
+                        <li>Mayor persistencia — menos abandono</li>
+                        <li>Mayor participación en clase</li>
+                    </ul>
+                </div>
+                <div class="impact-card imp3">
+                    <h3>Pensamiento Crítico y Autorregulación</h3>
+                    <ul>
+                        <li>Desarrollo de metacognición</li>
+                        <li>Mejores estrategias de aprendizaje</li>
+                        <li>Mayor autonomía académica</li>
+                        <li>Aprendizaje profundo vs. superficial</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- EQUIDAD -->
+        <div class="equity-box">
+            <div class="equity-icon">⚖️</div>
+            <div class="equity-content">
+                <h3>Impacto en equidad: beneficia más a quien más lo necesita</h3>
+                <p>La evaluación formativa beneficia <strong>desproporcionadamente a los estudiantes de bajo rendimiento</strong>. Estos estudiantes suelen tener menor capacidad de autorregulación — precisamente lo que la evaluación formativa desarrolla. El resultado: se reduce la brecha de desempeño entre estudiantes de alto y bajo rendimiento, sin perjudicar a los primeros. La evaluación formativa no es solo una mejora técnica — es una herramienta de inclusión y equidad educativa.</p>
+            </div>
+        </div>
+
+        <!-- QUÉ FUNCIONA Y QUÉ NO -->
+        <div class="section">
+            <h2>Condiciones de efectividad</h2>
+            <div class="works-grid">
+                <div class="works-card works-yes">
+                    <h3>Lo que SÍ funciona</h3>
+                    <ul>
+                        <li>Retroalimentación específica, oportuna y orientada a la acción</li>
+                        <li>Participación activa del estudiante (autoevaluación, coevaluación)</li>
+                        <li>Uso real de resultados para ajustar la enseñanza</li>
+                        <li>Alineamiento con los resultados de aprendizaje</li>
+                        <li>Clima de confianza donde el error no se penaliza</li>
+                        <li>Implementación sostenida (mínimo 1 semestre)</li>
+                    </ul>
+                </div>
+                <div class="works-card works-no">
+                    <h3>Lo que NO funciona</h3>
+                    <ul>
+                        <li>Quizzes frecuentes solo con nota, sin retroalimentación</li>
+                        <li>Retroalimentación genérica ("Buen trabajo", "Necesita mejorar")</li>
+                        <li>Retroalimentación tardía (semanas después)</li>
+                        <li>Elogios centrados en la persona, no en la tarea</li>
+                        <li>Sobrecarga evaluativa (demasiadas actividades)</li>
+                        <li>Recoger evidencia pero no usarla para decidir</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- TABLA DE FUENTES -->
+        <div class="section">
+            <h2>Referencia rápida de evidencia</h2>
+            <table class="sources">
+                <tr>
+                    <th>Hallazgo</th>
+                    <th>Fuente</th>
+                    <th>Dato clave</th>
+                </tr>
+                <tr>
+                    <td>Efecto global de la evaluación formativa</td>
+                    <td>Black y Wiliam (1998)</td>
+                    <td class="highlight-cell">d = 0.4 a 0.7</td>
+                </tr>
+                <tr>
+                    <td>Efecto de la retroalimentación</td>
+                    <td>Hattie (2009)</td>
+                    <td class="highlight-cell">d = 0.70</td>
+                </tr>
+                <tr>
+                    <td>Reducción brecha alto/bajo rendimiento</td>
+                    <td>Múltiples estudios</td>
+                    <td class="highlight-cell">20-35%</td>
+                </tr>
+                <tr>
+                    <td>Nivel más efectivo de retroalimentación</td>
+                    <td>Hattie y Timperley (2007)</td>
+                    <td class="highlight-cell">Proceso y autorregulación</td>
+                </tr>
+                <tr>
+                    <td>Nivel menos efectivo</td>
+                    <td>Hattie y Timperley (2007)</td>
+                    <td class="highlight-cell">Elogios personales ("del yo")</td>
+                </tr>
+                <tr>
+                    <td>Tiempo para efectos sostenidos</td>
+                    <td>Múltiples estudios</td>
+                    <td class="highlight-cell">Mínimo 1 semestre</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="footer">
+            <p>Curso: Evaluación Formativa en Educación Superior | Módulo 1 — Fundamentos | Unidad 1.4</p>
+        </div>
+    </div>
+</body>
+</html>

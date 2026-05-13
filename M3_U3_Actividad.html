@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Actividad 3.3 — Retroalimentación Eficiente</title>
+<style>
+:root{--primary:#C65D21;--dark:#8B4513;--light:#FFF3E0;--accent:#FFB74D;--bg:#f8fafc;--text:#1e293b;--muted:#64748b;--border:#e2e8f0;--radius:12px}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+.container{max-width:860px;margin:0 auto;padding:20px}
+.header{background:linear-gradient(135deg, #C65D21, #E8863A);color:white;padding:32px;border-radius:var(--radius);margin-bottom:24px;text-align:center}
+.header .badge{display:inline-block;background:rgba(255,255,255,0.2);padding:4px 16px;border-radius:20px;font-size:13px;margin-bottom:10px;letter-spacing:1px}
+.header h1{font-size:1.6em;margin-bottom:8px}
+.header p{opacity:0.85;font-size:0.95em}
+.info-bar{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:28px}
+.info-item{flex:1;min-width:200px;background:white;border-left:4px solid var(--primary);padding:12px 16px;border-radius:0 var(--radius) var(--radius) 0;box-shadow:0 1px 3px rgba(0,0,0,0.06)}
+.info-item strong{color:var(--primary)}
+.card{background:white;border-radius:var(--radius);padding:28px;margin-bottom:20px;box-shadow:0 1px 3px rgba(0,0,0,0.08);border:1px solid var(--border)}
+.card h2{color:var(--primary);font-size:1.2em;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.question-block{margin-bottom:16px}
+.question-block label{display:block;font-weight:600;margin-bottom:8px;font-size:0.96em}
+.hint{color:var(--muted);font-size:0.85em;margin-bottom:8px;font-style:italic}
+textarea{width:100%;min-height:110px;padding:14px;border:2px solid var(--border);border-radius:8px;font-family:inherit;font-size:0.95em;resize:vertical;transition:border-color 0.2s;line-height:1.6}
+textarea:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px #C65D2122}
+.char-count{text-align:right;font-size:0.8em;color:var(--muted);margin-top:4px}
+.options-group{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px}
+.option-btn{padding:10px 18px;border:2px solid var(--border);border-radius:8px;background:white;cursor:pointer;font-size:0.9em;transition:all 0.2s;text-align:left}
+.option-btn:hover{border-color:var(--primary);background:var(--light)}
+.option-btn.selected{border-color:var(--primary);background:var(--primary);color:white}
+.submit-section{text-align:center;margin:32px 0}
+.btn-primary{background:linear-gradient(135deg, #C65D21, #E8863A);color:white;border:none;padding:16px 48px;border-radius:8px;font-size:1.05em;font-weight:600;cursor:pointer;transition:transform 0.2s,box-shadow 0.2s}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 4px 12px #C65D2144}
+.btn-primary:disabled{opacity:0.5;cursor:not-allowed;transform:none;box-shadow:none}
+.feedback-panel{background:linear-gradient(135deg,#f0f9ff,#FFF3E0);border:2px solid var(--primary);border-radius:var(--radius);padding:28px;margin-top:20px;display:none}
+.feedback-panel.visible{display:block;animation:fadeIn 0.5s ease}
+.feedback-panel h3{color:var(--primary);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.feedback-section{margin-bottom:18px}
+.feedback-section h4{font-size:0.95em;color:var(--dark);margin-bottom:6px}
+.feedback-section p,.feedback-section li{font-size:0.93em;line-height:1.7}
+.feedback-section ul{margin:8px 0 0 20px}
+.feedback-badge{display:inline-block;padding:4px 12px;border-radius:20px;font-size:0.8em;font-weight:600;margin-right:6px;margin-bottom:6px}
+.badge-good{background:#dcfce7;color:#16a34a}
+.badge-improve{background:#fef3c7;color:#d97706}
+.badge-tip{background:#e0e7ff;color:#4338ca}
+.loading{display:none;text-align:center;padding:24px}
+.loading.visible{display:block}
+.spinner{display:inline-block;width:40px;height:40px;border:4px solid var(--border);border-top-color:var(--primary);border-radius:50%;animation:spin 0.8s linear infinite}
+.progress-bar{height:6px;background:var(--border);border-radius:3px;margin-bottom:24px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--primary),var(--accent));border-radius:3px;transition:width 0.5s ease}
+.error-msg{background:#fef2f2;border:1px solid #fecaca;color:#991b1b;padding:12px 16px;border-radius:8px;margin-top:12px;display:none;font-size:0.9em}
+.error-msg.visible{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media(max-width:600px){.container{padding:12px}.header{padding:20px}.header h1{font-size:1.3em}.card{padding:18px}.option-btn{width:100%}}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div class="badge">M&Oacute;DULO 3 &middot; UNIDAD 3</div>
+    <h1>&#9201; Retroalimentación Eficiente</h1>
+    <p>Actividad de pr&aacute;ctica con retroalimentaci&oacute;n IA</p>
+  </div>
+  <div class="info-bar">
+    <div class="info-item">&#128339; <strong>Tiempo:</strong> 15 min</div>
+    <div class="info-item">&#127919; <strong>Objetivo:</strong> Diseñar un protocolo de retroalimentación de 3 capas viable</div>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+  
+  <div class="card" id="q1Card">
+    <h2>&#9997; Pregunta 1</h2>
+    <div class="question-block">
+      <label>Seleccione una evaluación de su curso. ¿Cuántos estudiantes tiene y cuánto tiempo puede dedicar?</label>
+      <div class="hint">Sea realista: el protocolo debe ser sostenible.</div>
+      <textarea id="q1" placeholder="Escriba su respuesta aquí..." oninput="updateProgress()"></textarea>
+      <div class="char-count"><span id="q1count">0</span> caracteres</div>
+    </div>
+  </div>
+  <div class="card" id="q2Card">
+    <h2>&#128161; Pregunta 2</h2>
+    <div class="question-block">
+      <label>Diseñe un protocolo de 3 fases (auto → co → docente) con actor, acción, tiempo e instrumento.</label>
+      <div class="hint">Fase 1: ... | Fase 2: ... | Fase 3: ...</div>
+      <textarea id="q2" placeholder="Escriba su respuesta aquí..." oninput="updateProgress()"></textarea>
+      <div class="char-count"><span id="q2count">0</span> caracteres</div>
+    </div>
+  </div>
+  <div class="card" id="q3Card">
+    <h2>&#128300; Pregunta 3</h2>
+    <div class="question-block">
+      <label>¿Cuál criterio de calidad es el más débil?</label>
+      
+      <div class="options-group" id="q3Group">
+        <button class="option-btn" onclick="selectOption(this,'q3Group','q3')">Sostenibilidad</button>
+        <button class="option-btn" onclick="selectOption(this,'q3Group','q3')">Calidad del feedback</button>
+        <button class="option-btn" onclick="selectOption(this,'q3Group','q3')">Autonomía estudiantil</button>
+        <button class="option-btn" onclick="selectOption(this,'q3Group','q3')">Equidad</button>
+        <button class="option-btn" onclick="selectOption(this,'q3Group','q3')">Viabilidad</button>
+      </div>
+    </div>
+  </div>
+  <div class="card" id="q4Card">
+    <h2>&#128640; Pregunta 4</h2>
+    <div class="question-block">
+      <label>Proponga una mejora concreta para fortalecer ese criterio.</label>
+      <div class="hint">¿Qué cambiaría, agregaría o eliminaría?</div>
+      <textarea id="q4" placeholder="Escriba su respuesta aquí..." oninput="updateProgress()"></textarea>
+      <div class="char-count"><span id="q4count">0</span> caracteres</div>
+    </div>
+  </div>
+  <div class="submit-section">
+    <button class="btn-primary" id="submitBtn" onclick="submitActivity()">&#129302; Obtener retroalimentaci&oacute;n IA</button>
+  </div>
+  <div class="loading" id="loading">
+    <div class="spinner"></div>
+    <p style="margin-top:12px;color:var(--muted);">Analizando sus respuestas con inteligencia artificial...</p>
+    <p style="color:var(--muted);font-size:0.85em;margin-top:4px;">Esto puede tomar 10-20 segundos</p>
+  </div>
+  <div class="error-msg" id="errorMsg"></div>
+  <div class="feedback-panel" id="feedbackPanel">
+    <h3>&#129302; Retroalimentaci&oacute;n personalizada</h3>
+    <div id="feedbackContent"></div>
+  </div>
+  <div style="text-align:center;margin-top:40px;padding:16px;color:var(--muted);font-size:0.85em;border-top:1px solid var(--border);">
+    Curso: Evaluaci&oacute;n Formativa en Educaci&oacute;n Superior &middot; M&oacute;dulo 3, Unidad 3
+  </div>
+</div>
+<script>
+const WORKER_URL = 'https://evaluacionformativa.monicacastillaluna.workers.dev';
+const MOD = 3, UNIT = 3;
+const AI_CONTEXT = "Unidad 3.3 sobre eficiencia. Sistema de 3 capas: autoevaluación → coevaluación → docente focalizado. 5 criterios: sostenibilidad, calidad, autonomía, equidad, viabilidad.";
+const AI_FOCUS = "Evalúe realismo del protocolo, articulación de las 3 capas y viabilidad de la mejora propuesta.";
+const selections = {};
+
+document.querySelectorAll('textarea').forEach(ta => {
+  ta.addEventListener('input', function(){
+    const c = document.getElementById(this.id+'count');
+    if(c) c.textContent = this.value.length;
+  });
+});
+
+function selectOption(btn, groupId, qId) {
+  document.querySelectorAll('#'+groupId+' .option-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  selections[qId] = btn.textContent.trim();
+  updateProgress();
+}
+
+function updateProgress() {
+  const qs = [{"id":"q1","type":"textarea"},{"id":"q2","type":"textarea"},{"id":"q3","type":"select"},{"id":"q4","type":"textarea"}];
+  let filled = 0;
+  qs.forEach(q => {
+    if(q.type==='textarea'){const el=document.getElementById(q.id);if(el&&el.value.trim().length>15)filled++}
+    if(q.type==='select'&&selections[q.id])filled++;
+  });
+  document.getElementById('progressFill').style.width=(filled/qs.length*100)+'%';
+}
+
+async function submitActivity() {
+  const qs = [{"id":"q1","type":"textarea","label":"Seleccione una evaluación de su curso. ¿Cuántos estudiantes tiene y cuánto tiempo puede dedicar?"},{"id":"q2","type":"textarea","label":"Diseñe un protocolo de 3 fases (auto → co → docente) con actor, acción, tiempo e instrumento."},{"id":"q3","type":"select","label":"¿Cuál criterio de calidad es el más débil?"},{"id":"q4","type":"textarea","label":"Proponga una mejora concreta para fortalecer ese criterio."}];
+  let allFilled = true, answers = '';
+  qs.forEach((q,i) => {
+    if(q.type==='textarea'){
+      const v=document.getElementById(q.id).value.trim();
+      if(v.length<15)allFilled=false;
+      answers+='\nPregunta '+(i+1)+': '+q.label+'\nRespuesta: '+v+'\n';
+    } else {
+      if(!selections[q.id])allFilled=false;
+      answers+='\nPregunta '+(i+1)+': '+q.label+'\nSeleccionó: "'+(selections[q.id]||'(vacío)') +'"\n';
+    }
+  });
+  if(!allFilled){alert('Complete todas las preguntas antes de solicitar retroalimentación.');return}
+
+  const btn=document.getElementById('submitBtn');
+  const errorEl=document.getElementById('errorMsg');
+  btn.disabled=true;
+  errorEl.classList.remove('visible');
+  document.getElementById('loading').classList.add('visible');
+  document.getElementById('feedbackPanel').classList.remove('visible');
+
+  try {
+    const resp = await fetch(WORKER_URL, {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({modulo:MOD, unidad:UNIT, respuestas:answers, contexto:AI_CONTEXT, enfoque:AI_FOCUS})
+    });
+    const data = await resp.json();
+    if(data.error) throw new Error(data.error);
+    document.getElementById('feedbackContent').innerHTML = data.feedback;
+    document.getElementById('feedbackPanel').classList.add('visible');
+    document.getElementById('feedbackPanel').scrollIntoView({behavior:'smooth',block:'start'});
+  } catch(e) {
+    errorEl.textContent = 'No se pudo obtener retroalimentación: '+e.message+'. Intente nuevamente en unos segundos.';
+    errorEl.classList.add('visible');
+  }
+  document.getElementById('loading').classList.remove('visible');
+  btn.disabled=false;
+}
+</script>
+</body>
+</html>

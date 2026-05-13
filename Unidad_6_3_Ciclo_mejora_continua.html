@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ciclo de Mejora Continua - Unidad 6.3</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f4f8; color: #2d3748; line-height: 1.6; }
+        .container { max-width: 940px; margin: 0 auto; padding: 20px; }
+        .header { background: linear-gradient(135deg, #553c9a, #805ad5); color: white; padding: 36px; border-radius: 16px; text-align: center; margin-bottom: 30px; }
+        .header h1 { font-size: 1.7em; margin-bottom: 8px; }
+        .header p { font-size: 0.95em; opacity: 0.92; }
+        .section { background: white; border-radius: 14px; padding: 28px; margin-bottom: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); }
+        .section h2 { font-size: 1.3em; color: #553c9a; margin-bottom: 16px; border-bottom: 2px solid #faf5ff; padding-bottom: 8px; }
+
+        /* Cycle diagram */
+        .cycle-wheel { display: flex; flex-wrap: wrap; justify-content: center; gap: 16px; padding: 20px 0; }
+        .cycle-card { width: 200px; border-radius: 14px; overflow: hidden; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; border: 2px solid transparent; }
+        .cycle-card:hover { transform: translateY(-4px); box-shadow: 0 6px 20px rgba(0,0,0,0.12); }
+        .cycle-card.active { border-color: #805ad5; box-shadow: 0 4px 16px rgba(128,90,213,0.3); }
+        .cycle-card-header { padding: 16px; color: white; text-align: center; }
+        .cycle-card-header .card-num { font-size: 2em; font-weight: 700; opacity: 0.5; }
+        .cycle-card-header h3 { font-size: 1em; margin-top: 4px; }
+        .cycle-card-body { padding: 14px; font-size: 0.82em; background: white; min-height: 80px; }
+
+        .card-impl .cycle-card-header { background: linear-gradient(135deg, #2b6cb0, #3182ce); }
+        .card-recol .cycle-card-header { background: linear-gradient(135deg, #276749, #38a169); }
+        .card-refl .cycle-card-header { background: linear-gradient(135deg, #c05621, #dd6b20); }
+        .card-ajust .cycle-card-header { background: linear-gradient(135deg, #553c9a, #805ad5); }
+
+        /* Arrows between cards */
+        .cycle-arrow-h { display: flex; align-items: center; font-size: 1.8em; color: #805ad5; font-weight: bold; }
+
+        /* Detail panel */
+        .detail-panel { display: none; background: #faf5ff; border: 2px solid #805ad5; border-radius: 14px; padding: 20px; margin-top: 16px; animation: fadeIn 0.3s ease; }
+        .detail-panel.active { display: block; }
+        .detail-panel h4 { color: #553c9a; margin-bottom: 10px; font-size: 1.05em; }
+        .detail-panel ul { margin-left: 18px; }
+        .detail-panel li { margin-bottom: 6px; font-size: 0.88em; }
+
+        /* Implementation phases */
+        .phases-container { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+        .phase-card { border-radius: 14px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.07); }
+        .phase-header { padding: 16px; color: white; text-align: center; }
+        .phase-body { padding: 16px; background: white; font-size: 0.82em; }
+        .phase-body ul { margin-left: 16px; margin-top: 6px; }
+        .phase-body li { margin-bottom: 4px; }
+        .phase-1 .phase-header { background: linear-gradient(135deg, #3182ce, #63b3ed); }
+        .phase-2 .phase-header { background: linear-gradient(135deg, #38a169, #68d391); }
+        .phase-3 .phase-header { background: linear-gradient(135deg, #805ad5, #b794f4); }
+        .phase-tag { display: inline-block; padding: 2px 10px; border-radius: 10px; font-size: 0.78em; font-weight: 600; margin-bottom: 8px; }
+        .phase-1 .phase-tag { background: #ebf8ff; color: #2b6cb0; }
+        .phase-2 .phase-tag { background: #f0fff4; color: #276749; }
+        .phase-3 .phase-tag { background: #faf5ff; color: #553c9a; }
+
+        /* Indicators */
+        .indicator-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+        .indicator-card { border-radius: 12px; padding: 18px; text-align: center; }
+        .indicator-card h4 { font-size: 0.95em; margin-bottom: 8px; }
+        .indicator-card .ind-icon { font-size: 2em; margin-bottom: 8px; }
+        .indicator-card ul { text-align: left; margin-left: 14px; font-size: 0.8em; }
+        .indicator-card li { margin-bottom: 4px; }
+        .ind-proceso { background: #ebf8ff; border: 1px solid #bee3f8; }
+        .ind-proceso h4 { color: #2b6cb0; }
+        .ind-resultado { background: #f0fff4; border: 1px solid #c6f6d5; }
+        .ind-resultado h4 { color: #276749; }
+        .ind-sostenibilidad { background: #fffaf0; border: 1px solid #feebc8; }
+        .ind-sostenibilidad h4 { color: #c05621; }
+
+        /* Community */
+        .community-steps { counter-reset: step; }
+        .community-step { display: flex; gap: 14px; align-items: flex-start; margin-bottom: 16px; padding-bottom: 16px; border-bottom: 1px solid #edf2f7; }
+        .community-step:last-child { border-bottom: none; }
+        .step-number { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #553c9a, #805ad5); color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.95em; flex-shrink: 0; }
+        .step-content h4 { font-size: 0.95em; color: #553c9a; margin-bottom: 4px; }
+        .step-content p { font-size: 0.85em; color: #4a5568; }
+
+        .footer { text-align: center; padding: 20px; font-size: 0.78em; color: #718096; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+
+        @media (max-width: 768px) {
+            .cycle-wheel { flex-direction: column; align-items: center; }
+            .cycle-arrow-h { transform: rotate(90deg); justify-content: center; }
+            .phases-container { grid-template-columns: 1fr; }
+            .indicator-grid { grid-template-columns: 1fr; }
+            .header { padding: 24px 16px; }
+            .header h1 { font-size: 1.35em; }
+            .section { padding: 20px 16px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Ciclo de Mejora Continua</h1>
+            <p>Unidad 6.3 &mdash; Implementaci&oacute;n, seguimiento y mejora continua</p>
+            <p style="margin-top:6px; font-size:0.85em; opacity:0.8;">M&oacute;dulo 6 &bull; Evaluaci&oacute;n Formativa en Educaci&oacute;n Superior</p>
+        </div>
+
+        <!-- Cycle -->
+        <div class="section">
+            <h2>El ciclo de mejora continua</h2>
+            <p style="font-size:0.88em; color:#718096; margin-bottom:14px;">Haga clic en cada fase para ver las estrategias asociadas.</p>
+
+            <div class="cycle-wheel">
+                <div class="cycle-card card-impl" onclick="showDetail('impl')">
+                    <div class="cycle-card-header">
+                        <div class="card-num">1</div>
+                        <h3>Implementar</h3>
+                    </div>
+                    <div class="cycle-card-body">Ejecutar el plan con flexibilidad. No modificar todo al primer obst&aacute;culo.</div>
+                </div>
+                <div class="cycle-arrow-h">&#8594;</div>
+                <div class="cycle-card card-recol" onclick="showDetail('recol')">
+                    <div class="cycle-card-header">
+                        <div class="card-num">2</div>
+                        <h3>Recolectar datos</h3>
+                    </div>
+                    <div class="cycle-card-body">Recopilar informaci&oacute;n sistem&aacute;tica sobre los indicadores definidos.</div>
+                </div>
+                <div class="cycle-arrow-h">&#8594;</div>
+                <div class="cycle-card card-refl" onclick="showDetail('refl')">
+                    <div class="cycle-card-header">
+                        <div class="card-num">3</div>
+                        <h3>Reflexionar</h3>
+                    </div>
+                    <div class="cycle-card-body">Analizar los datos con preguntas orientadoras sobre qu&eacute; funcion&oacute; y qu&eacute; no.</div>
+                </div>
+                <div class="cycle-arrow-h">&#8594;</div>
+                <div class="cycle-card card-ajust" onclick="showDetail('ajust')">
+                    <div class="cycle-card-header">
+                        <div class="card-num">4</div>
+                        <h3>Ajustar</h3>
+                    </div>
+                    <div class="cycle-card-body">Mantener lo que funciona. Modificar, eliminar o incorporar seg&uacute;n los datos.</div>
+                </div>
+            </div>
+
+            <p style="text-align:center; font-size:0.85em; color:#805ad5; margin-top:8px;">&#8635; El ciclo se repite cada semestre, refinando progresivamente el sistema</p>
+
+            <div class="detail-panel" id="detail-impl">
+                <h4>&#128736; Fase 1: Implementar</h4>
+                <ul>
+                    <li>Ejecute el plan tal como lo dise&ntilde;&oacute;, con la flexibilidad necesaria para la realidad del aula.</li>
+                    <li>No modifique todo al primer obst&aacute;culo; necesita datos antes de decidir qu&eacute; cambiar.</li>
+                    <li>Comunique a los estudiantes que est&aacute; probando un enfoque nuevo y por qu&eacute;.</li>
+                    <li>Lleve un registro breve despu&eacute;s de cada clase donde implemente una estrategia formativa.</li>
+                </ul>
+            </div>
+            <div class="detail-panel" id="detail-recol">
+                <h4>&#128202; Fase 2: Recolectar datos</h4>
+                <ul>
+                    <li><strong>Registro personal:</strong> cu&aacute;ntas actividades implement&oacute;, tiempo invertido, observaciones.</li>
+                    <li><strong>Respuestas estudiantiles:</strong> datos de CATs, autoevaluaciones, entregas formativas.</li>
+                    <li><strong>Encuesta de mitad de semestre:</strong> percepci&oacute;n estudiantil sobre el sistema.</li>
+                    <li><strong>Calificaciones:</strong> tendencias de desempe&ntilde;o comparadas con semestres anteriores.</li>
+                    <li><strong>Observaci&oacute;n de pares:</strong> retroalimentaci&oacute;n de un colega que visite su clase.</li>
+                </ul>
+            </div>
+            <div class="detail-panel" id="detail-refl">
+                <h4>&#129504; Fase 3: Reflexionar</h4>
+                <p style="margin-bottom:10px; font-size:0.88em;">Preguntas orientadoras para el an&aacute;lisis:</p>
+                <ul>
+                    <li>&iquest;Qu&eacute; estrategias produjeron la mejor evidencia sobre el aprendizaje?</li>
+                    <li>&iquest;Qu&eacute; estrategias tuvieron menor participaci&oacute;n y por qu&eacute;?</li>
+                    <li>&iquest;La retroalimentaci&oacute;n fue realmente utilizada por los estudiantes?</li>
+                    <li>&iquest;D&oacute;nde fue excesiva la carga? &iquest;Qu&eacute; se puede simplificar?</li>
+                    <li>&iquest;Qu&eacute; sorprendi&oacute;? &iquest;Qu&eacute; confirma lo que ya sab&iacute;a?</li>
+                </ul>
+            </div>
+            <div class="detail-panel" id="detail-ajust">
+                <h4>&#128295; Fase 4: Ajustar</h4>
+                <ul>
+                    <li><strong style="color:#38a169;">Mantener</strong> lo que funciona bien y produce buenos datos.</li>
+                    <li><strong style="color:#dd6b20;">Modificar</strong> lo que funciona parcialmente (cambiar frecuencia, formato, momento).</li>
+                    <li><strong style="color:#e53e3e;">Eliminar</strong> lo que no funciona (eliminar tambi&eacute;n es ajustar).</li>
+                    <li><strong style="color:#3182ce;">Incorporar</strong> algo nuevo basado en lo aprendido en el ciclo.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Implementation Phases -->
+        <div class="section">
+            <h2>Fases de implementaci&oacute;n</h2>
+            <div class="phases-container">
+                <div class="phase-card phase-1">
+                    <div class="phase-header">
+                        <div style="font-size:1.6em; margin-bottom:4px;">&#127793;</div>
+                        <h3>Fase 1: Piloto</h3>
+                        <div style="font-size:0.82em; opacity:0.85;">Semestre 1</div>
+                    </div>
+                    <div class="phase-body">
+                        <span class="phase-tag">1 asignatura</span>
+                        <ul>
+                            <li>2-3 estrategias nuevas</li>
+                            <li>50% pr&aacute;cticas anteriores</li>
+                            <li>Documentar todo</li>
+                            <li>Comunicar al grupo</li>
+                        </ul>
+                        <p style="margin-top:10px; font-weight:600; color:#2b6cb0; font-size:0.85em;">Meta: &ge;3 componentes del sistema, &ge;70% participaci&oacute;n, &ge;2 ajustes basados en datos</p>
+                    </div>
+                </div>
+                <div class="phase-card phase-2">
+                    <div class="phase-header">
+                        <div style="font-size:1.6em; margin-bottom:4px;">&#127795;</div>
+                        <h3>Fase 2: Expansi&oacute;n</h3>
+                        <div style="font-size:0.82em; opacity:0.85;">Semestres 2-3</div>
+                    </div>
+                    <div class="phase-body">
+                        <span class="phase-tag">2-3 asignaturas</span>
+                        <ul>
+                            <li>M&aacute;s estrategias</li>
+                            <li>Herramientas digitales</li>
+                            <li>Rutinizar CATs</li>
+                            <li>Compartir con colegas</li>
+                        </ul>
+                        <p style="margin-top:10px; font-weight:600; color:#276749; font-size:0.85em;">Meta: sistema adaptable, carga estable, patrones identificados</p>
+                    </div>
+                </div>
+                <div class="phase-card phase-3">
+                    <div class="phase-header">
+                        <div style="font-size:1.6em; margin-bottom:4px;">&#127811;</div>
+                        <h3>Fase 3: Consolidaci&oacute;n</h3>
+                        <div style="font-size:0.82em; opacity:0.85;">Semestre 4+</div>
+                    </div>
+                    <div class="phase-body">
+                        <span class="phase-tag">Todas las asignaturas</span>
+                        <ul>
+                            <li>Documentar como modelo</li>
+                            <li>Talleres para colegas</li>
+                            <li>Comunidad de pr&aacute;ctica</li>
+                            <li>Investigar propia pr&aacute;ctica</li>
+                        </ul>
+                        <p style="margin-top:10px; font-weight:600; color:#553c9a; font-size:0.85em;">Meta: institucionalizar, formar a otros, contribuir a pol&iacute;ticas</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Indicators -->
+        <div class="section">
+            <h2>Indicadores de seguimiento</h2>
+            <div class="indicator-grid">
+                <div class="indicator-card ind-proceso">
+                    <div class="ind-icon">&#128203;</div>
+                    <h4>De proceso</h4>
+                    <ul>
+                        <li>Tasa implementaci&oacute;n &gt;80%</li>
+                        <li>Frecuencia retroalim. &ge;3/parcial</li>
+                        <li>Tiempo retorno &lt;7 d&iacute;as</li>
+                        <li>Participaci&oacute;n &gt;75%</li>
+                        <li>&ge;4 estrategias diversas</li>
+                    </ul>
+                </div>
+                <div class="indicator-card ind-resultado">
+                    <div class="ind-icon">&#127919;</div>
+                    <h4>De resultado</h4>
+                    <ul>
+                        <li>Progreso diagn&oacute;stico-cierre</li>
+                        <li>Calidad de productos finales</li>
+                        <li>Tasa de aprobaci&oacute;n</li>
+                        <li>Percepci&oacute;n estudiantil</li>
+                        <li>Uso de retroalimentaci&oacute;n</li>
+                    </ul>
+                </div>
+                <div class="indicator-card ind-sostenibilidad">
+                    <div class="ind-icon">&#9878;&#65039;</div>
+                    <h4>De sostenibilidad</h4>
+                    <ul>
+                        <li>Carga: &le;3-4 h/semana extra</li>
+                        <li>Satisfacci&oacute;n docente</li>
+                        <li>Estabilidad todo el semestre</li>
+                        <li>Sin abandono post semana 8</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Community of practice -->
+        <div class="section">
+            <h2>Comunidad de pr&aacute;ctica: no hacer esto en soledad</h2>
+            <div class="community-steps">
+                <div class="community-step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h4>Convoque</h4>
+                        <p>3-5 colegas interesados. Un grupo peque&ntilde;o y comprometido es mejor que uno grande y pasivo.</p>
+                    </div>
+                </div>
+                <div class="community-step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h4>Establezca ritmo</h4>
+                        <p>Quincenal o mensual, 60-90 minutos. La consistencia importa m&aacute;s que la frecuencia.</p>
+                    </div>
+                </div>
+                <div class="community-step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h4>Defina estructura</h4>
+                        <p>Compartir (20 min) &rarr; Discutir (20 min) &rarr; Planificar (15 min) &rarr; Recursos (5 min).</p>
+                    </div>
+                </div>
+                <div class="community-step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h4>Documente</h4>
+                        <p>Registro compartido de estrategias probadas, resultados y lecciones. Se vuelve invaluable con el tiempo.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            M&oacute;dulo 6 &bull; Evaluaci&oacute;n Formativa en Educaci&oacute;n Superior &bull; Unidad 6.3
+        </div>
+    </div>
+
+    <script>
+        function showDetail(id) {
+            var panels = document.querySelectorAll('.detail-panel');
+            var cards = document.querySelectorAll('.cycle-card');
+            for (var i = 0; i < panels.length; i++) { panels[i].classList.remove('active'); }
+            for (var i = 0; i < cards.length; i++) { cards[i].classList.remove('active'); }
+            var target = document.getElementById('detail-' + id);
+            if (target) {
+                target.classList.add('active');
+                target.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+            var cardMap = { impl: 'card-impl', recol: 'card-recol', refl: 'card-refl', ajust: 'card-ajust' };
+            var card = document.querySelector('.' + cardMap[id]);
+            if (card) card.classList.add('active');
+        }
+    </script>
+</body>
+</html>

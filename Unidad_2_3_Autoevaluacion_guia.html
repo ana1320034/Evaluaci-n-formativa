@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía de Autoevaluación - Módulo 2, Unidad 2.3</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f4f8;
+            color: #2d3748;
+            line-height: 1.6;
+        }
+        .container { max-width: 940px; margin: 0 auto; padding: 20px; }
+
+        /* ── Header ── */
+        .header {
+            background: linear-gradient(135deg, #276749, #2b6cb0);
+            color: white;
+            padding: 40px 36px;
+            border-radius: 16px;
+            text-align: center;
+            margin-bottom: 28px;
+            position: relative;
+            overflow: hidden;
+        }
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -40px; right: -40px;
+            width: 160px; height: 160px;
+            background: rgba(255,255,255,0.07);
+            border-radius: 50%;
+        }
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: -30px; left: -30px;
+            width: 120px; height: 120px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 50%;
+        }
+        .header .badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.18);
+            padding: 5px 16px;
+            border-radius: 20px;
+            font-size: 0.82em;
+            letter-spacing: 0.5px;
+            margin-bottom: 14px;
+            backdrop-filter: blur(2px);
+        }
+        .header h1 {
+            font-size: 1.75em;
+            font-weight: 700;
+            margin-bottom: 8px;
+            position: relative;
+        }
+        .header p {
+            font-size: 0.95em;
+            opacity: 0.92;
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        /* ── Secciones ── */
+        .section {
+            background: white;
+            border-radius: 14px;
+            padding: 28px;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+        }
+        .section-title {
+            font-size: 1.25em;
+            font-weight: 700;
+            margin-bottom: 18px;
+            color: #2d3748;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .section-title .icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 34px; height: 34px;
+            border-radius: 10px;
+            font-size: 1.1em;
+            flex-shrink: 0;
+        }
+
+        /* ── Caja de definición ── */
+        .definition-box {
+            background: #ebf8ff;
+            border-left: 5px solid #2b6cb0;
+            border-radius: 0 14px 14px 0;
+            padding: 24px 28px;
+            margin-bottom: 24px;
+        }
+        .definition-box h2 {
+            font-size: 1.2em;
+            color: #2b6cb0;
+            margin-bottom: 10px;
+        }
+        .definition-box p {
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+        .definition-box p:last-child { margin-bottom: 0; }
+        .keyword {
+            background: #bee3f8;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+            color: #2a4365;
+            white-space: nowrap;
+        }
+
+        /* ── Tarjetas grid ── */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+        }
+        .card {
+            border-radius: 14px;
+            padding: 22px 20px;
+            position: relative;
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: default;
+        }
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 18px rgba(0,0,0,0.10);
+        }
+        .card-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 30px; height: 30px;
+            border-radius: 50%;
+            font-weight: 700;
+            font-size: 0.85em;
+            margin-bottom: 10px;
+        }
+        .card h3 {
+            font-size: 1em;
+            margin-bottom: 6px;
+        }
+        .card .tag {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 0.75em;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        .card p {
+            font-size: 0.84em;
+            color: #4a5568;
+        }
+
+        /* Colores de tarjetas tipo */
+        .card-green {
+            background: #f0fff4;
+            border: 1px solid #c6f6d5;
+        }
+        .card-green .card-number { background: #276749; color: #fff; }
+        .card-green h3 { color: #276749; }
+        .card-green .tag { background: #c6f6d5; color: #276749; }
+
+        .card-blue {
+            background: #ebf8ff;
+            border: 1px solid #bee3f8;
+        }
+        .card-blue .card-number { background: #2b6cb0; color: #fff; }
+        .card-blue h3 { color: #2b6cb0; }
+        .card-blue .tag { background: #bee3f8; color: #2a4365; }
+
+        .card-teal {
+            background: #e6fffa;
+            border: 1px solid #b2f5ea;
+        }
+        .card-teal .card-number { background: #285e61; color: #fff; }
+        .card-teal h3 { color: #285e61; }
+        .card-teal .tag { background: #b2f5ea; color: #285e61; }
+
+        .card-cyan {
+            background: #edfdfd;
+            border: 1px solid #c4f1f9;
+        }
+        .card-cyan .card-number { background: #0987a0; color: #fff; }
+        .card-cyan h3 { color: #0987a0; }
+        .card-cyan .tag { background: #c4f1f9; color: #086f83; }
+
+        /* ── Flujo / pasos ── */
+        .flow-steps {
+            display: flex;
+            align-items: stretch;
+            gap: 0;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .flow-step {
+            flex: 1;
+            min-width: 150px;
+            max-width: 200px;
+            text-align: center;
+            padding: 20px 14px;
+            border-radius: 14px;
+            position: relative;
+        }
+        .flow-step .step-num {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px; height: 36px;
+            border-radius: 50%;
+            color: #fff;
+            font-weight: 700;
+            font-size: 1em;
+            margin-bottom: 10px;
+        }
+        .flow-step h4 {
+            font-size: 0.95em;
+            margin-bottom: 6px;
+        }
+        .flow-step p {
+            font-size: 0.78em;
+            color: #4a5568;
+        }
+        .flow-arrow {
+            display: flex;
+            align-items: center;
+            font-size: 1.5em;
+            color: #a0aec0;
+            padding: 0 4px;
+            flex-shrink: 0;
+        }
+
+        /* Step colors */
+        .step-1 { background: #f0fff4; }
+        .step-1 .step-num { background: #276749; }
+        .step-1 h4 { color: #276749; }
+
+        .step-2 { background: #ebf8ff; }
+        .step-2 .step-num { background: #2b6cb0; }
+        .step-2 h4 { color: #2b6cb0; }
+
+        .step-3 { background: #e6fffa; }
+        .step-3 .step-num { background: #285e61; }
+        .step-3 h4 { color: #285e61; }
+
+        .step-4 { background: #edfdfd; }
+        .step-4 .step-num { background: #0987a0; }
+        .step-4 h4 { color: #0987a0; }
+
+        /* ── Funciona / No funciona ── */
+        .two-cols {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .col-funciona {
+            background: #f0fff4;
+            border: 2px solid #38a169;
+            border-radius: 14px;
+            padding: 22px;
+        }
+        .col-funciona h3 {
+            color: #276749;
+            font-size: 1.05em;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .col-no-funciona {
+            background: #fff5f5;
+            border: 2px solid #e53e3e;
+            border-radius: 14px;
+            padding: 22px;
+        }
+        .col-no-funciona h3 {
+            color: #9b2c2c;
+            font-size: 1.05em;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .check-item, .x-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 14px;
+            font-size: 0.88em;
+        }
+        .check-item:last-child, .x-item:last-child { margin-bottom: 0; }
+        .check-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px; height: 24px;
+            background: #38a169;
+            color: #fff;
+            border-radius: 50%;
+            font-size: 0.8em;
+            font-weight: 700;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+        .x-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px; height: 24px;
+            background: #e53e3e;
+            color: #fff;
+            border-radius: 50%;
+            font-size: 0.8em;
+            font-weight: 700;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        /* ── Footer ── */
+        .footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 0.78em;
+            color: #a0aec0;
+        }
+        .footer span { color: #718096; font-weight: 600; }
+
+        /* ── Responsive ── */
+        @media (max-width: 768px) {
+            .container { padding: 14px; }
+            .header { padding: 28px 20px; }
+            .header h1 { font-size: 1.35em; }
+            .section { padding: 20px 16px; }
+            .cards-grid { grid-template-columns: 1fr; }
+            .two-cols { grid-template-columns: 1fr; }
+            .flow-steps { flex-direction: column; align-items: center; }
+            .flow-arrow { transform: rotate(90deg); padding: 4px 0; }
+            .flow-step { max-width: 100%; width: 100%; }
+        }
+
+        /* ── Utilidades ── */
+        .sr-only {
+            position: absolute;
+            width: 1px; height: 1px;
+            padding: 0; margin: -1px;
+            overflow: hidden;
+            clip: rect(0,0,0,0);
+            border: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <!-- ====== HEADER ====== -->
+        <header class="header" role="banner">
+            <div class="badge">Modulo 2 &middot; Unidad 2.3</div>
+            <h1>Autoevaluacion: El estudiante como dueno de su aprendizaje</h1>
+            <p>Guia visual sobre tipos de autoevaluacion y como implementarlos en el aula universitaria</p>
+        </header>
+
+        <!-- ====== DEFINICION ====== -->
+        <section class="definition-box" aria-label="Definicion de autoevaluacion">
+            <h2>Que es la autoevaluacion?</h2>
+            <p>
+                La autoevaluacion es el proceso mediante el cual el <span class="keyword">estudiante valora su propio desempeno</span>
+                a partir de criterios establecidos. No es simplemente "ponerse una nota"; implica un ejercicio de
+                <span class="keyword">reflexion critica</span> sobre lo que se ha logrado, lo que falta y como mejorar.
+            </p>
+            <p>
+                Se vincula directamente con la <span class="keyword">metacognicion</span> (pensar sobre el propio pensamiento)
+                y la <span class="keyword">autorregulacion</span> (ajustar estrategias para alcanzar metas de aprendizaje).
+                Cuando un estudiante se autoevalua de manera efectiva, activa ambos procesos: monitorea su comprension
+                y decide que acciones tomar para avanzar.
+            </p>
+        </section>
+
+        <!-- ====== TIPOS DE AUTOEVALUACION ====== -->
+        <section class="section" aria-label="Tipos de autoevaluacion">
+            <h2 class="section-title">
+                <span class="icon" style="background:#ebf8ff; color:#2b6cb0;" aria-hidden="true">&#9670;</span>
+                Tipos de autoevaluacion
+            </h2>
+            <div class="cards-grid">
+
+                <!-- Tarjeta 1 -->
+                <article class="card card-green">
+                    <div class="card-number">1</div>
+                    <h3>Escalas de autovaloracion</h3>
+                    <span class="tag">Simple y rapido</span>
+                    <p>
+                        El estudiante marca su nivel de desempeno en una escala
+                        (por ejemplo, 1 a 5 o "principiante a experto"). Util al final de una sesion
+                        para una revision rapida del aprendizaje percibido.
+                    </p>
+                </article>
+
+                <!-- Tarjeta 2 -->
+                <article class="card card-blue">
+                    <div class="card-number">2</div>
+                    <h3>Listas de cotejo para el estudiante</h3>
+                    <span class="tag">Criterios claros</span>
+                    <p>
+                        El estudiante verifica si su trabajo cumple con cada criterio de una lista
+                        predefinida ("Si/No" o "Logrado/En proceso"). Reduce la ambiguedad y
+                        orienta la revision hacia aspectos concretos.
+                    </p>
+                </article>
+
+                <!-- Tarjeta 3 -->
+                <article class="card card-teal">
+                    <div class="card-number">3</div>
+                    <h3>Diarios reflexivos</h3>
+                    <span class="tag">Proceso longitudinal</span>
+                    <p>
+                        El estudiante escribe periodicamente sobre su proceso de aprendizaje:
+                        que aprendio, que le costo, que estrategias uso. Permite observar patrones
+                        de crecimiento a lo largo del tiempo.
+                    </p>
+                </article>
+
+                <!-- Tarjeta 4 -->
+                <article class="card card-cyan">
+                    <div class="card-number">4</div>
+                    <h3>Rubricas de autoevaluacion</h3>
+                    <span class="tag">Alineadas con la del docente</span>
+                    <p>
+                        El estudiante usa la misma rubrica (o una version adaptada) que utilizara
+                        el docente para evaluar. Permite comparar la propia valoracion con la del
+                        experto y detectar discrepancias.
+                    </p>
+                </article>
+            </div>
+        </section>
+
+        <!-- ====== COMO ENTRENAR ====== -->
+        <section class="section" aria-label="Como entrenar a los estudiantes en autoevaluacion">
+            <h2 class="section-title">
+                <span class="icon" style="background:#f0fff4; color:#276749;" aria-hidden="true">&#9654;</span>
+                Como entrenar a los estudiantes
+            </h2>
+            <p style="font-size:0.88em; color:#718096; margin-bottom:18px;">
+                La autoevaluacion es una habilidad que se aprende. Estos cuatro pasos ayudan a desarrollarla progresivamente.
+            </p>
+            <div class="flow-steps" role="list" aria-label="Pasos del entrenamiento">
+                <div class="flow-step step-1" role="listitem">
+                    <div class="step-num">1</div>
+                    <h4>Modelar</h4>
+                    <p>El docente muestra como autoevaluarse usando un ejemplo de trabajo y la rubrica en voz alta.</p>
+                </div>
+                <div class="flow-arrow" aria-hidden="true">&#8594;</div>
+                <div class="flow-step step-2" role="listitem">
+                    <div class="step-num">2</div>
+                    <h4>Practicar</h4>
+                    <p>Los estudiantes practican con trabajos anonimos o ejemplos de semestres anteriores.</p>
+                </div>
+                <div class="flow-arrow" aria-hidden="true">&#8594;</div>
+                <div class="flow-step step-3" role="listitem">
+                    <div class="step-num">3</div>
+                    <h4>Calibrar</h4>
+                    <p>Se compara la autoevaluacion del estudiante con la evaluacion del docente y se discuten diferencias.</p>
+                </div>
+                <div class="flow-arrow" aria-hidden="true">&#8594;</div>
+                <div class="flow-step step-4" role="listitem">
+                    <div class="step-num">4</div>
+                    <h4>Usar</h4>
+                    <p>El estudiante aplica la autoevaluacion de forma autonoma como parte regular del curso.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ====== FUNCIONA / NO FUNCIONA ====== -->
+        <section class="section" aria-label="Que funciona y que no funciona en autoevaluacion">
+            <h2 class="section-title">
+                <span class="icon" style="background:#f0fff4; color:#276749;" aria-hidden="true">&#9878;</span>
+                En la practica...
+            </h2>
+            <div class="two-cols">
+
+                <!-- Funciona -->
+                <div class="col-funciona">
+                    <h3>
+                        <span aria-hidden="true" style="font-size:1.2em;">&#10004;</span>
+                        Funciona
+                    </h3>
+                    <div class="check-item">
+                        <span class="check-icon" aria-hidden="true">&#10003;</span>
+                        <span><strong>Dar criterios claros</strong> antes de pedir la autoevaluacion. El estudiante necesita saber contra que se esta midiendo.</span>
+                    </div>
+                    <div class="check-item">
+                        <span class="check-icon" aria-hidden="true">&#10003;</span>
+                        <span><strong>Modelar con ejemplos:</strong> mostrar como luce una autoevaluacion bien hecha usando trabajos reales o simulados.</span>
+                    </div>
+                    <div class="check-item">
+                        <span class="check-icon" aria-hidden="true">&#10003;</span>
+                        <span><strong>Calibrar con la evaluacion del docente:</strong> comparar las valoraciones para que el estudiante ajuste su juicio progresivamente.</span>
+                    </div>
+                </div>
+
+                <!-- No funciona -->
+                <div class="col-no-funciona">
+                    <h3>
+                        <span aria-hidden="true" style="font-size:1.2em;">&#10008;</span>
+                        No funciona
+                    </h3>
+                    <div class="x-item">
+                        <span class="x-icon" aria-hidden="true">&#10007;</span>
+                        <span><strong>Pedir autoevaluacion sin entrenamiento.</strong> Sin practica previa, los estudiantes tienden a sobrevalorarse o infravalorarse.</span>
+                    </div>
+                    <div class="x-item">
+                        <span class="x-icon" aria-hidden="true">&#10007;</span>
+                        <span><strong>Usarla solo como calificacion.</strong> Si la nota de autoevaluacion "cuenta", los estudiantes inflan sus puntajes en lugar de reflexionar.</span>
+                    </div>
+                    <div class="x-item">
+                        <span class="x-icon" aria-hidden="true">&#10007;</span>
+                        <span><strong>No dar retroalimentacion sobre la calidad de la autoevaluacion.</strong> El estudiante necesita saber si su juicio fue preciso para poder mejorar.</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ====== FOOTER ====== -->
+        <footer class="footer" role="contentinfo">
+            <p><span>Evaluacion Formativa</span> &middot; Modulo 2: Instrumentos de Evaluacion Formativa &middot; Unidad 2.3</p>
+            <p style="margin-top:6px;">Infografia educativa &mdash; Recurso de apoyo para docentes universitarios</p>
+        </footer>
+
+    </div>
+</body>
+</html>

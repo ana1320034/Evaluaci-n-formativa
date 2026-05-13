@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Organizador Gráfico - Evaluación Formativa vs. Sumativa</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f7fafc; color: #2d3748; }
+        .container { max-width: 940px; margin: 0 auto; padding: 20px; }
+
+        .header { background: linear-gradient(135deg, #2c7a7b, #319795, #38b2ac); color: white; padding: 36px; border-radius: 16px; text-align: center; margin-bottom: 30px; }
+        .header h1 { font-size: 1.8em; margin-bottom: 8px; }
+        .header p { opacity: 0.9; }
+
+        .section { background: white; border-radius: 14px; padding: 28px; margin-bottom: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); }
+        .section h2 { color: #285e61; font-size: 1.3em; margin-bottom: 16px; border-left: 4px solid #38b2ac; padding-left: 12px; }
+
+        /* Venn Diagram */
+        .venn-container { position: relative; height: 420px; margin: 20px auto; max-width: 700px; }
+        .venn-circle { position: absolute; border-radius: 50%; width: 320px; height: 320px; top: 50px; display: flex; flex-direction: column; justify-content: center; padding: 30px; font-size: 0.82em; line-height: 1.6; }
+        .venn-left { left: 20px; background: rgba(49, 130, 206, 0.15); border: 3px solid #3182ce; padding-right: 80px; }
+        .venn-right { right: 20px; background: rgba(56, 161, 105, 0.15); border: 3px solid #38a169; padding-left: 80px; }
+        .venn-center { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 180px; text-align: center; z-index: 2; background: rgba(128, 90, 213, 0.12); border-radius: 8px; padding: 14px; border: 2px dashed #805ad5; }
+        .venn-label { position: absolute; top: 10px; font-weight: 700; font-size: 1.1em; width: 100%; text-align: center; }
+        .venn-left .venn-label { color: #2b6cb0; }
+        .venn-right .venn-label { color: #276749; }
+        .venn-center h4 { color: #553c9a; font-size: 0.95em; margin-bottom: 6px; }
+        .venn-center p { font-size: 0.78em; color: #4a5568; line-height: 1.4; }
+
+        /* Comparison Table */
+        .comp-table { width: 100%; border-collapse: separate; border-spacing: 0; border-radius: 12px; overflow: hidden; margin: 16px 0; }
+        .comp-table th { padding: 12px 14px; font-size: 0.9em; text-align: center; }
+        .comp-table th:first-child { background: #4a5568; color: white; text-align: left; width: 22%; }
+        .comp-table th:nth-child(2) { background: #3182ce; color: white; }
+        .comp-table th:nth-child(3) { background: #38a169; color: white; }
+        .comp-table td { padding: 10px 14px; font-size: 0.85em; border-bottom: 1px solid #e2e8f0; }
+        .comp-table td:first-child { font-weight: 600; background: #f7fafc; }
+        .comp-table tr:last-child td { border-bottom: none; }
+
+        /* Continuum */
+        .continuum { margin: 20px 0; }
+        .continuum-bar { height: 50px; border-radius: 25px; background: linear-gradient(to right, #3182ce, #6b46c1, #38a169); position: relative; margin: 30px 0 50px; }
+        .continuum-bar::before { content: '100% FORMATIVA'; position: absolute; left: 10px; top: -24px; font-size: 0.8em; font-weight: 700; color: #3182ce; }
+        .continuum-bar::after { content: '100% SUMATIVA'; position: absolute; right: 10px; top: -24px; font-size: 0.8em; font-weight: 700; color: #38a169; }
+        .cont-marker { position: absolute; top: 55px; text-align: center; transform: translateX(-50%); }
+        .cont-marker::before { content: '▲'; display: block; color: #805ad5; font-size: 1.2em; margin-bottom: 2px; }
+        .cont-marker span { font-size: 0.72em; color: #4a5568; display: block; max-width: 110px; line-height: 1.3; }
+
+        /* Integration Models */
+        .integration-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 16px 0; }
+        .int-card { border-radius: 12px; padding: 20px; border: 2px solid; }
+        .int-card:nth-child(1) { border-color: #3182ce; background: #ebf8ff; }
+        .int-card:nth-child(2) { border-color: #805ad5; background: #faf5ff; }
+        .int-card:nth-child(3) { border-color: #38a169; background: #f0fff4; }
+        .int-card h4 { font-size: 0.95em; margin-bottom: 8px; }
+        .int-card:nth-child(1) h4 { color: #2b6cb0; }
+        .int-card:nth-child(2) h4 { color: #553c9a; }
+        .int-card:nth-child(3) h4 { color: #276749; }
+        .int-card p { font-size: 0.82em; color: #4a5568; line-height: 1.5; }
+        .int-card .example { margin-top: 10px; padding: 8px 12px; background: rgba(255,255,255,0.7); border-radius: 6px; font-size: 0.8em; font-style: italic; }
+
+        /* Flow diagram */
+        .flow { display: flex; align-items: center; justify-content: center; gap: 6px; margin: 20px 0; flex-wrap: wrap; }
+        .flow-step { border-radius: 10px; padding: 14px 16px; text-align: center; min-width: 140px; color: white; font-size: 0.82em; }
+        .flow-step h4 { font-size: 0.9em; margin-bottom: 4px; }
+        .fs1 { background: #3182ce; }
+        .fs2 { background: #6b46c1; }
+        .fs3 { background: #805ad5; }
+        .fs4 { background: #38a169; }
+        .flow-arrow { font-size: 1.5em; color: #a0aec0; }
+        .flow-sub { display: block; font-size: 0.75em; opacity: 0.85; margin-top: 4px; }
+
+        .tip-box { background: #fffaf0; border: 2px solid #ed8936; border-radius: 12px; padding: 20px; margin: 16px 0; }
+        .tip-box h3 { color: #c05621; margin-bottom: 8px; font-size: 1em; }
+        .tip-box ul { padding-left: 20px; font-size: 0.9em; color: #4a5568; line-height: 1.7; }
+
+        .footer { text-align: center; padding: 20px; color: #a0aec0; font-size: 0.85em; }
+
+        @media (max-width: 768px) {
+            .venn-container { height: auto; display: flex; flex-direction: column; gap: 16px; }
+            .venn-circle { position: static; width: 100%; height: auto; border-radius: 12px; padding: 20px; }
+            .venn-left { padding-right: 20px; }
+            .venn-right { padding-left: 20px; }
+            .venn-center { position: static; transform: none; width: 100%; }
+            .integration-grid { grid-template-columns: 1fr; }
+            .flow { flex-direction: column; }
+            .flow-arrow { transform: rotate(90deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Evaluación Formativa vs. Sumativa</h1>
+            <p>¿Complementarias o antagónicas? Organizador gráfico comparativo | Unidad 1.3</p>
+        </div>
+
+        <!-- TABLA COMPARATIVA -->
+        <div class="section">
+            <h2>Comparación dimensional</h2>
+            <table class="comp-table">
+                <tr>
+                    <th>Dimensión</th>
+                    <th>Evaluación Formativa</th>
+                    <th>Evaluación Sumativa</th>
+                </tr>
+                <tr>
+                    <td>Propósito</td>
+                    <td>Diagnosticar, retroalimentar, mejorar</td>
+                    <td>Medir, calificar, certificar</td>
+                </tr>
+                <tr>
+                    <td>Momento</td>
+                    <td>Durante todo el proceso</td>
+                    <td>Al final del periodo</td>
+                </tr>
+                <tr>
+                    <td>Frecuencia</td>
+                    <td>Continua (cada clase)</td>
+                    <td>Puntual (parciales, finales)</td>
+                </tr>
+                <tr>
+                    <td>Resultado</td>
+                    <td>Retroalimentación descriptiva</td>
+                    <td>Calificación numérica</td>
+                </tr>
+                <tr>
+                    <td>Rol del estudiante</td>
+                    <td>Participante activo</td>
+                    <td>Sujeto evaluado (pasivo)</td>
+                </tr>
+                <tr>
+                    <td>Uso de resultados</td>
+                    <td>Ajuste de enseñanza, autorregulación</td>
+                    <td>Acreditación, ranking</td>
+                </tr>
+                <tr>
+                    <td>El error es...</td>
+                    <td>Oportunidad de aprendizaje</td>
+                    <td>Penalización (resta puntos)</td>
+                </tr>
+                <tr>
+                    <td>Retroalimentación</td>
+                    <td>Oportuna (durante el proceso)</td>
+                    <td>Tardía (después de calificación)</td>
+                </tr>
+                <tr>
+                    <td>Emoción predominante</td>
+                    <td>Confianza, motivación intrínseca</td>
+                    <td>Ansiedad, competencia</td>
+                </tr>
+                <tr>
+                    <td>Pregunta al estudiante</td>
+                    <td>"¿Qué necesitas para seguir aprendiendo?"</td>
+                    <td>"¿Cuánto sabes?"</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- CONTINUO -->
+        <div class="section">
+            <h2>El continuo formativo-sumativo</h2>
+            <p style="font-size:0.9em; color:#4a5568; margin-bottom:8px;">La evaluación no es binaria — cada actividad se ubica en algún punto del continuo:</p>
+            <div class="continuum">
+                <div class="continuum-bar">
+                    <div class="cont-marker" style="left: 10%;">
+                        <span>Quiz sin nota para diagnóstico</span>
+                    </div>
+                    <div class="cont-marker" style="left: 30%;">
+                        <span>Foro reflexivo sin calificación</span>
+                    </div>
+                    <div class="cont-marker" style="left: 50%;">
+                        <span>Borrador con retroalimentación y nota parcial</span>
+                    </div>
+                    <div class="cont-marker" style="left: 72%;">
+                        <span>Parcial con retroalimentación y nota</span>
+                    </div>
+                    <div class="cont-marker" style="left: 92%;">
+                        <span>Examen final solo con nota</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FLUJO INTEGRADO -->
+        <div class="section">
+            <h2>Modelo integrado: flujo de un módulo</h2>
+            <div class="flow">
+                <div class="flow-step fs1">
+                    <h4>Diagnóstico formativo</h4>
+                    "¿Qué sabe ya?"
+                    <span class="flow-sub">→ Retroalimentación + ajuste de enseñanza</span>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step fs2">
+                    <h4>Monitoreo formativo</h4>
+                    "¿Cómo va?"
+                    <span class="flow-sub">→ Retroalimentación + ajuste</span>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step fs3">
+                    <h4>Monitoreo formativo</h4>
+                    "¿Qué falta?"
+                    <span class="flow-sub">→ Retroalimentación + ajuste</span>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step fs4">
+                    <h4>Evaluación sumativa</h4>
+                    Con retroalimentación final
+                    <span class="flow-sub">→ Calificación + retroalimentación formativa</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- MODELOS DE INTEGRACIÓN -->
+        <div class="section">
+            <h2>Tres formas de integrar formativa y sumativa</h2>
+            <div class="integration-grid">
+                <div class="int-card">
+                    <h4>1. Instrumentos sumativos con propósito formativo</h4>
+                    <p>Usar los resultados de un examen para ajustar la enseñanza, no solo para calificar.</p>
+                    <div class="example">Ejemplo: Después del parcial, el docente analiza errores comunes y los trabaja en clase. Los estudiantes pueden corregir errores.</div>
+                </div>
+                <div class="int-card">
+                    <h4>2. Actividades formativas como preparación</h4>
+                    <p>Práctica formativa (sin nota) con el mismo formato de la evaluación sumativa.</p>
+                    <div class="example">Ejemplo: Borrador de ensayo (formativo) con retroalimentación de pares → Ensayo final (sumativo) mejorado.</div>
+                </div>
+                <div class="int-card">
+                    <h4>3. Evaluación continua mixta</h4>
+                    <p>Múltiples entregas que son formativas (retroalimentación) y sumativas (nota) a la vez.</p>
+                    <div class="example">Ejemplo: 5 informes de laboratorio durante el semestre. Cada uno recibe retroalimentación antes del siguiente.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ORIENTACIONES -->
+        <div class="section">
+            <div class="tip-box">
+                <h3>Orientaciones para el equilibrio</h3>
+                <ul>
+                    <li><strong>Antes de cada evaluación sumativa</strong>, ofrezca al menos una oportunidad formativa sobre el mismo tipo de desempeño.</li>
+                    <li><strong>Cada clase o sesión</strong> debería incluir al menos una técnica formativa rápida (Exit Ticket, pregunta rápida).</li>
+                    <li><strong>Las actividades formativas deben superar en cantidad</strong> a las sumativas, especialmente al inicio del curso.</li>
+                    <li><strong>La clave no es el instrumento</strong>, sino el uso que se hace de los resultados: si informan la enseñanza y el aprendizaje, hay componente formativo.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>Curso: Evaluación Formativa en Educación Superior | Módulo 1 — Fundamentos | Unidad 1.3</p>
+        </div>
+    </div>
+</body>
+</html>

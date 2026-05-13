@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anatomia de una Rubrica Analitica - Unidad 4.2</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f4f8; color: #2d3748; line-height: 1.6; }
+        .container { max-width: 940px; margin: 0 auto; padding: 20px; }
+        .header { background: linear-gradient(135deg, #2b6cb0, #805ad5); color: white; padding: 36px; border-radius: 16px; text-align: center; margin-bottom: 30px; }
+        .header h1 { font-size: 1.7em; margin-bottom: 8px; }
+        .header p { font-size: 0.92em; opacity: 0.92; }
+        .section { background: white; border-radius: 14px; padding: 28px; margin-bottom: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); }
+        .section h2 { font-size: 1.25em; color: #2b6cb0; margin-bottom: 18px; border-bottom: 2px solid #bee3f8; padding-bottom: 8px; }
+
+        /* Anatomía visual */
+        .anatomy { border: 3px solid #805ad5; border-radius: 14px; overflow: hidden; margin-top: 16px; }
+        .anatomy-header { background: #805ad5; color: white; padding: 14px 18px; font-weight: 700; font-size: 0.95em; }
+        .anatomy-body { padding: 0; }
+        .anatomy-row { display: grid; grid-template-columns: 180px repeat(4, 1fr); border-bottom: 1px solid #e2e8f0; }
+        .anatomy-row:last-child { border-bottom: none; }
+        .anatomy-cell { padding: 12px 14px; font-size: 0.82em; display: flex; align-items: center; }
+        .anatomy-label { background: #faf5ff; font-weight: 700; color: #553c9a; border-right: 2px solid #d6bcfa; flex-direction: column; align-items: flex-start; justify-content: center; }
+        .anatomy-label .sublabel { font-weight: 400; font-size: 0.85em; color: #805ad5; margin-top: 2px; }
+        .level-header { background: #ebf8ff; font-weight: 700; color: #2b6cb0; text-align: center; justify-content: center; font-size: 0.85em; }
+        .anatomy-row-header { border-bottom: 2px solid #805ad5; }
+        .highlight-cell { position: relative; }
+
+        /* Annotations */
+        .annotation { position: relative; margin: 24px 0; padding: 16px 16px 16px 50px; border-radius: 10px; font-size: 0.85em; }
+        .annotation::before { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); font-size: 1.3em; }
+        .ann-purple { background: #faf5ff; border-left: 4px solid #805ad5; color: #553c9a; }
+        .ann-purple::before { content: "&#9664;"; color: #805ad5; }
+        .ann-blue { background: #ebf8ff; border-left: 4px solid #3182ce; color: #2b6cb0; }
+        .ann-blue::before { content: "&#9660;"; color: #3182ce; }
+
+        /* Flujo de 5 pasos */
+        .flow { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
+        .flow-step { background: linear-gradient(135deg, #ebf8ff, #faf5ff); border: 2px solid #805ad5; border-radius: 12px; padding: 16px 14px; text-align: center; min-width: 140px; flex: 1; }
+        .flow-step .step-num { display: inline-block; background: #805ad5; color: white; width: 30px; height: 30px; border-radius: 50%; line-height: 30px; font-weight: 700; font-size: 0.88em; margin-bottom: 8px; }
+        .flow-step h4 { font-size: 0.88em; color: #553c9a; margin-bottom: 4px; }
+        .flow-step p { font-size: 0.78em; color: #4a5568; }
+        .flow-arrow { font-size: 1.5em; color: #805ad5; font-weight: 700; flex-shrink: 0; }
+
+        /* Errores vs Buenas prácticas */
+        .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
+        .compare-col { border-radius: 12px; padding: 20px; }
+        .col-bad { background: #fff5f5; border: 2px solid #feb2b2; }
+        .col-bad h3 { color: #9b2c2c; font-size: 1em; margin-bottom: 14px; }
+        .col-good { background: #f0fff4; border: 2px solid #9ae6b4; }
+        .col-good h3 { color: #276749; font-size: 1em; margin-bottom: 14px; }
+        .compare-item { padding: 10px 12px; border-radius: 8px; margin-bottom: 10px; font-size: 0.85em; display: flex; align-items: flex-start; gap: 8px; }
+        .compare-item:last-child { margin-bottom: 0; }
+        .bad-item { background: white; border-left: 3px solid #e53e3e; }
+        .bad-item .icon { color: #e53e3e; font-weight: 700; flex-shrink: 0; }
+        .good-item { background: white; border-left: 3px solid #38a169; }
+        .good-item .icon { color: #38a169; font-weight: 700; flex-shrink: 0; }
+
+        .footer { text-align: center; padding: 20px; color: #718096; font-size: 0.78em; }
+
+        @media (max-width: 768px) {
+            .anatomy-row { grid-template-columns: 1fr; }
+            .anatomy-label { border-right: none; border-bottom: 2px solid #d6bcfa; }
+            .flow { flex-direction: column; }
+            .flow-arrow { transform: rotate(90deg); }
+            .compare-grid { grid-template-columns: 1fr; }
+            .header { padding: 24px 16px; }
+            .section { padding: 20px 16px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <p style="opacity:0.8; font-size:0.82em;">Modulo 4 &middot; Unidad 4.2</p>
+            <h1>Anatomia de una Rubrica Analitica</h1>
+            <p>Componentes, proceso de diseno en 5 pasos y errores comunes a evitar</p>
+        </div>
+
+        <!-- Sección 1: Anatomía visual -->
+        <div class="section">
+            <h2>Anatomia Visual de una Rubrica</h2>
+            <p style="font-size:0.88em; color:#4a5568; margin-bottom:12px;">Cada componente de la rubrica cumple una funcion especifica. Observelos senalados en este ejemplo simplificado.</p>
+
+            <div class="anatomy">
+                <div class="anatomy-header">Rubrica Analitica: Informe de Analisis de Caso</div>
+                <div class="anatomy-body">
+                    <div class="anatomy-row anatomy-row-header">
+                        <div class="anatomy-cell anatomy-label">
+                            CRITERIOS
+                            <span class="sublabel">Dimensiones del RA</span>
+                        </div>
+                        <div class="anatomy-cell level-header">Excelente (4)</div>
+                        <div class="anatomy-cell level-header">Bueno (3)</div>
+                        <div class="anatomy-cell level-header">Suficiente (2)</div>
+                        <div class="anatomy-cell level-header">En desarrollo (1)</div>
+                    </div>
+                    <div class="anatomy-row">
+                        <div class="anatomy-cell anatomy-label">
+                            Profundidad del analisis
+                            <span class="sublabel">30%</span>
+                        </div>
+                        <div class="anatomy-cell" style="background:#faf5ff; font-size:0.78em;">Identifica multiples causas interrelacionadas con evidencia de 3+ fuentes</div>
+                        <div class="anatomy-cell" style="font-size:0.78em;">Identifica 2+ causas con evidencia teorica y relaciones entre ellas</div>
+                        <div class="anatomy-cell" style="font-size:0.78em;">Identifica causas pero analisis superficial, poca evidencia</div>
+                        <div class="anatomy-cell" style="font-size:0.78em;">Describe sin analizar causas o una sola causa sin fundamento</div>
+                    </div>
+                    <div class="anatomy-row">
+                        <div class="anatomy-cell anatomy-label">
+                            Propuesta de solucion
+                            <span class="sublabel">25%</span>
+                        </div>
+                        <div class="anatomy-cell" style="font-size:0.78em;">Viable, detallada, contextualizada y fundamentada en el analisis</div>
+                        <div class="anatomy-cell" style="font-size:0.78em;">Viable y contextualizada, vinculada con el diagnostico</div>
+                        <div class="anatomy-cell" style="font-size:0.78em;">Viable pero generica, sin vincular al analisis previo</div>
+                        <div class="anatomy-cell" style="font-size:0.78em;">Inviable, ausente o desconectada del caso</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="annotation ann-purple">
+                <strong>CRITERIOS</strong> (columna izquierda): Cada fila es una dimension independiente del desempeno derivada del RA. Se expresan como sustantivo y llevan su ponderacion (%).
+            </div>
+            <div class="annotation ann-blue">
+                <strong>NIVELES</strong> (fila superior): 4 grados de calidad con etiquetas significativas. El nivel 3 (Bueno) es el nivel esperado del RA.
+            </div>
+            <div class="annotation ann-purple">
+                <strong>DESCRIPTORES</strong> (celdas internas): Describen que se observa en el trabajo en cada nivel. Deben ser especificos, observables y diferenciarse cualitativamente.
+            </div>
+        </div>
+
+        <!-- Sección 2: Flujo de 5 pasos -->
+        <div class="section">
+            <h2>Proceso de Diseno: 5 Pasos</h2>
+            <div class="flow">
+                <div class="flow-step">
+                    <div class="step-num">1</div>
+                    <h4>Identificar RA</h4>
+                    <p>Verbo (Bloom), objeto y contexto del resultado de aprendizaje</p>
+                </div>
+                <div class="flow-arrow">&#8594;</div>
+                <div class="flow-step">
+                    <div class="step-num">2</div>
+                    <h4>Descomponer en criterios</h4>
+                    <p>3-6 dimensiones independientes que cubran el RA completo</p>
+                </div>
+                <div class="flow-arrow">&#8594;</div>
+                <div class="flow-step">
+                    <div class="step-num">3</div>
+                    <h4>Definir niveles</h4>
+                    <p>4 niveles con etiquetas significativas. Nivel 3 = esperado</p>
+                </div>
+                <div class="flow-arrow">&#8594;</div>
+                <div class="flow-step">
+                    <div class="step-num">4</div>
+                    <h4>Redactar descriptores</h4>
+                    <p>Observables, especificos, diferenciados cualitativamente</p>
+                </div>
+                <div class="flow-arrow">&#8594;</div>
+                <div class="flow-step">
+                    <div class="step-num">5</div>
+                    <h4>Asignar ponderacion</h4>
+                    <p>Peso segun importancia relativa en el RA</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sección 3: Errores vs Buenas prácticas -->
+        <div class="section">
+            <h2>Errores Comunes vs. Buenas Practicas</h2>
+            <div class="compare-grid">
+                <div class="compare-col col-bad">
+                    <h3>&#10060; Errores comunes</h3>
+                    <div class="compare-item bad-item">
+                        <span class="icon">&#10006;</span>
+                        <div><strong>Criterios solapados</strong><br>"Claridad de redaccion" y "Calidad de comunicacion escrita" evaluan lo mismo.</div>
+                    </div>
+                    <div class="compare-item bad-item">
+                        <span class="icon">&#10006;</span>
+                        <div><strong>Adjetivos vacios</strong><br>"Buena fundamentacion teorica" no dice que buscar.</div>
+                    </div>
+                    <div class="compare-item bad-item">
+                        <span class="icon">&#10006;</span>
+                        <div><strong>Solo cuantitativo</strong><br>Cambiar "todos / la mayoria / algunos / ninguno" entre niveles.</div>
+                    </div>
+                    <div class="compare-item bad-item">
+                        <span class="icon">&#10006;</span>
+                        <div><strong>Desalineamiento</strong><br>El RA dice "analiza" pero la rubrica premia "describe".</div>
+                    </div>
+                    <div class="compare-item bad-item">
+                        <span class="icon">&#10006;</span>
+                        <div><strong>Demasiados criterios</strong><br>8-10 criterios hacen la rubrica inmanejable y confusa.</div>
+                    </div>
+                </div>
+                <div class="compare-col col-good">
+                    <h3>&#9989; Buenas practicas</h3>
+                    <div class="compare-item good-item">
+                        <span class="icon">&#10004;</span>
+                        <div><strong>Criterios independientes</strong><br>Cada criterio mide una dimension unica del desempeno.</div>
+                    </div>
+                    <div class="compare-item good-item">
+                        <span class="icon">&#10004;</span>
+                        <div><strong>Evidencia concreta</strong><br>"Integra 2+ marcos teoricos mostrando relaciones entre ellos".</div>
+                    </div>
+                    <div class="compare-item good-item">
+                        <span class="icon">&#10004;</span>
+                        <div><strong>Diferencia cualitativa</strong><br>La naturaleza del desempeno cambia entre niveles, no solo la cantidad.</div>
+                    </div>
+                    <div class="compare-item good-item">
+                        <span class="icon">&#10004;</span>
+                        <div><strong>Verbo RA = descriptor</strong><br>El nivel mas alto refleja el mismo nivel cognitivo del RA.</div>
+                    </div>
+                    <div class="compare-item good-item">
+                        <span class="icon">&#10004;</span>
+                        <div><strong>3-6 criterios</strong><br>Suficientes para cubrir el RA sin sobrecargar.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            Curso: Evaluacion Formativa en Educacion Superior &middot; Modulo 4 &middot; Unidad 4.2<br>
+            Infografia complementaria al texto de lectura
+        </div>
+    </div>
+</body>
+</html>

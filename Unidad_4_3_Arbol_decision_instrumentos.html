@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arbol de Decision: Instrumentos de Evaluacion - Unidad 4.3</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f4f8; color: #2d3748; line-height: 1.6; }
+        .container { max-width: 940px; margin: 0 auto; padding: 20px; }
+        .header { background: linear-gradient(135deg, #2b6cb0, #38a169); color: white; padding: 36px; border-radius: 16px; text-align: center; margin-bottom: 30px; }
+        .header h1 { font-size: 1.7em; margin-bottom: 8px; }
+        .header p { font-size: 0.92em; opacity: 0.92; }
+        .section { background: white; border-radius: 14px; padding: 28px; margin-bottom: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); }
+        .section h2 { font-size: 1.25em; color: #2b6cb0; margin-bottom: 18px; border-bottom: 2px solid #bee3f8; padding-bottom: 8px; }
+
+        /* Árbol de decisión */
+        .tree { display: flex; flex-direction: column; align-items: center; gap: 0; margin-top: 16px; }
+        .tree-node { background: #ebf8ff; border: 2px solid #3182ce; border-radius: 12px; padding: 16px 24px; text-align: center; font-size: 0.9em; font-weight: 600; color: #2b6cb0; max-width: 440px; position: relative; }
+        .tree-node.question { background: #ebf8ff; border-color: #3182ce; color: #2b6cb0; }
+        .tree-connector { display: flex; justify-content: center; gap: 60px; position: relative; }
+        .tree-branch { display: flex; flex-direction: column; align-items: center; gap: 0; }
+        .tree-answer { padding: 6px 16px; border-radius: 20px; font-size: 0.82em; font-weight: 700; margin: 8px 0; }
+        .answer-yes { background: #c6f6d5; color: #276749; }
+        .answer-no { background: #fed7d7; color: #9b2c2c; }
+        .tree-arrow { color: #718096; font-size: 1.3em; margin: 4px 0; }
+        .tree-result { border-radius: 12px; padding: 16px 20px; text-align: center; font-weight: 700; font-size: 0.92em; max-width: 260px; }
+        .result-checklist { background: #f0fff4; border: 3px solid #38a169; color: #276749; }
+        .result-scale { background: #fffaf0; border: 3px solid #dd6b20; color: #c05621; }
+        .result-rubric { background: #ebf8ff; border: 3px solid #3182ce; color: #2b6cb0; }
+        .result-desc { font-weight: 400; font-size: 0.82em; margin-top: 6px; color: #4a5568; }
+
+        .decision-flow { margin-top: 20px; }
+        .decision-step { display: flex; align-items: stretch; margin-bottom: 16px; gap: 16px; }
+        .decision-q { background: #ebf8ff; border: 2px solid #3182ce; border-radius: 12px; padding: 16px 20px; flex: 1; }
+        .decision-q h4 { color: #2b6cb0; font-size: 0.92em; margin-bottom: 4px; }
+        .decision-q p { font-size: 0.82em; color: #4a5568; }
+        .decision-a { display: flex; flex-direction: column; gap: 8px; min-width: 200px; }
+        .decision-option { padding: 10px 14px; border-radius: 10px; font-size: 0.82em; font-weight: 600; }
+        .opt-green { background: #f0fff4; border: 2px solid #38a169; color: #276749; }
+        .opt-orange { background: #fffaf0; border: 2px solid #dd6b20; color: #c05621; }
+        .opt-blue { background: #ebf8ff; border: 2px solid #3182ce; color: #2b6cb0; }
+
+        /* Tabla comparativa */
+        .compare-table { width: 100%; border-collapse: separate; border-spacing: 0; margin-top: 16px; border-radius: 12px; overflow: hidden; }
+        .compare-table th { padding: 14px 14px; font-size: 0.85em; text-align: center; color: white; }
+        .compare-table td { padding: 12px 14px; font-size: 0.82em; border-top: 1px solid #e2e8f0; text-align: center; }
+        .compare-table tbody td:first-child { font-weight: 600; color: #4a5568; text-align: left; background: #f7fafc; }
+        .compare-table tbody tr:nth-child(even) { background: #f7fafc; }
+        .th-dim { background: #4a5568; text-align: left !important; }
+        .th-green { background: #276749; }
+        .th-orange { background: #c05621; }
+        .th-blue { background: #2b6cb0; }
+
+        /* Resumen cards */
+        .summary-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 16px; }
+        .summary-card { border-radius: 12px; padding: 20px; text-align: center; }
+        .summary-card h3 { font-size: 1em; margin-bottom: 8px; }
+        .summary-card p { font-size: 0.82em; }
+        .summary-card .big-icon { font-size: 2em; margin-bottom: 10px; }
+        .sc-green { background: linear-gradient(135deg, #f0fff4, #c6f6d5); border: 2px solid #9ae6b4; }
+        .sc-green h3 { color: #276749; }
+        .sc-orange { background: linear-gradient(135deg, #fffaf0, #feebc8); border: 2px solid #fbd38d; }
+        .sc-orange h3 { color: #c05621; }
+        .sc-blue { background: linear-gradient(135deg, #ebf8ff, #bee3f8); border: 2px solid #90cdf4; }
+        .sc-blue h3 { color: #2b6cb0; }
+
+        .footer { text-align: center; padding: 20px; color: #718096; font-size: 0.78em; }
+
+        @media (max-width: 768px) {
+            .decision-step { flex-direction: column; }
+            .summary-cards { grid-template-columns: 1fr; }
+            .compare-table { font-size: 0.78em; }
+            .header { padding: 24px 16px; }
+            .section { padding: 20px 16px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <p style="opacity:0.8; font-size:0.82em;">Modulo 4 &middot; Unidad 4.3</p>
+            <h1>Arbol de Decision: &#191;Que Instrumento Uso?</h1>
+            <p>Rubrica analitica, lista de cotejo o escala de valoracion: guia para elegir el instrumento correcto</p>
+        </div>
+
+        <!-- Resumen de los 3 instrumentos -->
+        <div class="section">
+            <h2>Los 3 Instrumentos en un Vistazo</h2>
+            <div class="summary-cards">
+                <div class="summary-card sc-green">
+                    <div class="big-icon">&#9745;</div>
+                    <h3>Lista de Cotejo</h3>
+                    <p><strong>Logica binaria:</strong> Si / No<br>Verifica presencia o ausencia de elementos. Rapida de aplicar, ideal para procedimientos.</p>
+                </div>
+                <div class="summary-card sc-orange">
+                    <div class="big-icon">&#9776;</div>
+                    <h3>Escala de Valoracion</h3>
+                    <p><strong>Logica gradual:</strong> Niveles breves<br>Captura grados de desarrollo con descriptores cortos. Equilibrio entre detalle y agilidad.</p>
+                </div>
+                <div class="summary-card sc-blue">
+                    <div class="big-icon">&#9638;</div>
+                    <h3>Rubrica Analitica</h3>
+                    <p><strong>Logica detallada:</strong> Descriptores extensos<br>Evalua multiples criterios con descriptores especificos por nivel. Maxima retroalimentacion.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Árbol de decisión -->
+        <div class="section">
+            <h2>Arbol de Decision</h2>
+            <p style="font-size:0.88em; color:#4a5568; margin-bottom:16px;">Responda cada pregunta para llegar al instrumento mas adecuado para su situacion.</p>
+
+            <div class="decision-flow">
+                <div class="decision-step">
+                    <div class="decision-q">
+                        <h4>Pregunta 1: &#191;Que necesito verificar?</h4>
+                        <p>Si solo necesita confirmar que elementos especificos estan presentes o que pasos se completaron, la respuesta es simple.</p>
+                    </div>
+                    <div class="decision-a">
+                        <div class="decision-option opt-green">Si es presencia/ausencia &#8594; <strong>Lista de cotejo</strong></div>
+                        <div class="decision-option" style="background:#f7fafc; border:2px solid #718096; color:#4a5568;">Si necesito evaluar calidad &#8594; Siga a la pregunta 2</div>
+                    </div>
+                </div>
+
+                <div class="decision-step">
+                    <div class="decision-q">
+                        <h4>Pregunta 2: &#191;Evaluo en tiempo real?</h4>
+                        <p>Observacion de procedimientos, presentaciones en vivo, practicas clinicas... Si no puede detenerse a leer descriptores largos, necesita un instrumento agil.</p>
+                    </div>
+                    <div class="decision-a">
+                        <div class="decision-option opt-green">Si, en tiempo real &#8594; <strong>Lista de cotejo</strong></div>
+                        <div class="decision-option" style="background:#f7fafc; border:2px solid #718096; color:#4a5568;">No, evaluo un producto &#8594; Siga a la pregunta 3</div>
+                    </div>
+                </div>
+
+                <div class="decision-step">
+                    <div class="decision-q">
+                        <h4>Pregunta 3: &#191;Necesito descriptores detallados?</h4>
+                        <p>Si requiere explicar con precision que se espera en cada nivel de cada criterio para maximizar la retroalimentacion y la confiabilidad entre evaluadores.</p>
+                    </div>
+                    <div class="decision-a">
+                        <div class="decision-option opt-blue">Si, muy detallados &#8594; <strong>Rubrica analitica</strong></div>
+                        <div class="decision-option opt-orange">Descriptores breves bastan &#8594; <strong>Escala de valoracion</strong></div>
+                    </div>
+                </div>
+
+                <div class="decision-step">
+                    <div class="decision-q">
+                        <h4>Pregunta 4: &#191;Es autoevaluacion o coevaluacion?</h4>
+                        <p>Los instrumentos para que los propios estudiantes evaluen deben ser agiles y con descriptores que comprendan facilmente.</p>
+                    </div>
+                    <div class="decision-a">
+                        <div class="decision-option opt-orange">Si &#8594; <strong>Escala de valoracion</strong></div>
+                        <div class="decision-option opt-blue">No, es del docente &#8594; <strong>Rubrica analitica</strong></div>
+                    </div>
+                </div>
+
+                <div class="decision-step">
+                    <div class="decision-q">
+                        <h4>Pregunta 5: &#191;Es la evaluacion sumativa principal?</h4>
+                        <p>La evaluacion mas importante del modulo requiere el instrumento mas detallado y confiable.</p>
+                    </div>
+                    <div class="decision-a">
+                        <div class="decision-option opt-blue">Si, sumativa principal &#8594; <strong>Rubrica analitica</strong></div>
+                        <div class="decision-option opt-orange">Formativa o complementaria &#8594; <strong>Escala de valoracion</strong></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabla comparativa -->
+        <div class="section">
+            <h2>Comparacion de los 3 Instrumentos</h2>
+            <table class="compare-table">
+                <thead>
+                    <tr>
+                        <th class="th-dim" style="width:22%">Dimension</th>
+                        <th class="th-green" style="width:26%">Lista de cotejo</th>
+                        <th class="th-orange" style="width:26%">Escala de valoracion</th>
+                        <th class="th-blue" style="width:26%">Rubrica analitica</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Tipo de juicio</td>
+                        <td>Binario (si/no)</td>
+                        <td>Gradiente (niveles breves)</td>
+                        <td>Detallado (descriptores extensos)</td>
+                    </tr>
+                    <tr>
+                        <td>Complejidad</td>
+                        <td>Baja</td>
+                        <td>Media</td>
+                        <td>Alta</td>
+                    </tr>
+                    <tr>
+                        <td>Tiempo de aplicacion</td>
+                        <td>Rapido (1-3 min)</td>
+                        <td>Moderado (3-5 min)</td>
+                        <td>Lento (5-15 min)</td>
+                    </tr>
+                    <tr>
+                        <td>Mejor para</td>
+                        <td>Procedimientos, componentes</td>
+                        <td>Competencias graduales, autoevaluacion</td>
+                        <td>Productos complejos, sumativa</td>
+                    </tr>
+                    <tr>
+                        <td>Retroalimentacion</td>
+                        <td>Que falta</td>
+                        <td>Donde esta en el continuo</td>
+                        <td>Por que esta en ese nivel</td>
+                    </tr>
+                    <tr>
+                        <td>Confiabilidad</td>
+                        <td>Alta (binario)</td>
+                        <td>Media</td>
+                        <td>Alta (si bien disenada)</td>
+                    </tr>
+                    <tr>
+                        <td>Momento ideal</td>
+                        <td>Revision de borrador, observacion</td>
+                        <td>Coevaluacion, formativa rapida</td>
+                        <td>Evaluacion final del docente</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="footer">
+            Curso: Evaluacion Formativa en Educacion Superior &middot; Modulo 4 &middot; Unidad 4.3<br>
+            Infografia complementaria al texto de lectura
+        </div>
+    </div>
+</body>
+</html>

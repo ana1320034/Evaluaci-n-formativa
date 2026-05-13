@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matriz de Herramientas Digitales - Módulo 5, Unidad 5.1</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f4f8; color: #2d3748; line-height: 1.6; }
+        .container { max-width: 940px; margin: 0 auto; padding: 20px; }
+        .header { background: linear-gradient(135deg, #2b6cb0, #805ad5); color: white; padding: 36px; border-radius: 16px; text-align: center; margin-bottom: 30px; }
+        .header h1 { font-size: 1.7em; margin-bottom: 8px; }
+        .header p { font-size: 0.95em; opacity: 0.92; }
+        .intro { background: white; border-radius: 14px; padding: 24px 28px; margin-bottom: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); border-left: 5px solid #3182ce; }
+        .intro p { font-size: 0.9em; color: #4a5568; }
+        .tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; justify-content: center; }
+        .tab-btn { padding: 10px 18px; border: 2px solid #e2e8f0; border-radius: 25px; background: white; cursor: pointer; font-size: 0.85em; font-family: inherit; font-weight: 600; transition: all 0.3s; color: #4a5568; }
+        .tab-btn:hover { border-color: #805ad5; color: #805ad5; }
+        .tab-btn.active { color: white; border-color: transparent; }
+        .tab-btn[data-cat="1"].active { background: #2b6cb0; }
+        .tab-btn[data-cat="2"].active { background: #805ad5; }
+        .tab-btn[data-cat="3"].active { background: #c05621; }
+        .tab-btn[data-cat="4"].active { background: #38a169; }
+        .tab-btn[data-cat="5"].active { background: #d69e2e; }
+        .tab-btn[data-cat="6"].active { background: #e53e3e; }
+        .tab-btn[data-cat="all"].active { background: #4a5568; }
+        .category-section { display: none; margin-bottom: 24px; }
+        .category-section.visible { display: block; }
+        .cat-header { padding: 20px 24px; border-radius: 14px 14px 0 0; color: white; }
+        .cat-header h2 { font-size: 1.25em; margin-bottom: 4px; }
+        .cat-header p { font-size: 0.82em; opacity: 0.9; }
+        .cat-1 .cat-header { background: linear-gradient(135deg, #2b6cb0, #3182ce); }
+        .cat-2 .cat-header { background: linear-gradient(135deg, #553c9a, #805ad5); }
+        .cat-3 .cat-header { background: linear-gradient(135deg, #c05621, #dd6b20); }
+        .cat-4 .cat-header { background: linear-gradient(135deg, #276749, #38a169); }
+        .cat-5 .cat-header { background: linear-gradient(135deg, #b7791f, #d69e2e); }
+        .cat-6 .cat-header { background: linear-gradient(135deg, #9b2c2c, #e53e3e); }
+        .tools-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; padding: 20px; background: white; border-radius: 0 0 14px 14px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); }
+        .tool-card { border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; transition: transform 0.2s, box-shadow 0.2s; }
+        .tool-card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .tool-name { padding: 14px 16px; font-weight: 700; font-size: 1em; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+        .cat-1 .tool-name { background: #ebf8ff; color: #2b6cb0; }
+        .cat-2 .tool-name { background: #faf5ff; color: #553c9a; }
+        .cat-3 .tool-name { background: #fffaf0; color: #c05621; }
+        .cat-4 .tool-name { background: #f0fff4; color: #276749; }
+        .cat-5 .tool-name { background: #fffff0; color: #b7791f; }
+        .cat-6 .tool-name { background: #fff5f5; color: #9b2c2c; }
+        .tool-name .arrow { transition: transform 0.3s; font-size: 0.8em; }
+        .tool-name .arrow.open { transform: rotate(180deg); }
+        .tool-details { padding: 0 16px; max-height: 0; overflow: hidden; transition: max-height 0.4s ease, padding 0.3s ease; }
+        .tool-details.open { max-height: 500px; padding: 12px 16px 16px; }
+        .detail-row { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #f7fafc; font-size: 0.82em; }
+        .detail-row:last-child { border-bottom: none; }
+        .detail-label { color: #718096; font-weight: 600; min-width: 120px; }
+        .detail-value { text-align: right; color: #2d3748; }
+        .badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 0.75em; font-weight: 600; }
+        .badge-free { background: #f0fff4; color: #276749; }
+        .badge-freemium { background: #fffff0; color: #b7791f; }
+        .badge-paid { background: #fff5f5; color: #9b2c2c; }
+        .badge-acc-high { background: #f0fff4; color: #276749; }
+        .badge-acc-mid { background: #fffff0; color: #b7791f; }
+        .badge-acc-low { background: #fff5f5; color: #9b2c2c; }
+        .criteria-section { background: white; border-radius: 14px; padding: 28px; margin-bottom: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); }
+        .criteria-section h2 { font-size: 1.2em; color: #2b6cb0; margin-bottom: 16px; }
+        .criteria-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+        .criteria-card { padding: 16px; border-radius: 10px; border: 1px solid #e2e8f0; }
+        .criteria-card h3 { font-size: 0.92em; color: #2d3748; margin-bottom: 6px; }
+        .criteria-card p { font-size: 0.8em; color: #718096; }
+        .criteria-num { display: inline-block; width: 28px; height: 28px; background: #3182ce; color: white; border-radius: 50%; text-align: center; line-height: 28px; font-size: 0.82em; font-weight: 700; margin-right: 8px; }
+        .footer { text-align: center; padding: 20px; color: #a0aec0; font-size: 0.78em; }
+        @media (max-width: 768px) {
+            .container { padding: 12px; }
+            .header { padding: 24px 16px; }
+            .header h1 { font-size: 1.3em; }
+            .tools-grid { grid-template-columns: 1fr; padding: 12px; }
+            .criteria-grid { grid-template-columns: 1fr; }
+            .tabs { gap: 6px; }
+            .tab-btn { padding: 8px 12px; font-size: 0.78em; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Matriz de Herramientas Digitales para Evaluaci&oacute;n Formativa</h1>
+            <p>M&oacute;dulo 5 &bull; Unidad 5.1 &bull; Evaluaci&oacute;n Formativa en Educaci&oacute;n Superior</p>
+        </div>
+
+        <div class="intro">
+            <p><strong>Instrucciones:</strong> Explore las 6 categor&iacute;as de herramientas haciendo clic en las pesta&ntilde;as. Dentro de cada categor&iacute;a, haga clic en el nombre de una herramienta para expandir sus detalles: costo, accesibilidad, integraci&oacute;n LMS y caracter&iacute;sticas clave.</p>
+        </div>
+
+        <div class="tabs">
+            <button class="tab-btn active" data-cat="all" onclick="filterCategory('all', this)">Todas</button>
+            <button class="tab-btn" data-cat="1" onclick="filterCategory('1', this)">Encuestas r&aacute;pidas</button>
+            <button class="tab-btn" data-cat="2" onclick="filterCategory('2', this)">Presentaciones</button>
+            <button class="tab-btn" data-cat="3" onclick="filterCategory('3', this)">Video interactivo</button>
+            <button class="tab-btn" data-cat="4" onclick="filterCategory('4', this)">Discusi&oacute;n</button>
+            <button class="tab-btn" data-cat="5" onclick="filterCategory('5', this)">Portafolios</button>
+            <button class="tab-btn" data-cat="6" onclick="filterCategory('6', this)">IA</button>
+        </div>
+
+        <!-- Category 1: Quick Polling -->
+        <div class="category-section cat-1 visible" data-category="1">
+            <div class="cat-header">
+                <h2>1. Encuestas y Preguntas R&aacute;pidas</h2>
+                <p>Recogen respuestas en tiempo real para verificar comprensi&oacute;n y activar conocimientos previos.</p>
+            </div>
+            <div class="tools-grid">
+                <div class="tool-card">
+                    <div class="tool-name" onclick="toggleTool(this)">Kahoot! <span class="arrow">&#9660;</span></div>
+                    <div class="tool-details">
+                        <div class="detail-row"><span class="detail-label">Prop&oacute;sito</span><span class="detail-value">Gamificaci&oacute;n, verificaci&oacute;n r&aacute;pida</span></div>
+                        <div class="detail-row"><span class="detail-label">Costo</span><span class="detail-value"><span class="badge badge-freemium">Freemium</span></span></div>
+                        <div class="detail-row"><span class="detail-label">Accesibilidad</span><span class="detail-value"><span class="badge badge-acc-mid">Media</span></span></div>
+                        <div class="detail-row"><span class="detail-label">M&oacute;vil</span><span class="detail-value">S&iacute; (app)</span></div>
+                        <div class="detail-row"><span class="detail-label">LMS</span><span class="detail-value">LTI</span></div>
+                        <div class="detail-row"><span class="detail-label">Asincr&oacute;nico</span><span class="detail-value">Limitado</span></div>
+                        <div class="detail-row"><span class="detail-label">Destacado</span><span class="detail-value">Alta motivaci&oacute;n, formato competitivo</span></div>
+                        <div class="detail-row"><span class="detail-label">Limitaci&oacute;n</span><span class="detail-value">Solo preguntas cerradas, velocidad sobre reflexi&oacute;n</span></div>
+                    </div>
+                </div>
+                <div class="tool-card">
+                    <div class="tool-name" onclick="toggleTool(this)">Socrative <span class="arrow">&#9660;</span></div>
+                    <div class="tool-details">
+                        <div class="detail-row"><span class="detail-label">Prop&oacute;sito</span><span class="detail-value">Verificaci&oacute;n controlada por docente</span></div>
+                        <div class="detail-row"><span class="detail-label">Costo</span><span class="detail-value"><span class="badge badge-free">Gratis (50 est.)</span></span></div>
+                        <div class="detail-row"><span class="detail-label">Accesibilidad</span><span class="detail-value"><span class="badge badge-acc-high">Alta</span></span></div>
+                        <div class="detail-row"><span class="detail-label">M&oacute;vil</span><span class="detail-value">S&iacute; (web)</span></div>
+                        <div class="detail-row"><span class="detail-label">LMS</span><span class="detail-value">No nativo</span></div>
+                        <div class="detail-row"><span class="detail-label">Asincr&oacute;nico</span><span class="detail-value">No</span></div>
+                        <div class="detail-row"><span class="detail-label">Destacado</span><span class="detail-value">Preguntas abiertas, ritmo del docente</span></div>
+                        <div class="detail-row"><span class="detail-label">Limitaci&oacute;n</span><span class="detail-value">Sin modo asincr&oacute;nico, interfaz b&aacute;sica</span></div>
+                    </div>
+                </div>
+                <div class="tool-card">
+                    <div class="tool-name" onclick="toggleTool(this)">Quizizz <span class="arrow">&#9660;</span></div>
+                    <div class="tool-details">
+                        <div class="detail-row"><span class="detail-label">Prop&oacute;sito</span><span class="detail-value">Cuestionarios gamificados, s&iacute;ncronos y as&iacute;ncronos</span></div>
+                        <div class="detail-row"><span class="detail-label">Costo</span><span class="detail-value"><span class="badge badge-free">Gratis</span></span></div>
+                        <div class="detail-row"><span class="detail-label">Accesibilidad</span><span class="detail-value"><span class="badge badge-acc-high">Alta</span></span></div>
+                        <div class="detail-row"><span class="detail-label">M&oacute;vil</span><span class="detail-value">S&iacute; (app/web)</span></div>
+                        <div class="detail-row"><span class="detail-label">LMS</span><span class="detail-value">LTI</span></div>
+                        <div class="detail-row"><span class="detail-label">Asincr&oacute;nico</span><span class="detail-value">S&iacute;</span></div>
+                        <div class="detail-row"><span class="detail-label">Destacado</span><span class="detail-value">Ritmo individual, retroalimentaci&oacute;n inmediata</span></div>
+                        <div class="detail-row"><span class="detail-label">Limitaci&oacute;n</span><span class="detail-value">Gamificaci&oacute;n puede distraer</span></div>
+                    </div>
+                </div>
+                <div class="tool-card">
+                    <div class="tool-name" onclick="toggleTool(this)">Poll Everywhere <span class="arrow">&#9660;</span></div>
+                    <div class="tool-details">
+                        <div class="detail-row"><span class="detail-label">Prop&oacute;sito</span><span class="detail-value">Encuestas en audiencias grandes</span></div>
+                        <div class="detail-row"><span class="detail-label">Costo</span><span class="detail-value"><span class="badge badge-freemium">Freemium</span></span></div>
+                        <div class="detail-row"><span class="detail-label">Accesibilidad</span><span class="detail-value"><span class="badge badge-acc-high">Alta</span></span></div>
+                        <div class="detail-row"><span class="detail-label">M&oacute;vil</span><span class="detail-value">S&iacute; (web)</span></div>
+                        <div class="detail-row"><span class="detail-label">LMS</span><span class="detail-value">No nativo</span></div>
+                        <div class="detail-row"><span class="detail-label">Asincr&oacute;nico</span><span class="detail-value">Limitado</span></div>
+                        <div class="detail-row"><span class="detail-label">Destacado</span><span class="detail-value">Se integra en PowerPoint y Google Slides</span></div>
+                        <div class="detail-row"><span class="detail-label">Limitaci&oacute;n</span><span class="detail-value">Gratis solo 25 participantes</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Category 2: Interactive Presentations -->
+        <div class="category-section cat-2 visible" data-category="2">
+            <div class="cat-header">
+                <h2>2. Presentaciones Interactivas</h2>
+                <p>Transforman presentaciones pasivas en experiencias participativas con preguntas y actividades integradas.</p>
+            </div>
+            <div class="tools-grid">
+                <div class="tool-card">
+                    <div class="tool-name" onclick="toggleTool(this)">Nearpod <span class="arrow">&#9660;</span></div>
+                    <div class="tool-details">
+                        <div class="detail-row"><span class="detail-label">Prop&oacute;sito</span><span class="detail-value">Lecciones interactivas completas</span></div>
+                        <div class="detail-row"><span class="detail-label">Costo</span><span class="detail-value"><span class="badge badge-freemium">Freemium</span></span></div>
+                        <div class="detail-row"><span class="detail-label">Accesibilidad</span><span class="detail-value"><span class="badge badge-acc-high">Alta</span></span></div>
+                        <div class="detail-row"><span class="detail-label">M&oacute;vil</span><span class="detail-value">S&iacute; (web)</span></div>
+                        <div class="detail-row"><span class="detail-label">LMS</span><span class="detail-value">LTI</span></div>
+                        <div class="detail-row"><span class="detail-label">Asincr&oacute;nico</span><span class="detail-value">S&iacute; (Student-Paced)</span></div>
+                        <div class="detail-row"><span class="detail-label">Destacado</span><span class="detail-value">VR, pizarras, simulaciones, encuestas</span></div>
+                        <div class="detail-row"><span class="detail-label">Limitaci&oacute;n</span><span class="detail-value">Gratis hasta 40 estudiantes por lecci&oacute;n</span></div>
+                    </div>
+                </div>
+                <div class="tool-card">
+                    <div class="tool-name" onclick="toggleTool(this)">Mentimeter <span class="arrow">&#9660;</span></div>
+                    <div class="tool-details">
+                        <div class="detail-row"><span class="detail-label">Prop&oacute;sito</span><span class="detail-value">Visualizaci&oacute;n en vivo de opiniones</span></div>
+                        <div class="detail-row"><span class="detail-label">Costo</span><span class="detail-value"><span class="badge badge-freemium">Freemium</span></span></div>
+                        <div class="detail-row"><span class="detail-label">Accesibilidad</span><span class="detail-value"><span class="badge badge-acc-high">Alta</span></span></div>
+                        <div class="detail-row"><span class="detail-label">M&oacute;vil</span><span class="detail-value">S&iacute; (web)</span></div>
+                        <div class="detail-row"><span class="detail-label">LMS</span><span class="detail-value">No nativo</span></div>
+                        <div class="detail-row"><span class="detail-label">Asincr&oacute;nico</span><span class="detail-value">No</span></div>
+                        <div class="detail-row"><span class="detail-label">Destacado</span><span class="detail-value">Nubes de palabras, escalas, Q&amp;A</span></div>
+                        <div class="detail-row"><span class="detail-label">Limitaci&oacute;n</span><span class="detail-value">2 preguntas gratis por presentaci&oacute;n</span></div>
+                    </div>
+                </div>
+                <div class="tool-card">
+                    <div class="tool-name" onclick="toggleTool(this)">Pear Deck <span class="arrow">&#9660;</span></div>
+                    <div class="tool-details">
+                        <div class="detail-row"><span class="detail-label">Prop&oacute;sito</span><span class="detail-value">Interactividad sobre slides existentes</span></div>
+                        <div class="detail-row"><span class="detail-label">Costo</span><span class="detail-value"><span class="badge badge-freemium">Freemium</span></span></div>
+                        <div class="detail-row"><span class="detail-label">Accesibilidad</span><span class="detail-value"><span class="badge badge-acc-high">Alta</span></span></div>
+                        <div class="detail-row"><span class="detail-label">M&oacute;vil</span><span class="detail-value">S&iacute; (web)</span></div>
+                        <div class="detail-row"><span class="detail-label">LMS</span><span class="detail-value">Google/Microsoft</span></div>
+                        <div class="detail-row"><span class="detail-label">Asincr&oacute;nico</span><span class="detail-value">S&iacute;</span></div>
+                        <div class="detail-row"><span class="detail-label">Destacado</span><span class="detail-value">Integra en Google Slides y PowerPoint</span></div>
+                        <div class="detail-row"><span class="detail-label">Limitaci&oacute;n</span><span class="detail-value">Funciones avanzadas requieren pago</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Category 3: Interactive Video -->
+        <div class="category-section cat-3 visible" data-category="3">
+            <div class="cat-header">
+                <h2>3. Video Interactivo</h2>
+                <p>Insertan preguntas y actividades dentro de videos para convertirlos en experiencias de aprendizaje activo.</p>
+            </div>
+            <div class="tools-grid">
+                <div class="tool-card">
+                    <div class="tool-name" onclick="toggleTool(this)">Edpuzzle <span class="arrow">&#9660;</span></div>
+                    <div class="tool-details">
+                        <div class="detail-row"><span class="detail-label">Prop&oacute;sito</span><span class="detail-value">Videos con preguntas intercaladas</span></div>
+                        <div class="detail-row"><span class="detail-label">Costo</span><span class="detail-value"><span class="badge badge-free">Gratis (20 videos)</span></span></div>
+                        <div class="detail-row"><span class="detail-label">Accesibilidad</span><span class="detail-value"><span class="badge badge-acc-mid">Media</span></span></div>
+                        <div class="detail-row"><span class="detail-label">M&oacute;vil</span><span class="detail-value">S&iacute; (app/web)</span></div>
+                        <div class="detail-row"><span class="detail-label">LMS</span><span class="detail-value">LTI</span></div>
+                        <div class="detail-row"><span class="detail-label">Asincr&oacute;nico</span><span class="detail-value">S&iacute;</span></div>
+                        <div class="detail-row"><span class="detail-label">Destacado</span><span class="detail-value">Impide saltar contenido, anal&iacute;ticas detalladas</span></div>
+                        <div class="detail-row"><span class="detail-label">Limitaci&oacute;n</span><span class="detail-value">Requiere videos existentes, l&iacute;mite de 20</span></div>
+                    </div>
+                </div>
+                <div class="tool-card">
+                    <div class="tool-name" onclick="toggleTool(this)">PlayPosit <span class="arrow">&#9660;</span></div>
+                    <div class="tool-details">
+                        <div class="detail-row"><span class="detail-label">Prop&oacute;sito</span><span class="detail-value">Videos interactivos con anal&iacute;tica avanzada</span></div>
+                        <div class="detail-row"><span class="detail-label">Costo</span><span class="detail-value"><span class="badge badge-freemium">Freemium</span></span></div>
+                        <div class="detail-row"><span class="detail-label">Accesibilidad</span><span class="detail-value"><span class="badge badge-acc-mid">Media</span></span></div>
+                        <div class="detail-row"><span class="detail-label">M&oacute;vil</span><span class="detail-value">S&iacute; (web)</span></div>
+                        <div class="detail-row"><span class="detail-label">LMS</span><span class="detail-value">LTI</span></div>
+                        <div class="detail-row"><span class="detail-label">Asincr&oacute;nico</span><span class="detail-value">S&iacute;</span></div>
+                        <div class="detail-row"><span class="detail-label">Destacado</span><span class="detail-value">Reportes de pausas, repeticiones, abandono</span></div>
+                        <div class="detail-row"><span class="detail-label">Limitaci&oacute;n</span><span class="detail-value">Funciones avanzadas de pago</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Category 4: Discussion -->
+        <div class="category-section cat-4 visible" data-category="4">
+            <div class="cat-header">
+                <h2>4. Discusi&oacute;n y Colaboraci&oacute;n</h2>
+                <p>Espacios para expresar ideas, debatir y construir conocimiento colectivamente.</p>
+            </div>
+            <div class="tools-grid">
+                <div class="tool-card">
+                    <div class="tool-name" onclick="toggleTool(this)">Padlet <span class="arrow">&#9660;</span></div>
+                    <div class="tool-details">
+                        <div class="detail-row"><span class="detail-label">Prop&oacute;sito</span><span class="detail-value">Muro colaborativo multimedia</span></div>
+                        <div class="detail-row"><span class="detail-label">Costo</span><span class="detail-value"><span class="badge badge-freemium">Freemium (3 padlets)</span></span></div>
+                        <div class="detail-row"><span class="detail-label">Accesibilidad</span><span class="detail-value"><span class="badge badge-acc-high">Alta</span></span></div>
+                        <div class="detail-row"><span class="detail-label">M&oacute;vil</span><span class="detail-value">S&iacute; (app/web)</span></div>
+                        <div class="detail-row"><span class="detail-label">LMS</span><span class="detail-value">LTI</span></div>
+                        <div class="detail-row"><span class="detail-label">Asincr&oacute;nico</span><span class="detail-value">S&iacute;</span></div>
+                        <div class="detail-row"><span class="detail-label">Destacado</span><span class="detail-value">M&uacute;ltiples formatos: muro, columnas, mapa, timeline</span></div>
+                        <div class="detail-row"><span class="detail-label">Limitaci&oacute;n</span><span class="detail-value">Solo 3 padlets gratis</span></div>
+                    </div>
+                </div>
+                <div class="tool-card">
+                    <div class="tool-name" onclick="toggleTool(this)">Flip (Flipgrid) <span class="arrow">&#9660;</span></div>
+                    <div class="tool-details">
+                        <div class="detail-row"><span class="detail-label">Prop&oacute;sito</span><span class="detail-value">Video-discusi&oacute;n asincr&oacute;nica</span></div>
+                        <div class="detail-row"><span class="detail-label">Costo</span><span class="detail-value"><span class="badge badge-free">Gratis</span></span></div>
+                        <div class="detail-row"><span class="detail-label">Accesibilidad</span><span class="detail-value"><span class="badge badge-acc-mid">Media</span></span></div>
+                        <div class="detail-row"><span class="detail-label">M&oacute;vil</span><span class="detail-value">S&iacute; (app/web)</span></div>
+                        <div class="detail-row"><span class="detail-label">LMS</span><span class="detail-value">LTI</span></div>
+                        <div class="detail-row"><span class="detail-label">Asincr&oacute;nico</span><span class="detail-value">S&iacute;</span></div>
+                        <div class="detail-row"><span class="detail-label">Destacado</span><span class="detail-value">Eval&uacute;a habilidades comunicativas en video</span></div>
+                        <div class="detail-row"><span class="detail-label">Limitaci&oacute;n</span><span class="detail-value">Requiere c&aacute;mara, puede inhibir a algunos estudiantes</span></div>
+                    </div>
+                </div>
+                <div class="tool-card">
+                    <div class="tool-name" onclick="toggleTool(this)">FigJam / Miro <span class="arrow">&#9660;</span></div>
+                    <div class="tool-details">
+                        <div class="detail-row"><span class="detail-label">Prop&oacute;sito</span><span class="detail-value">Pizarra colaborativa digital</span></div>
+                        <div class="detail-row"><span class="detail-label">Costo</span><span class="detail-value"><span class="badge badge-freemium">Freemium</span></span></div>
+                        <div class="detail-row"><span class="detail-label">Accesibilidad</span><span class="detail-value"><span class="badge badge-acc-mid">Media</span></span></div>
+                        <div class="detail-row"><span class="detail-label">M&oacute;vil</span><span class="detail-value">S&iacute; (web)</span></div>
+                        <div class="detail-row"><span class="detail-label">LMS</span><span class="detail-value">No nativo</span></div>
+                        <div class="detail-row"><span class="detail-label">Asincr&oacute;nico</span><span class="detail-value">S&iacute;</span></div>
+                        <div class="detail-row"><span class="detail-label">Destacado</span><span class="detail-value">Colaboraci&oacute;n visual en tiempo real, plantillas</span></div>
+                        <div class="detail-row"><span class="detail-label">Limitaci&oacute;n</span><span class="detail-value">Curva de aprendizaje moderada</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Category 5: Portfolios -->
+        <div class="category-section cat-5 visible" data-category="5">
+            <div class="cat-header">
+                <h2>5. Portafolios Digitales</h2>
+                <p>Documentan el proceso de aprendizaje a lo largo del tiempo para evaluaci&oacute;n formativa longitudinal.</p>
+            </div>
+            <div class="tools-grid">
+                <div class="tool-card">
+                    <div class="tool-name" onclick="toggleTool(this)">Google Sites <span class="arrow">&#9660;</span></div>
+                    <div class="tool-details">
+                        <div class="detail-row"><span class="detail-label">Prop&oacute;sito</span><span class="detail-value">Portafolio web sencillo</span></div>
+                        <div class="detail-row"><span class="detail-label">Costo</span><span class="detail-value"><span class="badge badge-free">Gratis</span></span></div>
+                        <div class="detail-row"><span class="detail-label">Accesibilidad</span><span class="detail-value"><span class="badge badge-acc-high">Alta</span></span></div>
+                        <div class="detail-row"><span class="detail-label">M&oacute;vil</span><span class="detail-value">S&iacute; (web)</span></div>
+                        <div class="detail-row"><span class="detail-label">LMS</span><span class="detail-value">No nativo</span></div>
+                        <div class="detail-row"><span class="detail-label">Asincr&oacute;nico</span><span class="detail-value">S&iacute;</span></div>
+                        <div class="detail-row"><span class="detail-label">Destacado</span><span class="detail-value">Integraci&oacute;n Google, curva baja</span></div>
+                        <div class="detail-row"><span class="detail-label">Limitaci&oacute;n</span><span class="detail-value">Plantillas lim. para portafolios acad&eacute;micos</span></div>
+                    </div>
+                </div>
+                <div class="tool-card">
+                    <div class="tool-name" onclick="toggleTool(this)">Seesaw <span class="arrow">&#9660;</span></div>
+                    <div class="tool-details">
+                        <div class="detail-row"><span class="detail-label">Prop&oacute;sito</span><span class="detail-value">Portafolio multimedia con reflexi&oacute;n</span></div>
+                        <div class="detail-row"><span class="detail-label">Costo</span><span class="detail-value"><span class="badge badge-free">Gratis (b&aacute;sico)</span></span></div>
+                        <div class="detail-row"><span class="detail-label">Accesibilidad</span><span class="detail-value"><span class="badge badge-acc-high">Alta</span></span></div>
+                        <div class="detail-row"><span class="detail-label">M&oacute;vil</span><span class="detail-value">S&iacute; (app)</span></div>
+                        <div class="detail-row"><span class="detail-label">LMS</span><span class="detail-value">No nativo</span></div>
+                        <div class="detail-row"><span class="detail-label">Asincr&oacute;nico</span><span class="detail-value">S&iacute;</span></div>
+                        <div class="detail-row"><span class="detail-label">Destacado</span><span class="detail-value">F&aacute;cil de usar, multimedia integrado</span></div>
+                        <div class="detail-row"><span class="detail-label">Limitaci&oacute;n</span><span class="detail-value">Dise&ntilde;ado para educaci&oacute;n b&aacute;sica</span></div>
+                    </div>
+                </div>
+                <div class="tool-card">
+                    <div class="tool-name" onclick="toggleTool(this)">Mahara <span class="arrow">&#9660;</span></div>
+                    <div class="tool-details">
+                        <div class="detail-row"><span class="detail-label">Prop&oacute;sito</span><span class="detail-value">Portafolio acad&eacute;mico profesional</span></div>
+                        <div class="detail-row"><span class="detail-label">Costo</span><span class="detail-value"><span class="badge badge-free">Open source</span></span></div>
+                        <div class="detail-row"><span class="detail-label">Accesibilidad</span><span class="detail-value"><span class="badge badge-acc-mid">Media</span></span></div>
+                        <div class="detail-row"><span class="detail-label">M&oacute;vil</span><span class="detail-value">S&iacute; (web responsivo)</span></div>
+                        <div class="detail-row"><span class="detail-label">LMS</span><span class="detail-value">Moodle (MNet)</span></div>
+                        <div class="detail-row"><span class="detail-label">Asincr&oacute;nico</span><span class="detail-value">S&iacute;</span></div>
+                        <div class="detail-row"><span class="detail-label">Destacado</span><span class="detail-value">Dise&ntilde;ado para ed. superior, integra Moodle</span></div>
+                        <div class="detail-row"><span class="detail-label">Limitaci&oacute;n</span><span class="detail-value">Requiere instalaci&oacute;n institucional</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Category 6: AI -->
+        <div class="category-section cat-6 visible" data-category="6">
+            <div class="cat-header">
+                <h2>6. Evaluaci&oacute;n Asistida por IA</h2>
+                <p>Automatizan aspectos de retroalimentaci&oacute;n y calificaci&oacute;n, liberando tiempo para intervenciones pedag&oacute;gicas significativas.</p>
+            </div>
+            <div class="tools-grid">
+                <div class="tool-card">
+                    <div class="tool-name" onclick="toggleTool(this)">Gradescope <span class="arrow">&#9660;</span></div>
+                    <div class="tool-details">
+                        <div class="detail-row"><span class="detail-label">Prop&oacute;sito</span><span class="detail-value">Calificaci&oacute;n asistida por IA</span></div>
+                        <div class="detail-row"><span class="detail-label">Costo</span><span class="detail-value"><span class="badge badge-paid">Institucional</span></span></div>
+                        <div class="detail-row"><span class="detail-label">Accesibilidad</span><span class="detail-value"><span class="badge badge-acc-mid">Media</span></span></div>
+                        <div class="detail-row"><span class="detail-label">M&oacute;vil</span><span class="detail-value">S&iacute; (web)</span></div>
+                        <div class="detail-row"><span class="detail-label">LMS</span><span class="detail-value">LTI</span></div>
+                        <div class="detail-row"><span class="detail-label">Asincr&oacute;nico</span><span class="detail-value">S&iacute;</span></div>
+                        <div class="detail-row"><span class="detail-label">Destacado</span><span class="detail-value">R&uacute;bricas din&aacute;micas, calificaci&oacute;n por lotes</span></div>
+                        <div class="detail-row"><span class="detail-label">Limitaci&oacute;n</span><span class="detail-value">Requiere licencia Turnitin</span></div>
+                    </div>
+                </div>
+                <div class="tool-card">
+                    <div class="tool-name" onclick="toggleTool(this)">Cadmus <span class="arrow">&#9660;</span></div>
+                    <div class="tool-details">
+                        <div class="detail-row"><span class="detail-label">Prop&oacute;sito</span><span class="detail-value">Evaluaci&oacute;n del proceso de escritura</span></div>
+                        <div class="detail-row"><span class="detail-label">Costo</span><span class="detail-value"><span class="badge badge-paid">Institucional</span></span></div>
+                        <div class="detail-row"><span class="detail-label">Accesibilidad</span><span class="detail-value"><span class="badge badge-acc-mid">Media</span></span></div>
+                        <div class="detail-row"><span class="detail-label">M&oacute;vil</span><span class="detail-value">S&iacute; (web)</span></div>
+                        <div class="detail-row"><span class="detail-label">LMS</span><span class="detail-value">LTI</span></div>
+                        <div class="detail-row"><span class="detail-label">Asincr&oacute;nico</span><span class="detail-value">S&iacute;</span></div>
+                        <div class="detail-row"><span class="detail-label">Destacado</span><span class="detail-value">Muestra c&oacute;mo se construy&oacute; el trabajo</span></div>
+                        <div class="detail-row"><span class="detail-label">Limitaci&oacute;n</span><span class="detail-value">Licencia institucional requerida</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Selection Criteria -->
+        <div class="criteria-section">
+            <h2>Marco de Criterios para la Selecci&oacute;n</h2>
+            <div class="criteria-grid">
+                <div class="criteria-card">
+                    <h3><span class="criteria-num">1</span>Prop&oacute;sito pedag&oacute;gico</h3>
+                    <p>&iquest;Qu&eacute; necesito lograr? Diagn&oacute;stico, monitoreo o evidencia de aprendizaje profundo.</p>
+                </div>
+                <div class="criteria-card">
+                    <h3><span class="criteria-num">2</span>Curva de aprendizaje</h3>
+                    <p>Tiempo para dominarla (docente &lt;30 min, estudiantes &lt;5 min para lo b&aacute;sico).</p>
+                </div>
+                <div class="criteria-card">
+                    <h3><span class="criteria-num">3</span>Accesibilidad</h3>
+                    <p>T&eacute;cnica (m&oacute;vil, navegador, sin cuenta) y universal (DUA, lectores de pantalla).</p>
+                </div>
+                <div class="criteria-card">
+                    <h3><span class="criteria-num">4</span>Costo</h3>
+                    <p>Gratis, freemium o licencia institucional. Verifique l&iacute;mites de versiones gratuitas.</p>
+                </div>
+                <div class="criteria-card">
+                    <h3><span class="criteria-num">5</span>Integraci&oacute;n LMS</h3>
+                    <p>LTI, transferencia de calificaciones, Single Sign-On.</p>
+                </div>
+                <div class="criteria-card">
+                    <h3><span class="criteria-num">6</span>Protecci&oacute;n de datos</h3>
+                    <p>D&oacute;nde se almacenan, regulaciones aplicables, pol&iacute;tica de privacidad clara.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            Evaluaci&oacute;n Formativa en Educaci&oacute;n Superior &bull; M&oacute;dulo 5, Unidad 5.1 &bull; Matriz de Herramientas Digitales
+        </div>
+    </div>
+
+    <script>
+        function toggleTool(el) {
+            var details = el.nextElementSibling;
+            var arrow = el.querySelector('.arrow');
+            var isOpen = details.classList.contains('open');
+            details.classList.toggle('open');
+            arrow.classList.toggle('open');
+        }
+
+        function filterCategory(cat, btn) {
+            var sections = document.querySelectorAll('.category-section');
+            var buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(function(b) { b.classList.remove('active'); });
+            btn.classList.add('active');
+            sections.forEach(function(s) {
+                if (cat === 'all') {
+                    s.classList.add('visible');
+                } else {
+                    if (s.getAttribute('data-category') === cat) {
+                        s.classList.add('visible');
+                    } else {
+                        s.classList.remove('visible');
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>

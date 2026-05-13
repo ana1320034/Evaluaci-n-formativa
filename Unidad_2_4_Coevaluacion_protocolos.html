@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Protocolos de Coevaluación y Evaluación entre Pares - Unidad 2.4</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f0f8;
+            color: #2d3748;
+            line-height: 1.6;
+        }
+        .container { max-width: 940px; margin: 0 auto; padding: 20px; }
+
+        /* ── Header ── */
+        .header {
+            background: linear-gradient(135deg, #553c9a, #3182ce);
+            color: white;
+            padding: 40px 36px;
+            border-radius: 16px;
+            text-align: center;
+            margin-bottom: 28px;
+            position: relative;
+            overflow: hidden;
+        }
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -40px; right: -40px;
+            width: 160px; height: 160px;
+            background: rgba(255,255,255,0.07);
+            border-radius: 50%;
+        }
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: -30px; left: -20px;
+            width: 120px; height: 120px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 50%;
+        }
+        .header .badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.18);
+            padding: 4px 16px;
+            border-radius: 20px;
+            font-size: 0.82em;
+            margin-bottom: 12px;
+            letter-spacing: 0.3px;
+        }
+        .header h1 {
+            font-size: 1.75em;
+            font-weight: 700;
+            margin-bottom: 8px;
+            position: relative;
+        }
+        .header p {
+            font-size: 0.95em;
+            opacity: 0.92;
+            position: relative;
+        }
+
+        /* ── Secciones ── */
+        .section {
+            background: white;
+            border-radius: 14px;
+            padding: 28px;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+        }
+        .section-title {
+            font-size: 1.25em;
+            font-weight: 700;
+            color: #553c9a;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .section-title .icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px; height: 32px;
+            border-radius: 8px;
+            font-size: 1em;
+            flex-shrink: 0;
+        }
+
+        /* ── Caja definición ── */
+        .def-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+        }
+        .def-box {
+            border-radius: 12px;
+            padding: 22px;
+            border-left: 5px solid;
+        }
+        .def-box.coeval {
+            background: #faf5ff;
+            border-color: #805ad5;
+        }
+        .def-box.pares {
+            background: #ebf8ff;
+            border-color: #3182ce;
+        }
+        .def-box h3 {
+            font-size: 1em;
+            margin-bottom: 8px;
+        }
+        .def-box h3.purple { color: #553c9a; }
+        .def-box h3.blue { color: #2b6cb0; }
+        .def-box p { font-size: 0.88em; color: #4a5568; }
+        .def-box .keyword {
+            display: inline;
+            background: rgba(128,90,213,0.13);
+            padding: 1px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+        .def-box.pares .keyword {
+            background: rgba(49,130,206,0.13);
+        }
+        .def-shared {
+            margin-top: 14px;
+            text-align: center;
+            font-size: 0.85em;
+            color: #718096;
+            background: #f7fafc;
+            padding: 10px 16px;
+            border-radius: 8px;
+        }
+
+        /* ── Tarjetas de beneficios ── */
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+        .benefit-card {
+            background: linear-gradient(135deg, #faf5ff, #ebf8ff);
+            border-radius: 12px;
+            padding: 20px 16px;
+            text-align: center;
+            border: 1px solid #e9d8fd;
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: default;
+        }
+        .benefit-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 6px 18px rgba(85,60,154,0.12);
+        }
+        .benefit-icon {
+            width: 48px; height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 12px;
+            font-size: 1.3em;
+        }
+        .benefit-icon.b1 { background: #e9d8fd; }
+        .benefit-icon.b2 { background: #bee3f8; }
+        .benefit-icon.b3 { background: #c4b5fd; }
+        .benefit-icon.b4 { background: #90cdf4; }
+        .benefit-card h4 {
+            font-size: 0.88em;
+            color: #553c9a;
+            margin-bottom: 6px;
+        }
+        .benefit-card p {
+            font-size: 0.78em;
+            color: #4a5568;
+        }
+
+        /* ── Modelos comparados ── */
+        .models-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+        }
+        .model-card {
+            border-radius: 14px;
+            overflow: hidden;
+            border: 1px solid #e2e8f0;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .model-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+        }
+        .model-header {
+            padding: 18px 16px;
+            color: white;
+            text-align: center;
+        }
+        .model-header.m1 { background: linear-gradient(135deg, #553c9a, #6b46c1); }
+        .model-header.m2 { background: linear-gradient(135deg, #2b6cb0, #3182ce); }
+        .model-header.m3 { background: linear-gradient(135deg, #44337a, #553c9a); }
+        .model-header h3 { font-size: 1em; margin-bottom: 4px; }
+        .model-header .model-tag {
+            font-size: 0.72em;
+            background: rgba(255,255,255,0.2);
+            padding: 2px 10px;
+            border-radius: 10px;
+            display: inline-block;
+        }
+        .model-body {
+            padding: 18px 16px;
+            background: white;
+        }
+        .model-body p {
+            font-size: 0.82em;
+            color: #4a5568;
+            margin-bottom: 12px;
+        }
+        .model-steps {
+            list-style: none;
+            padding: 0;
+        }
+        .model-steps li {
+            font-size: 0.82em;
+            padding: 6px 0 6px 24px;
+            position: relative;
+            color: #2d3748;
+        }
+        .model-steps li::before {
+            content: '';
+            position: absolute;
+            left: 6px;
+            top: 12px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+        .model-card:nth-child(1) .model-steps li::before { background: #805ad5; }
+        .model-card:nth-child(2) .model-steps li::before { background: #3182ce; }
+        .model-card:nth-child(3) .model-steps li::before { background: #553c9a; }
+        .model-level {
+            margin-top: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .level-label {
+            font-size: 0.75em;
+            color: #718096;
+        }
+        .level-bar {
+            flex: 1;
+            height: 6px;
+            background: #e2e8f0;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        .level-fill {
+            height: 100%;
+            border-radius: 3px;
+        }
+        .level-fill.high { width: 90%; background: #805ad5; }
+        .level-fill.low { width: 40%; background: #3182ce; }
+        .level-fill.med { width: 70%; background: #553c9a; }
+
+        /* ── Diagrama de flujo ── */
+        .flow-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 0;
+            padding: 10px 0;
+        }
+        .flow-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            flex: 0 0 auto;
+            max-width: 130px;
+        }
+        .flow-number {
+            width: 38px; height: 38px;
+            border-radius: 50%;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.95em;
+            margin-bottom: 8px;
+        }
+        .flow-step:nth-child(1) .flow-number,
+        .flow-step:nth-child(3) .flow-number { background: #553c9a; }
+        .flow-step:nth-child(5) .flow-number,
+        .flow-step:nth-child(7) .flow-number { background: #6b46c1; }
+        .flow-step:nth-child(9) .flow-number { background: #805ad5; }
+        .flow-step:nth-child(11) .flow-number { background: #3182ce; }
+        .flow-label {
+            font-size: 0.82em;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 4px;
+        }
+        .flow-desc {
+            font-size: 0.72em;
+            color: #718096;
+        }
+        .flow-arrow {
+            font-size: 1.4em;
+            color: #a0aec0;
+            margin: 0 4px;
+            flex-shrink: 0;
+            align-self: center;
+        }
+
+        /* ── Tips / Advertencias ── */
+        .tips-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+        .tip-card {
+            padding: 18px;
+            border-radius: 10px;
+            font-size: 0.85em;
+            border-left: 4px solid;
+        }
+        .tip-card.do {
+            background: #faf5ff;
+            border-color: #805ad5;
+        }
+        .tip-card.warn {
+            background: #fffaf0;
+            border-color: #dd6b20;
+        }
+        .tip-card h4 {
+            font-size: 0.9em;
+            margin-bottom: 8px;
+        }
+        .tip-card.do h4 { color: #553c9a; }
+        .tip-card.warn h4 { color: #c05621; }
+        .tip-card ul {
+            padding-left: 18px;
+            color: #4a5568;
+        }
+        .tip-card ul li {
+            margin-bottom: 4px;
+            font-size: 0.92em;
+        }
+
+        /* ── Tabla comparativa rápida ── */
+        .compare-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            border-radius: 10px;
+            overflow: hidden;
+            font-size: 0.85em;
+            margin-top: 12px;
+        }
+        .compare-table th {
+            background: #553c9a;
+            color: white;
+            padding: 12px 14px;
+            text-align: left;
+            font-weight: 600;
+        }
+        .compare-table th:first-child {
+            border-radius: 10px 0 0 0;
+        }
+        .compare-table th:last-child {
+            border-radius: 0 10px 0 0;
+        }
+        .compare-table td {
+            padding: 10px 14px;
+            border-bottom: 1px solid #e2e8f0;
+            color: #4a5568;
+        }
+        .compare-table tr:nth-child(even) td {
+            background: #faf5ff;
+        }
+        .compare-table tr:last-child td:first-child {
+            border-radius: 0 0 0 10px;
+        }
+        .compare-table tr:last-child td:last-child {
+            border-radius: 0 0 10px 0;
+        }
+
+        /* ── Escalera visual ── */
+        .ladder {
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            gap: 12px;
+            padding: 16px 0 0;
+        }
+        .ladder-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        .ladder-block {
+            width: 100%;
+            min-width: 120px;
+            border-radius: 10px 10px 4px 4px;
+            padding: 14px 12px;
+            color: white;
+            font-size: 0.82em;
+            font-weight: 600;
+        }
+        .ladder-step:nth-child(1) .ladder-block { background: #3182ce; min-height: 60px; }
+        .ladder-step:nth-child(2) .ladder-block { background: #553c9a; min-height: 80px; }
+        .ladder-step:nth-child(3) .ladder-block { background: #6b46c1; min-height: 100px; }
+        .ladder-step:nth-child(4) .ladder-block { background: #805ad5; min-height: 120px; }
+        .ladder-num {
+            font-size: 0.72em;
+            color: #718096;
+            margin-top: 6px;
+        }
+
+        /* ── Footer ── */
+        .footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 0.78em;
+            color: #a0aec0;
+        }
+        .footer span { color: #805ad5; font-weight: 600; }
+
+        /* ── Toggle interactivo ── */
+        .toggle-btn {
+            display: inline-block;
+            background: #805ad5;
+            color: white;
+            border: none;
+            padding: 6px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.82em;
+            font-family: inherit;
+            margin-top: 8px;
+            transition: background 0.2s;
+        }
+        .toggle-btn:hover, .toggle-btn:focus {
+            background: #6b46c1;
+            outline: 2px solid #553c9a;
+            outline-offset: 2px;
+        }
+        .toggle-content {
+            display: none;
+            margin-top: 12px;
+            padding: 16px;
+            background: #f7fafc;
+            border-radius: 10px;
+            font-size: 0.88em;
+            color: #4a5568;
+        }
+        .toggle-content.active {
+            display: block;
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 768px) {
+            .container { padding: 12px; }
+            .header { padding: 28px 20px; }
+            .header h1 { font-size: 1.35em; }
+            .section { padding: 20px 16px; }
+            .def-grid { grid-template-columns: 1fr; }
+            .benefits-grid { grid-template-columns: 1fr 1fr; }
+            .models-grid { grid-template-columns: 1fr; }
+            .flow-container { flex-direction: column; gap: 0; }
+            .flow-arrow { transform: rotate(90deg); margin: 4px 0; }
+            .flow-step { max-width: 100%; flex-direction: row; gap: 12px; text-align: left; }
+            .flow-step .flow-number { margin-bottom: 0; flex-shrink: 0; }
+            .tips-grid { grid-template-columns: 1fr; }
+            .ladder { flex-wrap: wrap; align-items: center; }
+            .ladder-step .ladder-block { min-height: auto !important; }
+        }
+        @media (max-width: 480px) {
+            .benefits-grid { grid-template-columns: 1fr; }
+            .header h1 { font-size: 1.15em; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <!-- ════════ HEADER ════════ -->
+        <header class="header" role="banner">
+            <div class="badge">Modulo 2 &middot; Unidad 2.4</div>
+            <h1>Coevaluacion y Evaluacion entre Pares</h1>
+            <p>Protocolos de implementacion: modelos, pasos y gestion de la dinamica social</p>
+        </header>
+
+        <!-- ════════ DEFINICIONES ════════ -->
+        <section class="section" aria-labelledby="def-title">
+            <h2 class="section-title" id="def-title">
+                <span class="icon" style="background:#e9d8fd;" aria-hidden="true">&#128218;</span>
+                Conceptos clave: diferencias y relacion
+            </h2>
+            <div class="def-grid">
+                <div class="def-box coeval">
+                    <h3 class="purple">Coevaluacion</h3>
+                    <p>
+                        Evaluacion <span class="keyword">mutua y reciproca</span> entre miembros de un grupo.
+                        Todos evaluan a todos sobre su contribucion, colaboracion o desempeno.
+                        Se centra en el <span class="keyword">trabajo colaborativo</span> y la responsabilidad compartida.
+                    </p>
+                </div>
+                <div class="def-box pares">
+                    <h3 class="blue">Evaluacion entre pares</h3>
+                    <p>
+                        Un estudiante evalua el <span class="keyword">producto o desempeno</span> de otro companero
+                        usando criterios definidos. Puede ser anonima o identificada.
+                        Se centra en la <span class="keyword">calidad del trabajo</span> individual.
+                    </p>
+                </div>
+            </div>
+            <div class="def-shared">
+                Ambas desarrollan pensamiento critico, autonomia y comprension profunda de los criterios de evaluacion.
+            </div>
+        </section>
+
+        <!-- ════════ BENEFICIOS ════════ -->
+        <section class="section" aria-labelledby="ben-title">
+            <h2 class="section-title" id="ben-title">
+                <span class="icon" style="background:#bee3f8;" aria-hidden="true">&#9733;</span>
+                Beneficios para el aprendizaje
+            </h2>
+            <div class="benefits-grid">
+                <div class="benefit-card">
+                    <div class="benefit-icon b1" aria-hidden="true">&#129504;</div>
+                    <h4>Pensamiento critico</h4>
+                    <p>Analizar el trabajo de otros obliga a aplicar criterios de calidad de forma reflexiva.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon b2" aria-hidden="true">&#128269;</div>
+                    <h4>Comprension de criterios</h4>
+                    <p>Al evaluar, el estudiante interioriza que significa "buen desempeno" segun la rubrica.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon b3" aria-hidden="true">&#129309;</div>
+                    <h4>Aprendizaje social</h4>
+                    <p>Ver diferentes enfoques amplia perspectivas y modela estrategias entre iguales.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon b4" aria-hidden="true">&#128172;</div>
+                    <h4>Competencias comunicativas</h4>
+                    <p>Dar retroalimentacion constructiva desarrolla habilidades de comunicacion profesional.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ════════ 3 MODELOS ════════ -->
+        <section class="section" aria-labelledby="mod-title">
+            <h2 class="section-title" id="mod-title">
+                <span class="icon" style="background:#c4b5fd;" aria-hidden="true">&#128736;</span>
+                Tres modelos de coevaluacion comparados
+            </h2>
+            <div class="models-grid">
+                <!-- Modelo 1 -->
+                <article class="model-card">
+                    <div class="model-header m1">
+                        <h3>Revision entre pares con rubrica</h3>
+                        <span class="model-tag">Formal / Estructurado</span>
+                    </div>
+                    <div class="model-body">
+                        <p>El evaluador usa una <strong>rubrica con criterios predefinidos</strong> y niveles de desempeno para valorar el trabajo del companero.</p>
+                        <ul class="model-steps">
+                            <li>Criterios claros y compartidos</li>
+                            <li>Escala de valoracion definida</li>
+                            <li>Retroalimentacion escrita por criterio</li>
+                            <li>Resultados comparables y moderables</li>
+                        </ul>
+                        <div class="model-level">
+                            <span class="level-label">Formalidad</span>
+                            <div class="level-bar"><div class="level-fill high"></div></div>
+                        </div>
+                    </div>
+                </article>
+                <!-- Modelo 2 -->
+                <article class="model-card">
+                    <div class="model-header m2">
+                        <h3>Estrella y deseo</h3>
+                        <span class="model-tag">Accesible / Rapido</span>
+                    </div>
+                    <div class="model-body">
+                        <p>Formato sencillo: el evaluador identifica <strong>una fortaleza</strong> (estrella) y <strong>una sugerencia de mejora</strong> (deseo).</p>
+                        <ul class="model-steps">
+                            <li>&#9733; Estrella: lo que funciona bien</li>
+                            <li>&#10024; Deseo: lo que podria mejorar</li>
+                            <li>Ideal para primeras experiencias</li>
+                            <li>Reduce ansiedad ante la evaluacion</li>
+                        </ul>
+                        <div class="model-level">
+                            <span class="level-label">Formalidad</span>
+                            <div class="level-bar"><div class="level-fill low"></div></div>
+                        </div>
+                    </div>
+                </article>
+                <!-- Modelo 3 -->
+                <article class="model-card">
+                    <div class="model-header m3">
+                        <h3>Escalera de retroalimentacion</h3>
+                        <span class="model-tag">Progresivo / Profundo</span>
+                    </div>
+                    <div class="model-body">
+                        <p>Protocolo en <strong>cuatro peldanos</strong> que estructura la retroalimentacion de lo descriptivo a lo propositivo.</p>
+                        <div class="ladder" role="img" aria-label="Escalera con cuatro peldanos: clarificar, valorar, expresar inquietudes, sugerir">
+                            <div class="ladder-step">
+                                <div class="ladder-block">Clarificar</div>
+                                <span class="ladder-num">Paso 1</span>
+                            </div>
+                            <div class="ladder-step">
+                                <div class="ladder-block">Valorar</div>
+                                <span class="ladder-num">Paso 2</span>
+                            </div>
+                            <div class="ladder-step">
+                                <div class="ladder-block">Inquietudes</div>
+                                <span class="ladder-num">Paso 3</span>
+                            </div>
+                            <div class="ladder-step">
+                                <div class="ladder-block">Sugerir</div>
+                                <span class="ladder-num">Paso 4</span>
+                            </div>
+                        </div>
+                        <div class="model-level" style="margin-top:14px;">
+                            <span class="level-label">Formalidad</span>
+                            <div class="level-bar"><div class="level-fill med"></div></div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+
+            <!-- Tabla comparativa resumen -->
+            <button class="toggle-btn" onclick="toggleCompare()" aria-expanded="false" aria-controls="compare-panel">
+                Ver tabla comparativa de los 3 modelos
+            </button>
+            <div class="toggle-content" id="compare-panel" role="region" aria-label="Tabla comparativa de modelos">
+                <table class="compare-table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Aspecto</th>
+                            <th scope="col">Rubrica</th>
+                            <th scope="col">Estrella y deseo</th>
+                            <th scope="col">Escalera</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Complejidad</strong></td>
+                            <td>Alta</td>
+                            <td>Baja</td>
+                            <td>Media</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Tiempo necesario</strong></td>
+                            <td>15-25 min</td>
+                            <td>3-5 min</td>
+                            <td>10-15 min</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Entrenamiento previo</strong></td>
+                            <td>Imprescindible</td>
+                            <td>Minimo</td>
+                            <td>Recomendable</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Profundidad del feedback</strong></td>
+                            <td>Alta y especifica</td>
+                            <td>General</td>
+                            <td>Progresiva</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Mejor para...</strong></td>
+                            <td>Trabajos finales, proyectos</td>
+                            <td>Borradores, primeras versiones</td>
+                            <td>Discusiones, presentaciones</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- ════════ DIAGRAMA DE FLUJO ════════ -->
+        <section class="section" aria-labelledby="flow-title">
+            <h2 class="section-title" id="flow-title">
+                <span class="icon" style="background:#e9d8fd;" aria-hidden="true">&#128260;</span>
+                Pasos para implementar la coevaluacion
+            </h2>
+            <div class="flow-container" role="img" aria-label="Diagrama de flujo: definir criterios, entrenar, practicar, evaluar, moderar, integrar">
+                <div class="flow-step">
+                    <div class="flow-number">1</div>
+                    <div>
+                        <div class="flow-label">Definir criterios</div>
+                        <div class="flow-desc">Coconstruir o compartir la rubrica con el grupo</div>
+                    </div>
+                </div>
+                <div class="flow-arrow" aria-hidden="true">&#8594;</div>
+                <div class="flow-step">
+                    <div class="flow-number">2</div>
+                    <div>
+                        <div class="flow-label">Entrenar</div>
+                        <div class="flow-desc">Practicar con ejemplos anonimos y calibrar</div>
+                    </div>
+                </div>
+                <div class="flow-arrow" aria-hidden="true">&#8594;</div>
+                <div class="flow-step">
+                    <div class="flow-number">3</div>
+                    <div>
+                        <div class="flow-label">Practicar</div>
+                        <div class="flow-desc">Ronda piloto de baja presion (sin calificacion)</div>
+                    </div>
+                </div>
+                <div class="flow-arrow" aria-hidden="true">&#8594;</div>
+                <div class="flow-step">
+                    <div class="flow-number">4</div>
+                    <div>
+                        <div class="flow-label">Evaluar</div>
+                        <div class="flow-desc">Aplicar el protocolo elegido al trabajo real</div>
+                    </div>
+                </div>
+                <div class="flow-arrow" aria-hidden="true">&#8594;</div>
+                <div class="flow-step">
+                    <div class="flow-number">5</div>
+                    <div>
+                        <div class="flow-label">Moderar</div>
+                        <div class="flow-desc">El docente revisa, ajusta y resuelve discrepancias</div>
+                    </div>
+                </div>
+                <div class="flow-arrow" aria-hidden="true">&#8594;</div>
+                <div class="flow-step">
+                    <div class="flow-number">6</div>
+                    <div>
+                        <div class="flow-label">Integrar</div>
+                        <div class="flow-desc">Combinar con evaluacion docente para nota final</div>
+                    </div>
+                </div>
+            </div>
+
+            <button class="toggle-btn" onclick="toggleFlow()" aria-expanded="false" aria-controls="flow-detail">
+                Ver detalle de cada paso
+            </button>
+            <div class="toggle-content" id="flow-detail" role="region" aria-label="Detalle de los pasos de implementacion">
+                <ol style="padding-left:20px; line-height:2;">
+                    <li><strong>Definir criterios:</strong> Involucrar a los estudiantes en la creacion o revision de la rubrica aumenta la comprension y la percepcion de justicia.</li>
+                    <li><strong>Entrenar:</strong> Mostrar ejemplos de trabajos anonimos (buenos y mejorables) y pedir que los evaluen. Comparar y discutir las valoraciones.</li>
+                    <li><strong>Practicar:</strong> Una ronda de ensayo sin consecuencias en la calificacion. Permite ajustar el proceso y reducir la ansiedad.</li>
+                    <li><strong>Evaluar:</strong> Aplicar formalmente el protocolo seleccionado (rubrica, estrella/deseo o escalera) al trabajo de los companeros.</li>
+                    <li><strong>Moderar:</strong> El docente revisa las evaluaciones, identifica sesgos o discrepancias significativas y ajusta si es necesario.</li>
+                    <li><strong>Integrar:</strong> Ponderar la evaluacion entre pares junto con la evaluacion del docente. Se recomienda un peso de 10-30% para la coevaluacion.</li>
+                </ol>
+            </div>
+        </section>
+
+        <!-- ════════ TIPS Y ADVERTENCIAS ════════ -->
+        <section class="section" aria-labelledby="tips-title">
+            <h2 class="section-title" id="tips-title">
+                <span class="icon" style="background:#feebc8;" aria-hidden="true">&#9888;</span>
+                Gestionar la dinamica social
+            </h2>
+            <div class="tips-grid">
+                <div class="tip-card do">
+                    <h4>&#10004; Buenas practicas</h4>
+                    <ul>
+                        <li>Usar anonimato en las primeras experiencias para reducir sesgo social.</li>
+                        <li>Establecer normas de retroalimentacion constructiva antes de comenzar.</li>
+                        <li>Modelar ejemplos de feedback positivo y critico respetuoso.</li>
+                        <li>Rotar las parejas evaluadoras para evitar alianzas o conflictos recurrentes.</li>
+                        <li>Validar con el grupo que los criterios son claros y justos.</li>
+                    </ul>
+                </div>
+                <div class="tip-card warn">
+                    <h4>&#9888; Riesgos a prevenir</h4>
+                    <ul>
+                        <li><strong>Efecto halo social:</strong> calificar alto a los amigos. Solucion: anonimato + moderacion docente.</li>
+                        <li><strong>Ansiedad de los estudiantes:</strong> miedo a juzgar o ser juzgado. Solucion: entrenamiento gradual.</li>
+                        <li><strong>Superficialidad:</strong> comentarios vagos tipo "esta bien". Solucion: frases de inicio (sentence starters).</li>
+                        <li><strong>Percepcion de injusticia:</strong> "mi companero no sabe evaluar". Solucion: criterios coconstruidos + moderacion.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <button class="toggle-btn" onclick="toggleStarters()" aria-expanded="false" aria-controls="starters-panel" style="margin-top:16px;">
+                Ver frases de inicio para retroalimentacion
+            </button>
+            <div class="toggle-content" id="starters-panel" role="region" aria-label="Frases de inicio para dar retroalimentacion">
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+                    <div>
+                        <strong style="color:#553c9a;">Para valorar:</strong>
+                        <ul style="padding-left:18px; margin-top:4px; color:#4a5568;">
+                            <li>"Un punto fuerte de tu trabajo es..."</li>
+                            <li>"Me resulto especialmente claro cuando..."</li>
+                            <li>"Destaco la forma en que..."</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <strong style="color:#c05621;">Para sugerir mejora:</strong>
+                        <ul style="padding-left:18px; margin-top:4px; color:#4a5568;">
+                            <li>"Podrias considerar..."</li>
+                            <li>"Una idea para fortalecer esto seria..."</li>
+                            <li>"Me pregunto si funcionaria mejor si..."</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ════════ FOOTER ════════ -->
+        <footer class="footer" role="contentinfo">
+            <span>Modulo 2</span> &middot; Unidad 2.4: Coevaluacion y Evaluacion entre Pares<br>
+            Curso de Evaluacion Formativa &middot; Infografia educativa interactiva
+        </footer>
+
+    </div>
+
+    <script>
+        function toggleCompare() {
+            var panel = document.getElementById('compare-panel');
+            var btn = panel.previousElementSibling;
+            var isActive = panel.classList.toggle('active');
+            btn.setAttribute('aria-expanded', isActive);
+            btn.textContent = isActive ? 'Ocultar tabla comparativa' : 'Ver tabla comparativa de los 3 modelos';
+        }
+        function toggleFlow() {
+            var panel = document.getElementById('flow-detail');
+            var btn = panel.previousElementSibling;
+            var isActive = panel.classList.toggle('active');
+            btn.setAttribute('aria-expanded', isActive);
+            btn.textContent = isActive ? 'Ocultar detalle' : 'Ver detalle de cada paso';
+        }
+        function toggleStarters() {
+            var panel = document.getElementById('starters-panel');
+            var btn = panel.previousElementSibling;
+            var isActive = panel.classList.toggle('active');
+            btn.setAttribute('aria-expanded', isActive);
+            btn.textContent = isActive ? 'Ocultar frases de inicio' : 'Ver frases de inicio para retroalimentacion';
+        }
+    </script>
+</body>
+</html>

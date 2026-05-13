@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Organizador Gráfico - Mapa Conceptual: Fundamentos de la Evaluación Formativa</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f7fafc; color: #2d3748; }
+        .container { max-width: 960px; margin: 0 auto; padding: 20px; }
+
+        .header { background: linear-gradient(135deg, #2c5282, #3182ce); color: white; padding: 30px; border-radius: 16px; text-align: center; margin-bottom: 24px; }
+        .header h1 { font-size: 1.6em; margin-bottom: 6px; }
+        .header p { opacity: 0.9; font-size: 0.95em; }
+
+        .instructions { background: #fffaf0; border: 2px solid #ed8936; border-radius: 12px; padding: 20px; margin-bottom: 24px; }
+        .instructions h3 { color: #c05621; margin-bottom: 8px; }
+        .instructions p, .instructions li { font-size: 0.9em; color: #4a5568; line-height: 1.6; }
+        .instructions ol { padding-left: 20px; }
+
+        /* Map Layout */
+        .map-container { position: relative; min-height: 900px; }
+
+        .node { position: absolute; border-radius: 14px; padding: 16px; text-align: center; box-shadow: 0 3px 10px rgba(0,0,0,0.1); cursor: default; }
+        .node h3 { font-size: 0.95em; margin-bottom: 4px; }
+        .node p { font-size: 0.78em; line-height: 1.4; }
+
+        /* Central node */
+        .central { background: linear-gradient(135deg, #2b6cb0, #4299e1); color: white; width: 240px; left: 50%; transform: translateX(-50%); top: 20px; padding: 22px; border: 3px solid #1a365d; z-index: 3; }
+        .central h3 { font-size: 1.15em; }
+
+        /* Author nodes */
+        .author-node { width: 200px; border: 3px solid; padding: 14px; z-index: 2; }
+        .bw-node { border-color: #3182ce; background: #ebf8ff; left: 40px; top: 160px; }
+        .ht-node { border-color: #dd6b20; background: #fffaf0; left: 50%; transform: translateX(-50%); top: 160px; }
+        .sa-node { border-color: #38a169; background: #f0fff4; right: 40px; top: 160px; }
+        .bw-node h3 { color: #2b6cb0; }
+        .ht-node h3 { color: #c05621; }
+        .sa-node h3 { color: #276749; }
+
+        /* Strategy nodes */
+        .strategy-node { width: 160px; font-size: 0.85em; z-index: 1; }
+
+        /* BW strategies */
+        .s1 { background: #dbeafe; border: 2px solid #93c5fd; left: 0; top: 310px; }
+        .s2 { background: #dbeafe; border: 2px solid #93c5fd; left: 0; top: 420px; }
+        .s3 { background: #dbeafe; border: 2px solid #93c5fd; left: 170px; top: 365px; }
+        .s4 { background: #dbeafe; border: 2px solid #93c5fd; left: 0; top: 530px; }
+        .s5 { background: #dbeafe; border: 2px solid #93c5fd; left: 170px; top: 480px; }
+
+        /* HT elements */
+        .fu { background: #fed7aa; border: 2px solid #fdba74; left: 50%; transform: translateX(-120%); top: 310px; width: 140px; }
+        .fb { background: #fed7aa; border: 2px solid #fdba74; left: 50%; transform: translateX(-50%); top: 310px; width: 140px; }
+        .ff { background: #fed7aa; border: 2px solid #fdba74; left: 50%; transform: translateX(20%); top: 310px; width: 140px; }
+        .levels-node { background: #fff7ed; border: 2px solid #fdba74; left: 50%; transform: translateX(-50%); top: 420px; width: 320px; }
+
+        /* Sadler elements */
+        .sa1 { background: #d1fae5; border: 2px solid #6ee7b7; right: 0; top: 310px; width: 170px; }
+        .sa2 { background: #d1fae5; border: 2px solid #6ee7b7; right: 0; top: 420px; width: 170px; }
+        .sa3 { background: #d1fae5; border: 2px solid #6ee7b7; right: 0; top: 530px; width: 170px; }
+
+        /* Convergence */
+        .convergence-node { background: linear-gradient(135deg, #e9d5ff, #dbeafe, #d1fae5); border: 3px solid #805ad5; width: 400px; left: 50%; transform: translateX(-50%); top: 640px; z-index: 3; }
+        .convergence-node h3 { color: #553c9a; font-size: 1em; }
+
+        /* Impact */
+        .impact-row { position: absolute; top: 770px; left: 0; right: 0; display: flex; gap: 12px; justify-content: center; }
+        .impact-node { border-radius: 10px; padding: 14px; text-align: center; width: 200px; color: white; font-size: 0.82em; }
+        .imp-r { background: #3182ce; }
+        .imp-m { background: #38a169; }
+        .imp-a { background: #805ad5; }
+        .imp-e { background: #dd6b20; }
+
+        /* SVG Connectors */
+        .connectors { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+
+        .legend { background: white; border-radius: 12px; padding: 20px; margin-top: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); }
+        .legend h3 { font-size: 1em; color: #4a5568; margin-bottom: 10px; }
+        .legend-items { display: flex; gap: 20px; flex-wrap: wrap; }
+        .legend-item { display: flex; align-items: center; gap: 8px; font-size: 0.85em; }
+        .legend-color { width: 20px; height: 20px; border-radius: 4px; border: 2px solid; }
+
+        .footer { text-align: center; padding: 20px; color: #a0aec0; font-size: 0.85em; }
+
+        @media (max-width: 768px) {
+            .map-container { min-height: auto; }
+            .node { position: static !important; transform: none !important; width: 100% !important; margin-bottom: 12px; }
+            .impact-row { position: static; flex-direction: column; align-items: center; margin-top: 12px; }
+            .connectors { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Mapa Conceptual — Fundamentos de la Evaluación Formativa</h1>
+            <p>Modelo de referencia para la Actividad 1 del Módulo 1</p>
+        </div>
+
+        <div class="instructions">
+            <h3>Instrucciones para la Actividad 1</h3>
+            <p>Este organizador gráfico le muestra la estructura de relaciones entre los conceptos clave. Úselo como referencia, pero su mapa conceptual debe ser una construcción propia que refleje su comprensión personal. Puede:</p>
+            <ol>
+                <li>Usar esta estructura como punto de partida y <strong>modificarla</strong> según su comprensión.</li>
+                <li>Crear un mapa completamente diferente con su propia organización.</li>
+                <li>Agregar conceptos, relaciones o ejemplos de su propia práctica.</li>
+            </ol>
+            <p style="margin-top:8px;"><strong>Recuerde:</strong> Además del mapa, debe escribir una explicación (300-400 palabras) como si se la presentara a un colega.</p>
+        </div>
+
+        <div class="map-container">
+            <!-- CENTRAL -->
+            <div class="node central">
+                <h3>EVALUACIÓN FORMATIVA</h3>
+                <p>Proceso continuo y planificado de recolección y uso de evidencias del aprendizaje para mejorar la enseñanza y el aprendizaje</p>
+            </div>
+
+            <!-- AUTHORS -->
+            <div class="node author-node bw-node">
+                <h3>Black y Wiliam</h3>
+                <p>5 estrategias clave<br>(2009)</p>
+            </div>
+            <div class="node author-node ht-node">
+                <h3>Hattie y Timperley</h3>
+                <p>Modelo de retroalimentación<br>(2007)</p>
+            </div>
+            <div class="node author-node sa-node">
+                <h3>Sadler</h3>
+                <p>Brecha de aprendizaje<br>(1989)</p>
+            </div>
+
+            <!-- BW STRATEGIES -->
+            <div class="node strategy-node s1">
+                <h3>E1</h3>
+                <p>Clarificar metas y criterios de éxito</p>
+            </div>
+            <div class="node strategy-node s2">
+                <h3>E2</h3>
+                <p>Obtener evidencia del aprendizaje</p>
+            </div>
+            <div class="node strategy-node s3">
+                <h3>E3</h3>
+                <p>Retroalimentar para avanzar</p>
+            </div>
+            <div class="node strategy-node s4">
+                <h3>E4</h3>
+                <p>Pares como recursos de aprendizaje</p>
+            </div>
+            <div class="node strategy-node s5">
+                <h3>E5</h3>
+                <p>Estudiantes dueños de su aprendizaje</p>
+            </div>
+
+            <!-- HT ELEMENTS -->
+            <div class="node strategy-node fu">
+                <h3>Feed Up</h3>
+                <p>¿Hacia dónde voy?</p>
+            </div>
+            <div class="node strategy-node fb">
+                <h3>Feed Back</h3>
+                <p>¿Cómo me está yendo?</p>
+            </div>
+            <div class="node strategy-node ff">
+                <h3>Feed Forward</h3>
+                <p>¿Qué sigue?</p>
+            </div>
+            <div class="node strategy-node levels-node">
+                <h3>4 Niveles de retroalimentación</h3>
+                <p><strong>Más efectiva →</strong> Autorregulación > Proceso > Tarea > Yo <strong>← Menos efectiva</strong></p>
+            </div>
+
+            <!-- SADLER ELEMENTS -->
+            <div class="node strategy-node sa1">
+                <h3>Condición 1</h3>
+                <p>Conocer el estándar de calidad</p>
+            </div>
+            <div class="node strategy-node sa2">
+                <h3>Condición 2</h3>
+                <p>Comparar su desempeño con el estándar</p>
+            </div>
+            <div class="node strategy-node sa3">
+                <h3>Condición 3</h3>
+                <p>Tomar acción para cerrar la brecha</p>
+            </div>
+
+            <!-- CONVERGENCE -->
+            <div class="node convergence-node">
+                <h3>CONVERGENCIA</h3>
+                <p>Meta compartida: el estudiante desarrolla la capacidad de evaluar su propio trabajo, identificar brechas y tomar acción para mejorar, sin depender del docente</p>
+            </div>
+
+            <!-- IMPACT -->
+            <div class="impact-row">
+                <div class="impact-node imp-r">
+                    <strong>Rendimiento</strong><br>↓20-35% reprobación<br>d=0.40-0.70
+                </div>
+                <div class="impact-node imp-m">
+                    <strong>Motivación</strong><br>↓ Ansiedad<br>↑ Compromiso
+                </div>
+                <div class="impact-node imp-a">
+                    <strong>Autorregulación</strong><br>Metacognición<br>Autonomía
+                </div>
+                <div class="impact-node imp-e">
+                    <strong>Equidad</strong><br>Mayor beneficio<br>para bajo rendimiento
+                </div>
+            </div>
+        </div>
+
+        <div class="legend">
+            <h3>Leyenda de colores</h3>
+            <div class="legend-items">
+                <div class="legend-item"><div class="legend-color" style="background:#ebf8ff; border-color:#3182ce;"></div> Black y Wiliam</div>
+                <div class="legend-item"><div class="legend-color" style="background:#fffaf0; border-color:#dd6b20;"></div> Hattie y Timperley</div>
+                <div class="legend-item"><div class="legend-color" style="background:#f0fff4; border-color:#38a169;"></div> Sadler</div>
+                <div class="legend-item"><div class="legend-color" style="background:#e9d5ff; border-color:#805ad5;"></div> Convergencia</div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>Curso: Evaluación Formativa en Educación Superior | Módulo 1 — Actividad 1: Mapa Conceptual</p>
+        </div>
+    </div>
+</body>
+</html>

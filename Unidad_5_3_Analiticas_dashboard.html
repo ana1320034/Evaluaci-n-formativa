@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard de Anal&iacute;ticas de Aprendizaje - M&oacute;dulo 5, Unidad 5.3</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f4f8; color: #2d3748; line-height: 1.6; }
+        .container { max-width: 940px; margin: 0 auto; padding: 20px; }
+        .header { background: linear-gradient(135deg, #2b6cb0, #553c9a); color: white; padding: 36px; border-radius: 16px; text-align: center; margin-bottom: 30px; }
+        .header h1 { font-size: 1.6em; margin-bottom: 8px; }
+        .header p { font-size: 0.92em; opacity: 0.92; }
+
+        .section { background: white; border-radius: 14px; padding: 28px; margin-bottom: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); }
+        .section h2 { font-size: 1.15em; margin-bottom: 18px; }
+
+        /* Data Types Dashboard */
+        .data-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 16px; }
+        .data-card { border-radius: 12px; padding: 20px; border-left: 5px solid; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; }
+        .data-card:hover { transform: translateY(-2px); box-shadow: 0 4px 14px rgba(0,0,0,0.1); }
+        .data-card h3 { font-size: 0.95em; margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
+        .data-card .icon { font-size: 1.4em; }
+        .data-card p { font-size: 0.82em; color: #4a5568; margin-bottom: 8px; }
+        .data-card .metric { font-size: 0.78em; color: #718096; }
+        .data-card .detail { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; }
+        .data-card .detail.open { max-height: 300px; }
+        .data-card .detail-content { padding-top: 12px; border-top: 1px solid #e2e8f0; margin-top: 8px; }
+        .data-card .detail-content h4 { font-size: 0.82em; color: #2d3748; margin-bottom: 4px; }
+        .data-card .detail-content p { font-size: 0.78em; }
+
+        .dc-1 { background: #ebf8ff; border-color: #3182ce; }
+        .dc-1 h3 { color: #2b6cb0; }
+        .dc-2 { background: #faf5ff; border-color: #805ad5; }
+        .dc-2 h3 { color: #553c9a; }
+        .dc-3 { background: #f0fff4; border-color: #38a169; }
+        .dc-3 h3 { color: #276749; }
+        .dc-4 { background: #fffaf0; border-color: #dd6b20; }
+        .dc-4 h3 { color: #c05621; }
+        .dc-5 { background: #fff5f5; border-color: #e53e3e; }
+        .dc-5 h3 { color: #9b2c2c; }
+
+        /* Scenarios */
+        .scenario-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+        .scenario { border-radius: 12px; padding: 20px; text-align: center; }
+        .scenario .number { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 12px; font-weight: 700; color: white; font-size: 1.1em; }
+        .scenario h3 { font-size: 0.92em; margin-bottom: 8px; }
+        .scenario p { font-size: 0.8em; color: #4a5568; text-align: left; }
+        .sc-a { background: #fff5f5; border: 2px solid #e53e3e; }
+        .sc-a .number { background: #e53e3e; }
+        .sc-a h3 { color: #9b2c2c; }
+        .sc-b { background: #fffaf0; border: 2px solid #dd6b20; }
+        .sc-b .number { background: #dd6b20; }
+        .sc-b h3 { color: #c05621; }
+        .sc-c { background: #f0fff4; border: 2px solid #38a169; }
+        .sc-c .number { background: #38a169; }
+        .sc-c h3 { color: #276749; }
+
+        .arrow-section { text-align: center; padding: 8px 0; font-size: 1.2em; color: #a0aec0; }
+
+        /* LMS Comparison */
+        .lms-table { width: 100%; border-collapse: separate; border-spacing: 0; border-radius: 12px; overflow: hidden; }
+        .lms-table th { background: #2b6cb0; color: white; padding: 12px 16px; font-size: 0.85em; text-align: left; }
+        .lms-table td { padding: 10px 16px; font-size: 0.82em; border-bottom: 1px solid #e2e8f0; }
+        .lms-table tr:nth-child(even) td { background: #f7fafc; }
+        .lms-table tr:last-child td { border-bottom: none; }
+        .check-yes { color: #38a169; font-weight: 700; }
+        .check-partial { color: #dd6b20; font-weight: 700; }
+        .check-no { color: #e53e3e; font-weight: 700; }
+
+        /* Ethics */
+        .ethics-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 14px; }
+        .ethics-card { padding: 18px; border-radius: 12px; border: 2px solid #e2e8f0; }
+        .ethics-card h3 { font-size: 0.9em; color: #553c9a; margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
+        .ethics-card .eth-icon { width: 30px; height: 30px; border-radius: 50%; background: #faf5ff; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .ethics-card p { font-size: 0.8em; color: #4a5568; }
+
+        .footer { text-align: center; padding: 20px; color: #a0aec0; font-size: 0.78em; }
+
+        @media (max-width: 768px) {
+            .container { padding: 12px; }
+            .header { padding: 24px 16px; }
+            .header h1 { font-size: 1.3em; }
+            .data-grid { grid-template-columns: 1fr; }
+            .scenario-grid { grid-template-columns: 1fr; }
+            .ethics-grid { grid-template-columns: 1fr; }
+            .lms-table { font-size: 0.75em; }
+            .lms-table th, .lms-table td { padding: 8px 10px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Anal&iacute;ticas de Aprendizaje como Herramienta Formativa</h1>
+            <p>M&oacute;dulo 5 &bull; Unidad 5.3 &bull; De los datos a las decisiones pedag&oacute;gicas</p>
+        </div>
+
+        <!-- Data Types -->
+        <div class="section">
+            <h2 style="color:#2b6cb0;">5 Tipos de Datos del LMS</h2>
+            <p style="font-size:0.85em; color:#718096; margin-bottom:16px;">Haga clic en cada tarjeta para ver qu&eacute; significa pedag&oacute;gicamente y qu&eacute; decisi&oacute;n tomar.</p>
+            <div class="data-grid">
+                <div class="data-card dc-1" onclick="toggleDetail(this)">
+                    <h3><span class="icon">&#128337;</span> Conexi&oacute;n y acceso</h3>
+                    <p>Frecuencia, &uacute;ltimo acceso, horarios de actividad, duraci&oacute;n de sesiones.</p>
+                    <div class="metric">Indicador de tendencia, no medida absoluta</div>
+                    <div class="detail">
+                        <div class="detail-content">
+                            <h4>Significado pedag&oacute;gico:</h4>
+                            <p>Detecta estudiantes desconectados del curso. Un estudiante sin acceso en 10+ d&iacute;as es se&ntilde;al de alerta temprana.</p>
+                            <h4 style="margin-top:8px;">Decisi&oacute;n a tomar:</h4>
+                            <p>Contacto personalizado y emp&aacute;tico. Ofrecer plan de recuperaci&oacute;n. NO asumir desinter&eacute;s.</p>
+                            <h4 style="margin-top:8px;">Precauci&oacute;n:</h4>
+                            <p style="color:#c05621;">Tiempo de conexi&oacute;n &ne; tiempo de aprendizaje. Una pesta&ntilde;a abierta no significa estudio activo.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="data-card dc-2" onclick="toggleDetail(this)">
+                    <h3><span class="icon">&#128203;</span> Progreso en actividades</h3>
+                    <p>Tareas entregadas vs. pendientes, orden de completaci&oacute;n, tasa por actividad.</p>
+                    <div class="metric">Permite identificar qui&eacute;n se queda atr&aacute;s</div>
+                    <div class="detail">
+                        <div class="detail-content">
+                            <h4>Significado pedag&oacute;gico:</h4>
+                            <p>Revela si los estudiantes siguen la secuencia dise&ntilde;ada o saltan actividades. Baja completaci&oacute;n puede indicar problema de dise&ntilde;o.</p>
+                            <h4 style="margin-top:8px;">Decisi&oacute;n a tomar:</h4>
+                            <p>Si una actividad tiene baja completaci&oacute;n, revisar sus instrucciones, carga de trabajo y relevancia percibida antes de penalizar.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="data-card dc-3" onclick="toggleDetail(this)">
+                    <h3><span class="icon">&#128200;</span> Evaluaciones</h3>
+                    <p>Calificaciones, intentos necesarios, tiempo por pregunta, tasas de error.</p>
+                    <div class="metric">Detecta errores conceptuales extendidos</div>
+                    <div class="detail">
+                        <div class="detail-content">
+                            <h4>Significado pedag&oacute;gico:</h4>
+                            <p>Preguntas con error &gt;60% revelan conceptos no comprendidos por la mayor&iacute;a. El tiempo por pregunta indica confusi&oacute;n espec&iacute;fica.</p>
+                            <h4 style="margin-top:8px;">Decisi&oacute;n a tomar:</h4>
+                            <p>Crear recurso adicional focalizado en el concepto problem&aacute;tico. Reabrir cuestionario o dedicar tiempo sincr&oacute;nico al tema.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="data-card dc-4" onclick="toggleDetail(this)">
+                    <h3><span class="icon">&#128172;</span> Participaci&oacute;n en foros</h3>
+                    <p>Publicaciones, respuestas, redes de interacci&oacute;n, calidad de intervenciones.</p>
+                    <div class="metric">Distingue participaci&oacute;n activa de observaci&oacute;n pasiva</div>
+                    <div class="detail">
+                        <div class="detail-content">
+                            <h4>Significado pedag&oacute;gico:</h4>
+                            <p>Las redes de interacci&oacute;n revelan si hay grupos aislados. Los observadores pasivos pueden necesitar formatos alternativos de participaci&oacute;n.</p>
+                            <h4 style="margin-top:8px;">Decisi&oacute;n a tomar:</h4>
+                            <p>Ofrecer formatos alternativos (audio, video). Reestructurar grupos. Crear roles rotativos que obliguen participaci&oacute;n diversificada.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="data-card dc-5" onclick="toggleDetail(this)">
+                    <h3><span class="icon">&#128218;</span> Acceso a recursos</h3>
+                    <p>Recursos consultados, descargas vs. visualizaciones, consultas pre-evaluaci&oacute;n.</p>
+                    <div class="metric">Revela estrategias de estudio y preferencias</div>
+                    <div class="detail">
+                        <div class="detail-content">
+                            <h4>Significado pedag&oacute;gico:</h4>
+                            <p>Los materiales ignorados pueden ser irrelevantes, mal ubicados o en formato inadecuado. Consultas pre-evaluaci&oacute;n revelan qu&eacute; sienten como importante.</p>
+                            <h4 style="margin-top:8px;">Decisi&oacute;n a tomar:</h4>
+                            <p>Reposicionar o reformatear recursos ignorados. Crear gu&iacute;as de estudio basadas en patrones de consulta reales.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="arrow-section">&#11015; Los datos se convierten en decisiones &#11015;</div>
+
+        <!-- Scenarios -->
+        <div class="section">
+            <h2 style="color:#553c9a;">De los Datos a las Decisiones: 3 Escenarios</h2>
+            <div class="scenario-grid">
+                <div class="scenario sc-a">
+                    <div class="number">A</div>
+                    <h3>Estudiantes en riesgo</h3>
+                    <p><strong>Dato:</strong> Sin acceso 15 d&iacute;as, tareas pendientes, &uacute;ltimo quiz 3/10.</p>
+                    <p style="margin-top:8px;"><strong>Acci&oacute;n:</strong> Mensaje personalizado y emp&aacute;tico (no punitivo). Plan de recuperaci&oacute;n concreto. Derivar a tutor&iacute;a si es necesario.</p>
+                </div>
+                <div class="scenario sc-b">
+                    <div class="number">B</div>
+                    <h3>Ajuste del ritmo</h3>
+                    <p><strong>Dato:</strong> Solo 40% complet&oacute; actividades de semana anterior. Entregas concentradas al cierre.</p>
+                    <p style="margin-top:8px;"><strong>Acci&oacute;n:</strong> Extender plazos, reducir carga, segmentar actividades complejas. Comunicar transparentemente el ajuste.</p>
+                </div>
+                <div class="scenario sc-c">
+                    <div class="number">C</div>
+                    <h3>Reforzamiento</h3>
+                    <p><strong>Dato:</strong> Preguntas 4, 7, 8 con error &gt;60%, todas sobre el mismo subtema.</p>
+                    <p style="margin-top:8px;"><strong>Acci&oacute;n:</strong> Recurso adicional focalizado (video corto, infograf&iacute;a). Reabrir cuestionario. Clarificar en sesi&oacute;n sincr&oacute;nica.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- LMS Comparison -->
+        <div class="section">
+            <h2 style="color:#2b6cb0;">Funcionalidades Anal&iacute;ticas por LMS</h2>
+            <div style="overflow-x:auto;">
+                <table class="lms-table">
+                    <thead>
+                        <tr>
+                            <th>Funcionalidad</th>
+                            <th>Moodle</th>
+                            <th>Canvas</th>
+                            <th>Blackboard</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Informes de actividad</td>
+                            <td class="check-yes">&#10003; Completo</td>
+                            <td class="check-yes">&#10003; Completo</td>
+                            <td class="check-yes">&#10003; Completo</td>
+                        </tr>
+                        <tr>
+                            <td>Predicci&oacute;n de riesgo</td>
+                            <td class="check-partial">&#9679; Plugin requerido</td>
+                            <td class="check-partial">&#9679; B&aacute;sico</td>
+                            <td class="check-yes">&#10003; Retention Center</td>
+                        </tr>
+                        <tr>
+                            <td>Progreso por estudiante</td>
+                            <td class="check-yes">&#10003; Finalizaci&oacute;n de actividad</td>
+                            <td class="check-yes">&#10003; New Analytics</td>
+                            <td class="check-yes">&#10003; Performance Dashboard</td>
+                        </tr>
+                        <tr>
+                            <td>An&aacute;lisis de cuestionarios</td>
+                            <td class="check-yes">&#10003; Pregunta por pregunta</td>
+                            <td class="check-yes">&#10003; Quiz Statistics</td>
+                            <td class="check-partial">&#9679; B&aacute;sico</td>
+                        </tr>
+                        <tr>
+                            <td>Dashboard visual</td>
+                            <td class="check-partial">&#9679; IntelliBoard (plugin)</td>
+                            <td class="check-yes">&#10003; Nativo</td>
+                            <td class="check-partial">&#9679; B&aacute;sico</td>
+                        </tr>
+                        <tr>
+                            <td>Alertas configurables</td>
+                            <td class="check-partial">&#9679; Plugin requerido</td>
+                            <td class="check-partial">&#9679; Limitado</td>
+                            <td class="check-yes">&#10003; Configurable</td>
+                        </tr>
+                        <tr>
+                            <td>Exportaci&oacute;n de datos</td>
+                            <td class="check-yes">&#10003; CSV</td>
+                            <td class="check-yes">&#10003; CSV</td>
+                            <td class="check-yes">&#10003; CSV</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p style="font-size:0.75em; color:#718096; margin-top:10px; text-align:center;">
+                &#10003; = Disponible nativo &nbsp;&nbsp; &#9679; = Disponible con limitaciones o plugin &nbsp;&nbsp; &#10007; = No disponible
+            </p>
+        </div>
+
+        <!-- Ethics -->
+        <div class="section" style="border-left: 5px solid #805ad5;">
+            <h2 style="color:#553c9a;">Consideraciones &Eacute;ticas del Uso de Datos</h2>
+            <div class="ethics-grid">
+                <div class="ethics-card">
+                    <h3><span class="eth-icon">&#128065;</span> Transparencia</h3>
+                    <p>Los estudiantes deben saber qu&eacute; datos se recopilan y para qu&eacute;. Incluya una nota en el programa del curso.</p>
+                </div>
+                <div class="ethics-card">
+                    <h3><span class="eth-icon">&#9878;&#65039;</span> Proporcionalidad</h3>
+                    <p>Recopile solo datos necesarios para decisiones pedag&oacute;gicas. M&aacute;s datos no implican mejores decisiones.</p>
+                </div>
+                <div class="ethics-card">
+                    <h3><span class="eth-icon">&#128101;</span> No estigmatizaci&oacute;n</h3>
+                    <p>Use los datos para apoyar, no para etiquetar. &laquo;En riesgo&raquo; significa &laquo;necesita atenci&oacute;n&raquo;, no &laquo;caso perdido&raquo;.</p>
+                </div>
+                <div class="ethics-card">
+                    <h3><span class="eth-icon">&#9888;&#65039;</span> Sesgo algor&iacute;tmico</h3>
+                    <p>Los modelos predictivos pueden perpetuar sesgos. Use datos como insumo para su juicio, no como veredicto.</p>
+                </div>
+                <div class="ethics-card">
+                    <h3><span class="eth-icon">&#128274;</span> Propiedad de datos</h3>
+                    <p>&iquest;Del estudiante, la instituci&oacute;n o el proveedor del LMS? Conozca la pol&iacute;tica de su instituci&oacute;n.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            Evaluaci&oacute;n Formativa en Educaci&oacute;n Superior &bull; M&oacute;dulo 5, Unidad 5.3 &bull; Anal&iacute;ticas de Aprendizaje
+        </div>
+    </div>
+
+    <script>
+        function toggleDetail(card) {
+            var detail = card.querySelector('.detail');
+            var isOpen = detail.classList.contains('open');
+            // Close all
+            document.querySelectorAll('.data-card .detail').forEach(function(d) { d.classList.remove('open'); });
+            // Toggle clicked
+            if (!isOpen) { detail.classList.add('open'); }
+        }
+    </script>
+</body>
+</html>

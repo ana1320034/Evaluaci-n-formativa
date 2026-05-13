@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa Conceptual - M&oacute;dulo 6: Sistema Integral de Evaluaci&oacute;n Formativa</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f4f8; color: #2d3748; line-height: 1.6; }
+        .container { max-width: 940px; margin: 0 auto; padding: 20px; }
+        .header { background: linear-gradient(135deg, #2b6cb0, #553c9a); color: white; padding: 36px; border-radius: 16px; text-align: center; margin-bottom: 30px; }
+        .header h1 { font-size: 1.6em; margin-bottom: 8px; }
+        .header p { font-size: 0.92em; opacity: 0.9; }
+
+        /* Central node */
+        .central-node { background: linear-gradient(135deg, #553c9a, #805ad5); color: white; border-radius: 16px; padding: 24px; text-align: center; margin-bottom: 24px; box-shadow: 0 4px 16px rgba(85,60,154,0.3); }
+        .central-node h2 { font-size: 1.4em; margin-bottom: 6px; }
+        .central-node p { font-size: 0.88em; opacity: 0.9; }
+
+        /* Connector line */
+        .connector { text-align: center; margin: -8px 0; }
+        .connector-line { display: inline-block; width: 3px; height: 24px; background: #805ad5; }
+
+        /* Branch */
+        .branch { background: white; border-radius: 14px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); overflow: hidden; border-left: 5px solid; }
+        .branch-header { padding: 16px 20px; cursor: pointer; display: flex; align-items: center; justify-content: space-between; user-select: none; }
+        .branch-header:hover { background: #f7fafc; }
+        .branch-header h3 { font-size: 1.05em; display: flex; align-items: center; gap: 10px; }
+        .branch-header .branch-icon { font-size: 1.3em; }
+        .branch-toggle { font-size: 1.2em; color: #718096; transition: transform 0.3s; }
+        .branch-toggle.open { transform: rotate(180deg); }
+        .branch-body { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; }
+        .branch-body.open { max-height: 3000px; }
+        .branch-content { padding: 0 20px 20px 20px; }
+
+        /* Branch colors */
+        .branch-1 { border-color: #3182ce; }
+        .branch-1 .branch-header h3 { color: #2b6cb0; }
+        .branch-2 { border-color: #38a169; }
+        .branch-2 .branch-header h3 { color: #276749; }
+        .branch-3 { border-color: #dd6b20; }
+        .branch-3 .branch-header h3 { color: #c05621; }
+        .branch-4 { border-color: #e53e3e; }
+        .branch-4 .branch-header h3 { color: #9b2c2c; }
+        .branch-5 { border-color: #805ad5; }
+        .branch-5 .branch-header h3 { color: #553c9a; }
+
+        /* Sub-nodes */
+        .sub-node { display: flex; align-items: flex-start; gap: 12px; padding: 12px 14px; margin-bottom: 10px; border-radius: 10px; font-size: 0.88em; cursor: default; transition: background 0.2s; position: relative; }
+        .sub-node:hover { filter: brightness(0.97); }
+        .sub-node-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; margin-top: 5px; }
+        .sub-node-text { flex: 1; }
+        .sub-node-text strong { display: block; margin-bottom: 2px; }
+        .sub-node-text .sub-detail { font-size: 0.85em; color: #718096; }
+
+        .sn-blue { background: #ebf8ff; }
+        .sn-blue .sub-node-dot { background: #3182ce; }
+        .sn-green { background: #f0fff4; }
+        .sn-green .sub-node-dot { background: #38a169; }
+        .sn-orange { background: #fffaf0; }
+        .sn-orange .sub-node-dot { background: #dd6b20; }
+        .sn-red { background: #fff5f5; }
+        .sn-red .sub-node-dot { background: #e53e3e; }
+        .sn-purple { background: #faf5ff; }
+        .sn-purple .sub-node-dot { background: #805ad5; }
+
+        /* Module reference tags */
+        .mod-tag { display: inline-block; padding: 2px 8px; border-radius: 8px; font-size: 0.72em; font-weight: 600; margin-left: 6px; vertical-align: middle; }
+        .mod-1 { background: #bee3f8; color: #2b6cb0; }
+        .mod-2 { background: #c6f6d5; color: #276749; }
+        .mod-3 { background: #feebc8; color: #c05621; }
+        .mod-4 { background: #fed7d7; color: #9b2c2c; }
+        .mod-5 { background: #e9d8fd; color: #553c9a; }
+        .mod-6 { background: #e2e8f0; color: #4a5568; }
+
+        /* Tooltip on hover */
+        .tooltip-trigger { cursor: help; border-bottom: 1px dotted #805ad5; }
+        .tooltip-content { display: none; position: absolute; left: 20px; top: 100%; background: white; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px; font-size: 0.82em; box-shadow: 0 4px 12px rgba(0,0,0,0.1); z-index: 10; width: 280px; color: #4a5568; }
+        .sub-node:hover .tooltip-content { display: block; }
+
+        /* Connections section */
+        .connections { background: linear-gradient(135deg, #faf5ff, #ebf8ff); border: 2px solid #805ad5; border-radius: 14px; padding: 20px; margin-top: 10px; }
+        .connections h4 { color: #553c9a; margin-bottom: 12px; font-size: 1em; }
+        .conn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .conn-item { display: flex; align-items: center; gap: 8px; font-size: 0.82em; padding: 8px 12px; background: white; border-radius: 8px; }
+        .conn-arrow { color: #805ad5; font-weight: bold; }
+
+        .footer { text-align: center; padding: 20px; font-size: 0.78em; color: #718096; }
+
+        @media (max-width: 768px) {
+            .header { padding: 24px 16px; }
+            .header h1 { font-size: 1.3em; }
+            .conn-grid { grid-template-columns: 1fr; }
+            .tooltip-content { position: static; display: block; margin-top: 8px; width: 100%; }
+            .sub-node { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Mapa Conceptual &mdash; M&oacute;dulo 6</h1>
+            <p>Dise&ntilde;o de un Sistema Integral de Evaluaci&oacute;n Formativa</p>
+            <p style="margin-top:4px; font-size:0.82em; opacity:0.8;">Haga clic en cada rama para expandir o colapsar. Pase el cursor sobre los nodos para ver conexiones con m&oacute;dulos anteriores.</p>
+        </div>
+
+        <!-- Central Node -->
+        <div class="central-node">
+            <h2>Sistema Integral de Evaluaci&oacute;n Formativa</h2>
+            <p>Articulaci&oacute;n coherente de estrategias, principios y herramientas a lo largo del per&iacute;odo acad&eacute;mico</p>
+        </div>
+
+        <!-- Branch 1: Components -->
+        <div class="connector"><span class="connector-line"></span></div>
+        <div class="branch branch-1">
+            <div class="branch-header" onclick="toggleBranch(this)">
+                <h3><span class="branch-icon">&#128736;</span> 1. Componentes del sistema</h3>
+                <span class="branch-toggle open">&#9660;</span>
+            </div>
+            <div class="branch-body open">
+                <div class="branch-content">
+                    <div class="sub-node sn-blue">
+                        <div class="sub-node-dot"></div>
+                        <div class="sub-node-text">
+                            <strong>Evaluaci&oacute;n diagn&oacute;stica <span class="mod-tag mod-1">M1</span> <span class="mod-tag mod-2">M2</span></strong>
+                            <span class="sub-detail">Mapeo del punto de partida: conocimientos previos, concepciones, habilidades.</span>
+                            <div class="tooltip-content">Conecta con M1 (fundamentos: evaluar para aprender) y M2 (Background Knowledge Probe como t&eacute;cnica diagn&oacute;stica).</div>
+                        </div>
+                    </div>
+                    <div class="sub-node sn-blue">
+                        <div class="sub-node-dot"></div>
+                        <div class="sub-node-text">
+                            <strong>Monitoreo continuo <span class="mod-tag mod-2">M2</span> <span class="mod-tag mod-5">M5</span></strong>
+                            <span class="sub-detail">Recolecci&oacute;n frecuente y ligera: CATs, polls digitales, tickets de salida.</span>
+                            <div class="tooltip-content">Conecta con M2 (CATs: Minute Paper, Muddiest Point) y M5 (herramientas digitales: Mentimeter, Kahoot, Socrative).</div>
+                        </div>
+                    </div>
+                    <div class="sub-node sn-blue">
+                        <div class="sub-node-dot"></div>
+                        <div class="sub-node-text">
+                            <strong>Cierre formativo <span class="mod-tag mod-2">M2</span> <span class="mod-tag mod-4">M4</span></strong>
+                            <span class="sub-detail">Valoraci&oacute;n estructurada del avance en RA al final de cada unidad.</span>
+                            <div class="tooltip-content">Conecta con M2 (autoevaluaci&oacute;n y coevaluaci&oacute;n como cierre) y M4 (portafolio parcial, r&uacute;bricas anal&iacute;ticas, evaluaci&oacute;n aut&eacute;ntica).</div>
+                        </div>
+                    </div>
+                    <div class="sub-node sn-blue">
+                        <div class="sub-node-dot"></div>
+                        <div class="sub-node-text">
+                            <strong>Retroalimentaci&oacute;n <span class="mod-tag mod-3">M3</span> <span class="mod-tag mod-5">M5</span></strong>
+                            <span class="sub-detail">Tejido conectivo del sistema. Oportuna, espec&iacute;fica, orientada al futuro.</span>
+                            <div class="tooltip-content">Conecta con M3 (modelo SBI, feed forward, retroalimentaci&oacute;n efectiva) y M5 (retroalimentaci&oacute;n automatizada v&iacute;a herramientas digitales).</div>
+                        </div>
+                    </div>
+                    <div class="sub-node sn-blue">
+                        <div class="sub-node-dot"></div>
+                        <div class="sub-node-text">
+                            <strong>Ajuste instruccional <span class="mod-tag mod-1">M1</span></strong>
+                            <span class="sub-detail">Modificar la ense&ntilde;anza seg&uacute;n datos: reteaching, agrupaci&oacute;n, ritmo.</span>
+                            <div class="tooltip-content">Conecta con M1 (principio fundamental: la evaluaci&oacute;n formativa existe para mejorar el aprendizaje, no solo para medirlo).</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Branch 2: Integrated Strategies -->
+        <div class="connector"><span class="connector-line"></span></div>
+        <div class="branch branch-2">
+            <div class="branch-header" onclick="toggleBranch(this)">
+                <h3><span class="branch-icon">&#127919;</span> 2. Estrategias integradas</h3>
+                <span class="branch-toggle">&#9660;</span>
+            </div>
+            <div class="branch-body">
+                <div class="branch-content">
+                    <div class="sub-node sn-green">
+                        <div class="sub-node-dot"></div>
+                        <div class="sub-node-text">
+                            <strong>Classroom Assessment Techniques (CATs) <span class="mod-tag mod-2">M2</span></strong>
+                            <span class="sub-detail">Minute Paper, Muddiest Point, Application Card, Background Knowledge Probe. R&aacute;pidas, frecuentes, informativas.</span>
+                            <div class="tooltip-content">M2: t&eacute;cnicas de evaluaci&oacute;n en el aula. Herramientas de monitoreo continuo de bajo costo.</div>
+                        </div>
+                    </div>
+                    <div class="sub-node sn-green">
+                        <div class="sub-node-dot"></div>
+                        <div class="sub-node-text">
+                            <strong>Autoevaluaci&oacute;n y coevaluaci&oacute;n <span class="mod-tag mod-2">M2</span></strong>
+                            <span class="sub-detail">Protocolos estructurados con criterios claros. Desarrollan autorregulaci&oacute;n. Se combinan con evaluaci&oacute;n docente.</span>
+                            <div class="tooltip-content">M2: estrategias que dan protagonismo al estudiante. La autoevaluaci&oacute;n desarrolla metacognici&oacute;n; la coevaluaci&oacute;n multiplica la capacidad evaluativa.</div>
+                        </div>
+                    </div>
+                    <div class="sub-node sn-green">
+                        <div class="sub-node-dot"></div>
+                        <div class="sub-node-text">
+                            <strong>Retroalimentaci&oacute;n estructurada <span class="mod-tag mod-3">M3</span></strong>
+                            <span class="sub-detail">Modelo SBI, feed forward, retroalimentaci&oacute;n entre pares. Tres preguntas: &iquest;a d&oacute;nde va? &iquest;d&oacute;nde est&aacute;? &iquest;c&oacute;mo cerrar la brecha?</span>
+                            <div class="tooltip-content">M3: la retroalimentaci&oacute;n efectiva es oportuna (&lt;7 d&iacute;as), espec&iacute;fica (evidencia concreta) y orientada al futuro (qu&eacute; hacer para mejorar).</div>
+                        </div>
+                    </div>
+                    <div class="sub-node sn-green">
+                        <div class="sub-node-dot"></div>
+                        <div class="sub-node-text">
+                            <strong>Instrumentos de evaluaci&oacute;n aut&eacute;ntica <span class="mod-tag mod-4">M4</span></strong>
+                            <span class="sub-detail">R&uacute;bricas anal&iacute;ticas, portafolios, estudios de caso, listas de cotejo, escalas de valoraci&oacute;n.</span>
+                            <div class="tooltip-content">M4: instrumentos que eval&uacute;an desempe&ntilde;o en contextos reales. Descriptores observables, niveles diferenciados cualitativamente.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Branch 3: DUA -->
+        <div class="connector"><span class="connector-line"></span></div>
+        <div class="branch branch-3">
+            <div class="branch-header" onclick="toggleBranch(this)">
+                <h3><span class="branch-icon">&#127760;</span> 3. DUA como principio transversal</h3>
+                <span class="branch-toggle">&#9660;</span>
+            </div>
+            <div class="branch-body">
+                <div class="branch-content">
+                    <div class="sub-node sn-orange">
+                        <div class="sub-node-dot"></div>
+                        <div class="sub-node-text">
+                            <strong>M&uacute;ltiples formas de representaci&oacute;n</strong>
+                            <span class="sub-detail">Instrucciones multimodales, r&uacute;bricas anticipadas, ejemplos de desempe&ntilde;o, vocabulario claro.</span>
+                        </div>
+                    </div>
+                    <div class="sub-node sn-orange">
+                        <div class="sub-node-dot"></div>
+                        <div class="sub-node-text">
+                            <strong>M&uacute;ltiples formas de acci&oacute;n y expresi&oacute;n</strong>
+                            <span class="sub-detail">Opciones de formato de entrega, herramientas de apoyo, variedad de tipos de respuesta, apoyos procedimentales.</span>
+                        </div>
+                    </div>
+                    <div class="sub-node sn-orange">
+                        <div class="sub-node-dot"></div>
+                        <div class="sub-node-text">
+                            <strong>M&uacute;ltiples formas de implicaci&oacute;n</strong>
+                            <span class="sub-detail">Bajo riesgo, elecci&oacute;n, autoevaluaci&oacute;n, prop&oacute;sito expl&iacute;cito, retroalimentaci&oacute;n accionable.</span>
+                        </div>
+                    </div>
+                    <div class="sub-node sn-orange">
+                        <div class="sub-node-dot"></div>
+                        <div class="sub-node-text">
+                            <strong>Principio clave: dise&ntilde;o proactivo <span class="mod-tag mod-6">M6</span></strong>
+                            <span class="sub-detail">Dise&ntilde;ar para la variabilidad, no para el promedio. Si la barrera es el instrumento, el problema es el dise&ntilde;o.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Branch 4: Digital Tools -->
+        <div class="connector"><span class="connector-line"></span></div>
+        <div class="branch branch-4">
+            <div class="branch-header" onclick="toggleBranch(this)">
+                <h3><span class="branch-icon">&#128187;</span> 4. Herramientas digitales</h3>
+                <span class="branch-toggle">&#9660;</span>
+            </div>
+            <div class="branch-body">
+                <div class="branch-content">
+                    <div class="sub-node sn-red">
+                        <div class="sub-node-dot"></div>
+                        <div class="sub-node-text">
+                            <strong>Monitoreo y polls <span class="mod-tag mod-5">M5</span></strong>
+                            <span class="sub-detail">Mentimeter, Kahoot, Socrative, Quizizz. Escalan las CATs a grupos grandes con retroalimentaci&oacute;n inmediata.</span>
+                        </div>
+                    </div>
+                    <div class="sub-node sn-red">
+                        <div class="sub-node-dot"></div>
+                        <div class="sub-node-text">
+                            <strong>Retroalimentaci&oacute;n automatizada <span class="mod-tag mod-5">M5</span></strong>
+                            <span class="sub-detail">Google Forms con feedback autom&aacute;tico, quizzes con explicaciones, LMS con r&uacute;bricas digitales.</span>
+                        </div>
+                    </div>
+                    <div class="sub-node sn-red">
+                        <div class="sub-node-dot"></div>
+                        <div class="sub-node-text">
+                            <strong>Portafolios digitales <span class="mod-tag mod-4">M4</span> <span class="mod-tag mod-5">M5</span></strong>
+                            <span class="sub-detail">Google Sites, Padlet, blogs. Colecci&oacute;n curada de evidencias con reflexi&oacute;n.</span>
+                        </div>
+                    </div>
+                    <div class="sub-node sn-red">
+                        <div class="sub-node-dot"></div>
+                        <div class="sub-node-text">
+                            <strong>Coevaluaci&oacute;n digital <span class="mod-tag mod-2">M2</span> <span class="mod-tag mod-5">M5</span></strong>
+                            <span class="sub-detail">Peergrade, Turnitin PeerMark, formularios de evaluaci&oacute;n entre pares en l&iacute;nea.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Branch 5: Implementation -->
+        <div class="connector"><span class="connector-line"></span></div>
+        <div class="branch branch-5">
+            <div class="branch-header" onclick="toggleBranch(this)">
+                <h3><span class="branch-icon">&#128640;</span> 5. Implementaci&oacute;n y mejora continua</h3>
+                <span class="branch-toggle">&#9660;</span>
+            </div>
+            <div class="branch-body">
+                <div class="branch-content">
+                    <div class="sub-node sn-purple">
+                        <div class="sub-node-dot"></div>
+                        <div class="sub-node-text">
+                            <strong>Implementaci&oacute;n gradual (3 fases) <span class="mod-tag mod-6">M6</span></strong>
+                            <span class="sub-detail">Piloto (1 asignatura) &rarr; Expansi&oacute;n (2-3 asignaturas) &rarr; Consolidaci&oacute;n (institucionalizaci&oacute;n).</span>
+                        </div>
+                    </div>
+                    <div class="sub-node sn-purple">
+                        <div class="sub-node-dot"></div>
+                        <div class="sub-node-text">
+                            <strong>Ciclo de mejora continua <span class="mod-tag mod-6">M6</span></strong>
+                            <span class="sub-detail">Implementar &rarr; Recolectar datos &rarr; Reflexionar &rarr; Ajustar &rarr; Implementar...</span>
+                        </div>
+                    </div>
+                    <div class="sub-node sn-purple">
+                        <div class="sub-node-dot"></div>
+                        <div class="sub-node-text">
+                            <strong>Indicadores de seguimiento <span class="mod-tag mod-6">M6</span></strong>
+                            <span class="sub-detail">De proceso (fidelidad), de resultado (impacto en aprendizaje), de sostenibilidad (carga manejable).</span>
+                        </div>
+                    </div>
+                    <div class="sub-node sn-purple">
+                        <div class="sub-node-dot"></div>
+                        <div class="sub-node-text">
+                            <strong>Comunidades de pr&aacute;ctica <span class="mod-tag mod-6">M6</span></strong>
+                            <span class="sub-detail">3-5 colegas, reuniones regulares, compartir estrategias, documentar lecciones aprendidas.</span>
+                        </div>
+                    </div>
+                    <div class="sub-node sn-purple">
+                        <div class="sub-node-dot"></div>
+                        <div class="sub-node-text">
+                            <strong>Documentaci&oacute;n y transferencia <span class="mod-tag mod-6">M6</span></strong>
+                            <span class="sub-detail">Diario docente, portafolio de innovaci&oacute;n, material de formaci&oacute;n para colegas (RA 6.3).</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cross-module connections -->
+        <div class="branch" style="border-color: #805ad5; margin-top:30px;">
+            <div class="branch-header" onclick="toggleBranch(this)">
+                <h3 style="color:#553c9a;"><span class="branch-icon">&#128279;</span> Conexiones entre m&oacute;dulos</h3>
+                <span class="branch-toggle open">&#9660;</span>
+            </div>
+            <div class="branch-body open">
+                <div class="branch-content">
+                    <div class="connections">
+                        <h4>C&oacute;mo se integran los 6 m&oacute;dulos en el sistema</h4>
+                        <div class="conn-grid">
+                            <div class="conn-item">
+                                <span class="mod-tag mod-1">M1</span>
+                                <span class="conn-arrow">&rarr;</span>
+                                <span>Fundamentos te&oacute;ricos y alineamiento constructivo que sostienen todo el sistema</span>
+                            </div>
+                            <div class="conn-item">
+                                <span class="mod-tag mod-2">M2</span>
+                                <span class="conn-arrow">&rarr;</span>
+                                <span>CATs, auto/coevaluaci&oacute;n: las herramientas de monitoreo y cierre formativo</span>
+                            </div>
+                            <div class="conn-item">
+                                <span class="mod-tag mod-3">M3</span>
+                                <span class="conn-arrow">&rarr;</span>
+                                <span>Retroalimentaci&oacute;n: el tejido conectivo que da sentido a toda evaluaci&oacute;n</span>
+                            </div>
+                            <div class="conn-item">
+                                <span class="mod-tag mod-4">M4</span>
+                                <span class="conn-arrow">&rarr;</span>
+                                <span>Instrumentos aut&eacute;nticos: r&uacute;bricas, portafolios y tareas contextualizadas</span>
+                            </div>
+                            <div class="conn-item">
+                                <span class="mod-tag mod-5">M5</span>
+                                <span class="conn-arrow">&rarr;</span>
+                                <span>Herramientas digitales: escalan, automatizan y facilitan la implementaci&oacute;n</span>
+                            </div>
+                            <div class="conn-item">
+                                <span class="mod-tag mod-6">M6</span>
+                                <span class="conn-arrow">&rarr;</span>
+                                <span>Integraci&oacute;n: de piezas sueltas a un sistema coherente, viable y mejorable</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="background:#f0fff4; border:1px solid #c6f6d5; border-radius:12px; padding:16px; margin-top:14px; text-align:center;">
+                        <p style="font-size:0.92em;"><strong style="color:#276749;">Principio integrador</strong></p>
+                        <p style="font-size:0.88em; color:#4a5568;">El sistema integral no es la suma de las partes, sino la articulaci&oacute;n coherente de estrategias, principios y herramientas al servicio del aprendizaje del estudiante.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            M&oacute;dulo 6 &bull; Evaluaci&oacute;n Formativa en Educaci&oacute;n Superior &bull; Mapa Conceptual Integrador
+        </div>
+    </div>
+
+    <script>
+        function toggleBranch(header) {
+            var body = header.nextElementSibling;
+            var toggle = header.querySelector('.branch-toggle');
+            body.classList.toggle('open');
+            toggle.classList.toggle('open');
+        }
+    </script>
+</body>
+</html>

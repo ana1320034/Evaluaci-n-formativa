@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Esquema Visual - Tres Marcos Teóricos de la Evaluación Formativa</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f7fafc; color: #2d3748; }
+        .container { max-width: 960px; margin: 0 auto; padding: 20px; }
+
+        .header { background: linear-gradient(135deg, #553c9a, #6b46c1, #805ad5); color: white; padding: 36px; border-radius: 16px; text-align: center; margin-bottom: 30px; }
+        .header h1 { font-size: 1.9em; margin-bottom: 8px; }
+        .header p { font-size: 1.05em; opacity: 0.9; }
+
+        .framework { background: white; border-radius: 14px; padding: 28px; margin-bottom: 28px; box-shadow: 0 2px 10px rgba(0,0,0,0.07); border-left: 6px solid; }
+        .fw-bw { border-color: #3182ce; }
+        .fw-ht { border-color: #dd6b20; }
+        .fw-sa { border-color: #38a169; }
+
+        .fw-header { display: flex; align-items: center; gap: 16px; margin-bottom: 18px; }
+        .fw-icon { width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.6em; color: white; flex-shrink: 0; }
+        .fw-bw .fw-icon { background: #3182ce; }
+        .fw-ht .fw-icon { background: #dd6b20; }
+        .fw-sa .fw-icon { background: #38a169; }
+        .fw-title { font-size: 1.3em; font-weight: 700; }
+        .fw-subtitle { font-size: 0.9em; color: #718096; }
+
+        .strategies-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin: 16px 0; }
+        .strategy-card { background: #ebf8ff; border-radius: 10px; padding: 14px; text-align: center; border-top: 3px solid #3182ce; }
+        .strategy-card .num { font-size: 1.8em; font-weight: 800; color: #3182ce; }
+        .strategy-card p { font-size: 0.78em; line-height: 1.4; color: #4a5568; margin-top: 6px; }
+
+        .matrix { width: 100%; border-collapse: separate; border-spacing: 0; margin: 16px 0; border-radius: 10px; overflow: hidden; }
+        .matrix th { background: #3182ce; color: white; padding: 10px; font-size: 0.85em; text-align: center; }
+        .matrix td { padding: 10px; font-size: 0.85em; border-bottom: 1px solid #e2e8f0; text-align: center; vertical-align: top; }
+        .matrix tr:nth-child(even) td { background: #f7fafc; }
+        .matrix .role { font-weight: 600; background: #ebf8ff !important; text-align: left; }
+
+        .feed-model { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 16px 0; }
+        .feed-card { border-radius: 12px; padding: 20px; text-align: center; color: white; }
+        .feed-up { background: linear-gradient(135deg, #ed8936, #dd6b20); }
+        .feed-back { background: linear-gradient(135deg, #e53e3e, #c53030); }
+        .feed-forward { background: linear-gradient(135deg, #38a169, #276749); }
+        .feed-card h3 { font-size: 1.15em; margin-bottom: 6px; }
+        .feed-card .question { font-style: italic; font-size: 1em; margin-bottom: 10px; opacity: 0.95; }
+        .feed-card p { font-size: 0.85em; opacity: 0.9; line-height: 1.5; }
+
+        .levels { margin: 16px 0; }
+        .level-row { display: flex; align-items: stretch; margin-bottom: 8px; border-radius: 10px; overflow: hidden; }
+        .level-num { width: 50px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 800; font-size: 1.3em; flex-shrink: 0; }
+        .level-content { flex: 1; padding: 14px 18px; }
+        .level-content h4 { font-size: 0.95em; margin-bottom: 4px; }
+        .level-content p { font-size: 0.85em; color: #4a5568; }
+        .level-bar { width: 80px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.8em; color: white; flex-shrink: 0; }
+        .l4 .level-num, .l4 .level-bar { background: #e53e3e; }
+        .l4 .level-content { background: #fff5f5; }
+        .l3 .level-num, .l3 .level-bar { background: #38a169; }
+        .l3 .level-content { background: #f0fff4; }
+        .l2 .level-num, .l2 .level-bar { background: #3182ce; }
+        .l2 .level-content { background: #ebf8ff; }
+        .l1 .level-num, .l1 .level-bar { background: #718096; }
+        .l1 .level-content { background: #f7fafc; }
+
+        .sadler-flow { display: flex; align-items: center; justify-content: center; gap: 8px; margin: 20px 0; flex-wrap: wrap; }
+        .sadler-step { background: white; border: 3px solid #38a169; border-radius: 12px; padding: 18px 22px; text-align: center; min-width: 200px; }
+        .sadler-step .step-num { background: #38a169; color: white; width: 32px; height: 32px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-weight: 700; margin-bottom: 8px; }
+        .sadler-step h4 { color: #276749; font-size: 0.95em; margin-bottom: 4px; }
+        .sadler-step p { font-size: 0.82em; color: #4a5568; }
+        .arrow { font-size: 2em; color: #38a169; flex-shrink: 0; }
+
+        .convergence { background: linear-gradient(135deg, #faf5ff, #ebf8ff, #f0fff4); border: 2px solid #805ad5; border-radius: 14px; padding: 24px; margin: 20px 0; text-align: center; }
+        .convergence h3 { color: #553c9a; margin-bottom: 12px; font-size: 1.1em; }
+        .convergence p { font-size: 1em; line-height: 1.7; color: #4a5568; max-width: 700px; margin: 0 auto; }
+        .convergence .highlight { background: #e9d8fd; padding: 2px 8px; border-radius: 4px; font-weight: 600; color: #553c9a; }
+
+        .comparison { width: 100%; border-collapse: separate; border-spacing: 0; margin: 16px 0; border-radius: 10px; overflow: hidden; font-size: 0.88em; }
+        .comparison th { padding: 12px; color: white; text-align: center; }
+        .comparison th:nth-child(1) { background: #805ad5; }
+        .comparison th:nth-child(2) { background: #3182ce; }
+        .comparison th:nth-child(3) { background: #dd6b20; }
+        .comparison th:nth-child(4) { background: #38a169; }
+        .comparison td { padding: 10px 12px; border-bottom: 1px solid #e2e8f0; text-align: center; }
+        .comparison tr:nth-child(even) td { background: #faf5ff; }
+
+        .footer { text-align: center; padding: 20px; color: #a0aec0; font-size: 0.85em; }
+
+        @media (max-width: 768px) {
+            .strategies-grid { grid-template-columns: repeat(2, 1fr); }
+            .feed-model { grid-template-columns: 1fr; }
+            .sadler-flow { flex-direction: column; }
+            .arrow { transform: rotate(90deg); }
+            .level-bar { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Tres Marcos Teóricos de la Evaluación Formativa</h1>
+            <p>Black y Wiliam | Hattie y Timperley | Sadler — Diagrama comparativo | Unidad 1.2</p>
+        </div>
+
+        <!-- MARCO 1: BLACK Y WILIAM -->
+        <div class="framework fw-bw">
+            <div class="fw-header">
+                <div class="fw-icon">B&W</div>
+                <div>
+                    <div class="fw-title">Black y Wiliam (2009)</div>
+                    <div class="fw-subtitle">5 estrategias clave para implementar evaluación formativa</div>
+                </div>
+            </div>
+            <div class="strategies-grid">
+                <div class="strategy-card">
+                    <div class="num">1</div>
+                    <p><strong>Clarificar</strong> y compartir metas de aprendizaje y criterios de éxito</p>
+                </div>
+                <div class="strategy-card">
+                    <div class="num">2</div>
+                    <p><strong>Diseñar</strong> actividades que obtengan evidencia del aprendizaje</p>
+                </div>
+                <div class="strategy-card">
+                    <div class="num">3</div>
+                    <p><strong>Retroalimentar</strong> de forma que haga avanzar el aprendizaje</p>
+                </div>
+                <div class="strategy-card">
+                    <div class="num">4</div>
+                    <p><strong>Activar</strong> a estudiantes como recursos para otros</p>
+                </div>
+                <div class="strategy-card">
+                    <div class="num">5</div>
+                    <p><strong>Activar</strong> a estudiantes como dueños de su aprendizaje</p>
+                </div>
+            </div>
+            <table class="matrix">
+                <tr>
+                    <th style="background:#2c5282"></th>
+                    <th>¿Hacia dónde va?</th>
+                    <th>¿Dónde está ahora?</th>
+                    <th>¿Cómo llegar?</th>
+                </tr>
+                <tr>
+                    <td class="role">Docente</td>
+                    <td>Estrategia 1<br><em>Clarificar metas</em></td>
+                    <td>Estrategia 2<br><em>Obtener evidencia</em></td>
+                    <td>Estrategia 3<br><em>Retroalimentar</em></td>
+                </tr>
+                <tr>
+                    <td class="role">Pares</td>
+                    <td>Estrategia 1<br><em>Comprender criterios</em></td>
+                    <td colspan="2">Estrategia 4 — <em>Recursos para otros</em></td>
+                </tr>
+                <tr>
+                    <td class="role">Estudiante</td>
+                    <td>Estrategia 1<br><em>Compartir metas</em></td>
+                    <td colspan="2">Estrategia 5 — <em>Dueños de su aprendizaje</em></td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- MARCO 2: HATTIE Y TIMPERLEY -->
+        <div class="framework fw-ht">
+            <div class="fw-header">
+                <div class="fw-icon">H&T</div>
+                <div>
+                    <div class="fw-title">Hattie y Timperley (2007)</div>
+                    <div class="fw-subtitle">Modelo de retroalimentación efectiva: 3 preguntas + 4 niveles</div>
+                </div>
+            </div>
+
+            <div class="feed-model">
+                <div class="feed-card feed-up">
+                    <h3>Feed Up</h3>
+                    <div class="question">¿Hacia dónde voy?</div>
+                    <p>Clarifica la meta de aprendizaje. Define expectativas. Conecta la tarea con el objetivo mayor.</p>
+                </div>
+                <div class="feed-card feed-back">
+                    <h3>Feed Back</h3>
+                    <div class="question">¿Cómo me está yendo?</div>
+                    <p>Informa sobre el desempeño actual. Describe la distancia a la meta. Basado en evidencias concretas.</p>
+                </div>
+                <div class="feed-card feed-forward">
+                    <h3>Feed Forward</h3>
+                    <div class="question">¿Qué sigue?</div>
+                    <p>Orienta acciones futuras. Sugiere estrategias concretas. La parte más importante y más omitida.</p>
+                </div>
+            </div>
+
+            <h3 style="margin: 18px 0 10px; color: #c05621; font-size: 1.05em;">4 Niveles de retroalimentación (de más a menos efectiva)</h3>
+            <div class="levels">
+                <div class="level-row l3">
+                    <div class="level-num">3</div>
+                    <div class="level-content">
+                        <h4>Autorregulación (FR)</h4>
+                        <p>"Antes de entregar, aplica la rúbrica a tu propio trabajo. ¿En qué criterio necesitas dedicar más tiempo?"</p>
+                    </div>
+                    <div class="level-bar">MÁS EFECTIVA</div>
+                </div>
+                <div class="level-row l2">
+                    <div class="level-num">2</div>
+                    <div class="level-content">
+                        <h4>Proceso (FP)</h4>
+                        <p>"Tu análisis es correcto, pero no explicaste por qué elegiste esa prueba. Justificar las decisiones fortalece el argumento."</p>
+                    </div>
+                    <div class="level-bar">EFECTIVA</div>
+                </div>
+                <div class="level-row l1">
+                    <div class="level-num">1</div>
+                    <div class="level-content">
+                        <h4>Tarea (FT)</h4>
+                        <p>"La fecha es 1789, no 1798." — Corrección directa. Útil pero limitada a esa tarea específica.</p>
+                    </div>
+                    <div class="level-bar">LIMITADA</div>
+                </div>
+                <div class="level-row l4">
+                    <div class="level-num">4</div>
+                    <div class="level-content">
+                        <h4>Yo / Self (FS)</h4>
+                        <p>"Buen trabajo." / "Eres muy inteligente." — No da información accionable. Puede crear dependencia.</p>
+                    </div>
+                    <div class="level-bar">INEFECTIVA</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MARCO 3: SADLER -->
+        <div class="framework fw-sa">
+            <div class="fw-header">
+                <div class="fw-icon">RS</div>
+                <div>
+                    <div class="fw-title">Royce Sadler (1989)</div>
+                    <div class="fw-subtitle">La brecha de aprendizaje y las 3 condiciones para cerrarla</div>
+                </div>
+            </div>
+
+            <div class="sadler-flow">
+                <div class="sadler-step">
+                    <div class="step-num">1</div>
+                    <h4>Conocer el estándar</h4>
+                    <p>El estudiante sabe qué aspecto tiene un trabajo de calidad</p>
+                </div>
+                <div class="arrow">→</div>
+                <div class="sadler-step">
+                    <div class="step-num">2</div>
+                    <h4>Comparar su desempeño</h4>
+                    <p>El estudiante puede evaluar dónde está respecto al estándar</p>
+                </div>
+                <div class="arrow">→</div>
+                <div class="sadler-step">
+                    <div class="step-num">3</div>
+                    <h4>Tomar acción</h4>
+                    <p>El estudiante sabe qué hacer concretamente para cerrar la brecha</p>
+                </div>
+            </div>
+
+            <div style="background: #f0fff4; border-radius: 10px; padding: 18px; margin-top: 14px; text-align: center;">
+                <p style="font-size: 0.95em; color: #276749; line-height: 1.6;">
+                    <strong>Transformación clave:</strong> Si solo el docente conoce el estándar de calidad, el estudiante depende permanentemente del docente para saber si su trabajo está bien. La evaluación formativa transfiere gradualmente esa capacidad evaluativa al estudiante.
+                </p>
+            </div>
+        </div>
+
+        <!-- CONVERGENCIA -->
+        <div class="convergence">
+            <h3>Punto de convergencia de los tres marcos</h3>
+            <p>Los tres marcos coinciden en una meta final: que el <span class="highlight">estudiante desarrolle la capacidad de evaluar su propio trabajo</span>, identificar brechas y tomar acción para mejorar — sin depender del docente para saber si va bien.</p>
+        </div>
+
+        <!-- TABLA COMPARATIVA -->
+        <div class="framework" style="border-color: #805ad5;">
+            <h2 style="color: #553c9a; margin-bottom: 16px; border-left: 4px solid #805ad5; padding-left: 12px;">Síntesis comparativa</h2>
+            <table class="comparison">
+                <tr>
+                    <th>Aspecto</th>
+                    <th>Black y Wiliam</th>
+                    <th>Hattie y Timperley</th>
+                    <th>Sadler</th>
+                </tr>
+                <tr>
+                    <td style="font-weight:600; text-align:left;">Pregunta central</td>
+                    <td>¿Cómo implementar la EF?</td>
+                    <td>¿Cómo retroalimentar efectivamente?</td>
+                    <td>¿Cómo cierra el estudiante la brecha?</td>
+                </tr>
+                <tr>
+                    <td style="font-weight:600; text-align:left;">Aporte principal</td>
+                    <td>5 estrategias prácticas</td>
+                    <td>3 preguntas + 4 niveles</td>
+                    <td>3 condiciones para cerrar la brecha</td>
+                </tr>
+                <tr>
+                    <td style="font-weight:600; text-align:left;">Rol del estudiante</td>
+                    <td>Dueño de su aprendizaje + recurso para otros</td>
+                    <td>Receptor activo de retroalimentación multinivel</td>
+                    <td>Evaluador de su propio desempeño</td>
+                </tr>
+                <tr>
+                    <td style="font-weight:600; text-align:left;">Rol del docente</td>
+                    <td>Diseñador de oportunidades + retroalimentador</td>
+                    <td>Retroalimentador estratégico</td>
+                    <td>Compartidor de estándares + guía</td>
+                </tr>
+                <tr>
+                    <td style="font-weight:600; text-align:left;">Meta final</td>
+                    <td>Autorregulación del aprendizaje</td>
+                    <td>Retroalimentación que genera acción</td>
+                    <td>Autonomía evaluativa del estudiante</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="footer">
+            <p>Curso: Evaluación Formativa en Educación Superior | Módulo 1 — Fundamentos | Unidad 1.2</p>
+        </div>
+    </div>
+</body>
+</html>

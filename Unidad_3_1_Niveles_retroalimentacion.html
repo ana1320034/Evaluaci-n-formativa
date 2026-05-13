@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Niveles de Retroalimentación de Hattie y Timperley - Unidad 3.1</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f4f8; color: #2d3748; line-height: 1.6; }
+        .container { max-width: 940px; margin: 0 auto; padding: 20px; }
+
+        .header {
+            background: linear-gradient(135deg, #2b6cb0, #2c5282);
+            color: white; padding: 36px; border-radius: 16px;
+            text-align: center; margin-bottom: 30px;
+        }
+        .header h1 { font-size: 1.7em; margin-bottom: 8px; }
+        .header p { font-size: 0.92em; opacity: 0.9; }
+
+        .hero-stat {
+            background: linear-gradient(135deg, #276749, #38a169);
+            color: white; border-radius: 14px; padding: 32px;
+            text-align: center; margin-bottom: 28px;
+            box-shadow: 0 4px 12px rgba(39,103,73,0.2);
+        }
+        .hero-stat .number { font-size: 3.2em; font-weight: 800; letter-spacing: -2px; }
+        .hero-stat .label { font-size: 1.05em; margin-top: 4px; }
+        .hero-stat .sublabel { font-size: 0.82em; opacity: 0.85; margin-top: 6px; }
+
+        .section { background: white; border-radius: 14px; padding: 28px; margin-bottom: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); }
+        .section h2 { font-size: 1.3em; margin-bottom: 16px; color: #2b6cb0; }
+
+        /* Pyramid */
+        .pyramid-container { display: flex; flex-direction: column; align-items: center; gap: 0; margin: 20px 0; }
+        .pyramid-level {
+            text-align: center; padding: 18px 24px; color: white;
+            font-weight: 600; font-size: 0.92em; position: relative;
+            border-radius: 8px; margin-bottom: 6px;
+        }
+        .pyramid-level .level-tag {
+            font-size: 0.72em; font-weight: 400; opacity: 0.85;
+            display: block; margin-top: 2px;
+        }
+        .level-autoreg { background: linear-gradient(135deg, #276749, #2f855a); width: 50%; }
+        .level-proceso { background: linear-gradient(135deg, #2b6cb0, #3182ce); width: 65%; }
+        .level-tarea { background: linear-gradient(135deg, #c05621, #dd6b20); width: 80%; }
+        .level-yo { background: linear-gradient(135deg, #9b2c2c, #c53030); width: 95%; }
+
+        .arrow-up { text-align: center; margin: 8px 0; }
+        .arrow-up span {
+            display: inline-block; background: #38a169; color: white;
+            padding: 6px 18px; border-radius: 20px; font-size: 0.78em; font-weight: 600;
+        }
+
+        /* Example cards */
+        .examples-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
+        .example-card {
+            border-radius: 10px; padding: 18px; font-size: 0.85em;
+        }
+        .example-good {
+            background: #f0fff4; border-left: 4px solid #38a169;
+        }
+        .example-good .tag {
+            color: #276749; font-weight: 700; font-size: 0.78em;
+            text-transform: uppercase; margin-bottom: 6px;
+        }
+        .example-bad {
+            background: #fff5f5; border-left: 4px solid #e53e3e;
+        }
+        .example-bad .tag {
+            color: #9b2c2c; font-weight: 700; font-size: 0.78em;
+            text-transform: uppercase; margin-bottom: 6px;
+        }
+
+        .level-section { margin-bottom: 24px; }
+        .level-section h3 {
+            font-size: 1.05em; margin-bottom: 10px; padding: 8px 14px;
+            border-radius: 8px; color: white; display: inline-block;
+        }
+        .h3-autoreg { background: #276749; }
+        .h3-proceso { background: #2b6cb0; }
+        .h3-tarea { background: #c05621; }
+        .h3-yo { background: #9b2c2c; }
+
+        .level-desc { font-size: 0.88em; color: #4a5568; margin-bottom: 12px; }
+
+        /* Error cards */
+        .errors-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+        .error-card {
+            background: #fffaf0; border-left: 4px solid #dd6b20;
+            border-radius: 10px; padding: 16px; font-size: 0.85em;
+        }
+        .error-card .error-title {
+            color: #c05621; font-weight: 700; font-size: 0.88em; margin-bottom: 6px;
+        }
+
+        .footer {
+            text-align: center; padding: 20px; font-size: 0.78em; color: #718096;
+        }
+
+        @media (max-width: 768px) {
+            .examples-grid, .errors-grid { grid-template-columns: 1fr; }
+            .level-autoreg { width: 70%; }
+            .level-proceso { width: 80%; }
+            .level-tarea { width: 90%; }
+            .level-yo { width: 100%; }
+            .container { padding: 12px; }
+            .header { padding: 24px 16px; }
+            .header h1 { font-size: 1.3em; }
+            .section { padding: 20px 16px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <!-- Header -->
+        <div class="header">
+            <h1>Los 4 Niveles de Retroalimentacion</h1>
+            <p>Modelo de Hattie y Timperley (2007) — Unidad 3.1 | Modulo 3</p>
+        </div>
+
+        <!-- Hero Stat -->
+        <div class="hero-stat">
+            <div class="number">d = 0.70</div>
+            <div class="label">Tamano de efecto de la retroalimentacion</div>
+            <div class="sublabel">Entre las 10 intervenciones mas poderosas para el aprendizaje (Hattie, 2009). Un efecto de 0.40 ya se considera significativo.</div>
+        </div>
+
+        <!-- Pyramid -->
+        <div class="section">
+            <h2>Piramide de efectividad: de mas a menos poderoso</h2>
+
+            <div class="arrow-up"><span>Mayor efectividad</span></div>
+
+            <div class="pyramid-container">
+                <div class="pyramid-level level-autoreg">
+                    Nivel 3: Autorregulacion
+                    <span class="level-tag">Monitoreo y regulacion del propio aprendizaje — Efectividad MUY ALTA</span>
+                </div>
+                <div class="pyramid-level level-proceso">
+                    Nivel 2: Proceso
+                    <span class="level-tag">Estrategias y procedimientos — Efectividad ALTA</span>
+                </div>
+                <div class="pyramid-level level-tarea">
+                    Nivel 1: Tarea
+                    <span class="level-tag">Correcto / incorrecto, producto — Efectividad MEDIA</span>
+                </div>
+                <div class="pyramid-level level-yo">
+                    Nivel 4: Yo (Persona)
+                    <span class="level-tag">Elogios y juicios sobre la persona — Efectividad BAJA o NEGATIVA</span>
+                </div>
+            </div>
+
+            <div class="arrow-up" style="margin-top: 4px;"><span style="background:#e53e3e;">Menor efectividad</span></div>
+        </div>
+
+        <!-- Level Details -->
+        <div class="section">
+            <h2>Cada nivel en detalle: ejemplos efectivos vs. inefectivos</h2>
+
+            <!-- Autorregulacion -->
+            <div class="level-section">
+                <h3 class="h3-autoreg">Nivel 3: Autorregulacion</h3>
+                <p class="level-desc">Se dirige a la capacidad del estudiante para monitorear, dirigir y regular su propio aprendizaje. Desarrolla autonomia y metacognicion.</p>
+                <div class="examples-grid">
+                    <div class="example-card example-good">
+                        <div class="tag">Efectivo</div>
+                        "Antes de entregar tu proximo informe, usa esta lista: (1) ¿Mi tesis responde a la pregunta? (2) ¿Cada parrafo aporta evidencia? (3) ¿Considere un contraargumento? Evalua tu borrador con estos criterios."
+                    </div>
+                    <div class="example-card example-bad">
+                        <div class="tag">Inefectivo</div>
+                        "Deberias revisar mejor tu trabajo antes de entregarlo."
+                    </div>
+                </div>
+            </div>
+
+            <!-- Proceso -->
+            <div class="level-section">
+                <h3 class="h3-proceso">Nivel 2: Proceso</h3>
+                <p class="level-desc">Se enfoca en las estrategias que el estudiante utilizo. Es transferible: ayuda a mejorar no solo este trabajo sino los futuros.</p>
+                <div class="examples-grid">
+                    <div class="example-card example-good">
+                        <div class="tag">Efectivo</div>
+                        "Noto que usas lectura superficial para las ideas principales. Prueba subrayar los conectores argumentativos (sin embargo, por lo tanto) para mapear la estructura logica antes de resumir."
+                    </div>
+                    <div class="example-card example-bad">
+                        <div class="tag">Inefectivo</div>
+                        "Necesitas mejorar tu estrategia de lectura."
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tarea -->
+            <div class="level-section">
+                <h3 class="h3-tarea">Nivel 1: Tarea</h3>
+                <p class="level-desc">Se enfoca en el producto: si la respuesta es correcta o no, errores especificos cometidos. Es util cuando es especifica.</p>
+                <div class="examples-grid">
+                    <div class="example-card example-good">
+                        <div class="tag">Efectivo</div>
+                        "En tu calculo de la integral, el error esta en el paso 3: aplicaste la regla de la cadena sin considerar el exponente negativo. Revisa la formula y recalcula desde ese punto."
+                    </div>
+                    <div class="example-card example-bad">
+                        <div class="tag">Inefectivo</div>
+                        "Mal. Revisa el procedimiento."
+                    </div>
+                </div>
+            </div>
+
+            <!-- Yo -->
+            <div class="level-section">
+                <h3 class="h3-yo">Nivel 4: Yo (Persona)</h3>
+                <p class="level-desc">Se dirige a la persona, no al trabajo. No contiene informacion accionable. Puede generar efectos negativos en la motivacion.</p>
+                <div class="examples-grid">
+                    <div class="example-card example-bad">
+                        <div class="tag">Inefectivo</div>
+                        "¡Excelente trabajo! Eres muy inteligente."
+                        <br><br><em style="font-size:0.88em; color:#9b2c2c;">No dice que hizo bien ni como replicarlo.</em>
+                    </div>
+                    <div class="example-card example-bad">
+                        <div class="tag">Inefectivo</div>
+                        "Esperaba mas de ti."
+                        <br><br><em style="font-size:0.88em; color:#9b2c2c;">Genera culpa sin dar direccion para mejorar.</em>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Error cards -->
+        <div class="section">
+            <h2>Errores comunes que neutralizan la retroalimentacion</h2>
+            <div class="errors-grid">
+                <div class="error-card">
+                    <div class="error-title">La retroalimentacion fantasma</div>
+                    Comentarios extensos que llegan despues de la calificacion final, cuando el estudiante ya no puede actuar sobre ellos. Informacion desperdiciada.
+                </div>
+                <div class="error-card">
+                    <div class="error-title">El exceso correctivo</div>
+                    Senalar todos los errores genera sobrecarga cognitiva y paralisis. Mejor priorizar 2-3 aspectos clave que el estudiante pueda abordar de inmediato.
+                </div>
+                <div class="error-card">
+                    <div class="error-title">La vaguedad bienintencionada</div>
+                    "Profundiza mas", "Falta analisis", "Mejora la redaccion" — parecen utiles pero no dicen que hacer concretamente.
+                </div>
+                <div class="error-card">
+                    <div class="error-title">El sandwich toxico</div>
+                    La tecnica elogio-critica-elogio ensena a los estudiantes a ignorar los elogios porque anticipan la critica. Mejor ser directo y constructivo.
+                </div>
+            </div>
+        </div>
+
+        <!-- Key Takeaway -->
+        <div class="section" style="background: linear-gradient(135deg, #ebf8ff, #f0fff4); border: 2px solid #2b6cb0;">
+            <h2 style="color:#2c5282;">Tres preguntas para analizar cualquier retroalimentacion</h2>
+            <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:14px; margin-top:12px;">
+                <div style="background:white; border-radius:10px; padding:16px; text-align:center; box-shadow: 0 2px 6px rgba(0,0,0,0.06);">
+                    <div style="font-size:1.8em;">1</div>
+                    <div style="font-weight:600; color:#2b6cb0; font-size:0.88em;">¿A que nivel se dirige?</div>
+                    <div style="font-size:0.78em; color:#718096; margin-top:4px;">Tarea, proceso, autorregulacion o yo</div>
+                </div>
+                <div style="background:white; border-radius:10px; padding:16px; text-align:center; box-shadow: 0 2px 6px rgba(0,0,0,0.06);">
+                    <div style="font-size:1.8em;">2</div>
+                    <div style="font-weight:600; color:#276749; font-size:0.88em;">¿Es accionable?</div>
+                    <div style="font-size:0.78em; color:#718096; margin-top:4px;">¿El estudiante sabe que hacer despues?</div>
+                </div>
+                <div style="background:white; border-radius:10px; padding:16px; text-align:center; box-shadow: 0 2px 6px rgba(0,0,0,0.06);">
+                    <div style="font-size:1.8em;">3</div>
+                    <div style="font-weight:600; color:#553c9a; font-size:0.88em;">¿Promueve autonomia?</div>
+                    <div style="font-size:0.78em; color:#718096; margin-top:4px;">¿O genera dependencia del docente?</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            Curso: Evaluacion Formativa en Educacion Superior | Modulo 3, Unidad 3.1<br>
+            Basado en: Hattie, J. & Timperley, H. (2007). The power of feedback. <em>Review of Educational Research</em>, 77(1), 81-112.
+        </div>
+
+    </div>
+</body>
+</html>

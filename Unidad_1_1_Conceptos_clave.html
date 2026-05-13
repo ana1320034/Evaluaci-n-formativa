@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infografía - ¿Qué es la evaluación formativa?</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f4f8; color: #2d3748; }
+        .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+
+        .header { background: linear-gradient(135deg, #2b6cb0, #4299e1); color: white; padding: 40px; border-radius: 16px; text-align: center; margin-bottom: 30px; }
+        .header h1 { font-size: 2em; margin-bottom: 10px; }
+        .header p { font-size: 1.1em; opacity: 0.9; }
+
+        .section { background: white; border-radius: 12px; padding: 30px; margin-bottom: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        .section h2 { color: #2b6cb0; font-size: 1.4em; margin-bottom: 16px; border-left: 4px solid #4299e1; padding-left: 12px; }
+
+        .definition-box { background: #ebf8ff; border: 2px solid #90cdf4; border-radius: 12px; padding: 24px; margin: 16px 0; }
+        .definition-box p { font-size: 1.1em; line-height: 1.7; }
+        .keyword { background: #bee3f8; padding: 2px 8px; border-radius: 4px; font-weight: 600; }
+
+        .three-columns { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: 20px 0; }
+        .column-card { background: #f7fafc; border-radius: 10px; padding: 20px; text-align: center; border-top: 4px solid; }
+        .column-card:nth-child(1) { border-color: #48bb78; }
+        .column-card:nth-child(2) { border-color: #ed8936; }
+        .column-card:nth-child(3) { border-color: #9f7aea; }
+        .column-card .icon { font-size: 2.5em; margin-bottom: 10px; }
+        .column-card h3 { font-size: 1em; margin-bottom: 8px; color: #2d3748; }
+        .column-card p { font-size: 0.9em; color: #4a5568; line-height: 1.5; }
+
+        .timeline { position: relative; padding-left: 40px; margin: 20px 0; }
+        .timeline::before { content: ''; position: absolute; left: 15px; top: 0; bottom: 0; width: 3px; background: #4299e1; }
+        .timeline-item { position: relative; margin-bottom: 24px; }
+        .timeline-item::before { content: ''; position: absolute; left: -33px; top: 4px; width: 14px; height: 14px; border-radius: 50%; background: #4299e1; border: 3px solid white; box-shadow: 0 0 0 2px #4299e1; }
+        .timeline-item .year { font-weight: 700; color: #2b6cb0; font-size: 1.1em; }
+        .timeline-item .author { font-weight: 600; color: #4a5568; }
+        .timeline-item .desc { color: #718096; font-size: 0.95em; margin-top: 4px; }
+
+        .not-box { background: #fff5f5; border: 2px solid #fc8181; border-radius: 12px; padding: 20px; margin: 16px 0; }
+        .not-box h3 { color: #c53030; margin-bottom: 12px; }
+        .not-box ul { list-style: none; padding: 0; }
+        .not-box li { padding: 6px 0; padding-left: 24px; position: relative; color: #4a5568; }
+        .not-box li::before { content: '✗'; position: absolute; left: 0; color: #e53e3e; font-weight: bold; }
+
+        .yes-box { background: #f0fff4; border: 2px solid #68d391; border-radius: 12px; padding: 20px; margin: 16px 0; }
+        .yes-box h3 { color: #276749; margin-bottom: 12px; }
+        .yes-box ul { list-style: none; padding: 0; }
+        .yes-box li { padding: 6px 0; padding-left: 24px; position: relative; color: #4a5568; }
+        .yes-box li::before { content: '✓'; position: absolute; left: 0; color: #38a169; font-weight: bold; }
+
+        .stat-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin: 20px 0; }
+        .stat-card { background: linear-gradient(135deg, #ebf8ff, #e6fffa); border-radius: 10px; padding: 20px; text-align: center; }
+        .stat-card .number { font-size: 2.2em; font-weight: 800; color: #2b6cb0; }
+        .stat-card .label { font-size: 0.9em; color: #4a5568; margin-top: 4px; }
+
+        .footer { text-align: center; padding: 20px; color: #a0aec0; font-size: 0.85em; }
+
+        @media (max-width: 768px) {
+            .three-columns { grid-template-columns: 1fr; }
+            .stat-grid { grid-template-columns: 1fr; }
+            .header h1 { font-size: 1.5em; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>¿Qué es la Evaluación Formativa?</h1>
+            <p>Conceptos clave y relaciones fundamentales | Unidad 1.1</p>
+        </div>
+
+        <div class="section">
+            <h2>Definición</h2>
+            <div class="definition-box">
+                <p>La evaluación formativa es un <span class="keyword">proceso continuo</span> y <span class="keyword">planificado</span> en el cual <span class="keyword">docentes y estudiantes</span> recopilan, interpretan y utilizan <span class="keyword">evidencias del aprendizaje</span> para tomar <span class="keyword">decisiones</span> sobre los siguientes pasos en la enseñanza y el aprendizaje.</p>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Tres formas de evaluación</h2>
+            <div class="three-columns">
+                <div class="column-card">
+                    <div class="icon">📊</div>
+                    <h3>Evaluación DEL aprendizaje</h3>
+                    <p><strong>Propósito:</strong> Medir y certificar<br><strong>Momento:</strong> Al final<br><strong>Pregunta:</strong> ¿Cuánto aprendió?<br><strong>Resultado:</strong> Calificación</p>
+                </div>
+                <div class="column-card">
+                    <div class="icon">🧭</div>
+                    <h3>Evaluación PARA el aprendizaje</h3>
+                    <p><strong>Propósito:</strong> Mejorar y guiar<br><strong>Momento:</strong> Durante el proceso<br><strong>Pregunta:</strong> ¿Qué necesita ahora?<br><strong>Resultado:</strong> Retroalimentación</p>
+                </div>
+                <div class="column-card">
+                    <div class="icon">🔄</div>
+                    <h3>Evaluación COMO aprendizaje</h3>
+                    <p><strong>Propósito:</strong> Generar aprendizaje<br><strong>Momento:</strong> Integrado en actividades<br><strong>Pregunta:</strong> ¿Cómo me autorregulo?<br><strong>Resultado:</strong> Metacognición</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Evolución histórica</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <span class="year">1967</span> — <span class="author">Michael Scriven</span>
+                    <div class="desc">Acuña el término "evaluación formativa" para programas educativos.</div>
+                </div>
+                <div class="timeline-item">
+                    <span class="year">1968</span> — <span class="author">Benjamin Bloom</span>
+                    <div class="desc">Aplica el concepto al aprendizaje estudiantil (mastery learning).</div>
+                </div>
+                <div class="timeline-item">
+                    <span class="year">1989</span> — <span class="author">Royce Sadler</span>
+                    <div class="desc">Introduce el concepto de "brecha de aprendizaje" y las 3 condiciones para cerrarla.</div>
+                </div>
+                <div class="timeline-item">
+                    <span class="year">1998</span> — <span class="author">Black y Wiliam</span>
+                    <div class="desc">"Inside the Black Box" — revisan 250+ estudios demostrando impacto masivo.</div>
+                </div>
+                <div class="timeline-item">
+                    <span class="year">2007</span> — <span class="author">Hattie y Timperley</span>
+                    <div class="desc">Modelo de retroalimentación efectiva: Feed up / Feed back / Feed forward.</div>
+                </div>
+                <div class="timeline-item">
+                    <span class="year">2023+</span> — <span class="author">IA y analíticas</span>
+                    <div class="desc">Inteligencia artificial y analíticas de aprendizaje: la nueva frontera.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                <div class="yes-box">
+                    <h3>La evaluación formativa ES:</h3>
+                    <ul>
+                        <li>Un proceso continuo y planificado</li>
+                        <li>Evaluación PARA y COMO aprendizaje</li>
+                        <li>Basada en evidencias, no en intuiciones</li>
+                        <li>Participación activa del estudiante</li>
+                        <li>Retroalimentación orientada a la acción</li>
+                        <li>El error como oportunidad</li>
+                    </ul>
+                </div>
+                <div class="not-box">
+                    <h3>La evaluación formativa NO es:</h3>
+                    <ul>
+                        <li>Simplemente hacer más exámenes parciales</li>
+                        <li>Dar una nota y devolverla rápido</li>
+                        <li>Un tipo específico de instrumento</li>
+                        <li>Opcional o complementaria</li>
+                        <li>Exclusiva del docente</li>
+                        <li>Incompatible con la evaluación sumativa</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Datos de impacto</h2>
+            <div class="stat-grid">
+                <div class="stat-card">
+                    <div class="number">d = 0.70</div>
+                    <div class="label">Efecto de la retroalimentación (Hattie) — entre los más altos en educación</div>
+                </div>
+                <div class="stat-card">
+                    <div class="number">250+</div>
+                    <div class="label">Estudios revisados por Black y Wiliam confirmando el impacto</div>
+                </div>
+                <div class="stat-card">
+                    <div class="number">20-35%</div>
+                    <div class="label">Reducción en tasas de reprobación con evaluación formativa</div>
+                </div>
+                <div class="stat-card">
+                    <div class="number">800+</div>
+                    <div class="label">Metaanálisis sintetizados en Visible Learning de Hattie</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>Curso: Evaluación Formativa en Educación Superior | Módulo 1 — Fundamentos | Unidad 1.1</p>
+        </div>
+    </div>
+</body>
+</html>

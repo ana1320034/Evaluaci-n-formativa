@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¿Qué CAT uso en esta situación? — Unidad 2.2</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f4f8;
+            color: #2d3748;
+            line-height: 1.6;
+        }
+        .container { max-width: 960px; margin: 0 auto; padding: 20px; }
+
+        /* ── Header ── */
+        .header {
+            background: linear-gradient(135deg, #2b6cb0, #805ad5);
+            color: white;
+            padding: 40px 36px 32px;
+            border-radius: 16px;
+            text-align: center;
+            margin-bottom: 28px;
+            position: relative;
+        }
+        .breadcrumb {
+            font-size: 0.82em;
+            opacity: 0.88;
+            margin-bottom: 14px;
+            letter-spacing: 0.3px;
+        }
+        .breadcrumb span { margin: 0 6px; }
+        .header h1 { font-size: 1.75em; margin-bottom: 8px; }
+        .header p { font-size: 0.95em; opacity: 0.92; max-width: 640px; margin: 0 auto; }
+
+        /* ── Sections ── */
+        .section {
+            background: white;
+            border-radius: 14px;
+            padding: 28px;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+        }
+        .section-title {
+            font-size: 1.3em;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #2b6cb0;
+        }
+        .section-title .icon {
+            width: 32px; height: 32px;
+            border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.1em;
+            flex-shrink: 0;
+        }
+
+        /* ── Tarjetas de técnicas ── */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+            gap: 20px;
+        }
+        .tech-card {
+            border-radius: 12px;
+            padding: 22px;
+            border-left: 5px solid;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+        .tech-card:hover, .tech-card:focus-within {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+        }
+        .tech-card h3 {
+            font-size: 1.05em;
+            margin-bottom: 8px;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .tech-card .badge {
+            font-size: 0.7em;
+            padding: 2px 8px;
+            border-radius: 10px;
+            color: white;
+            font-weight: 600;
+        }
+        .tech-card p { font-size: 0.85em; color: #4a5568; margin-bottom: 6px; }
+        .tech-card .meta {
+            display: flex; gap: 14px; flex-wrap: wrap;
+            font-size: 0.78em; color: #718096; margin-top: 10px;
+            border-top: 1px solid #e2e8f0; padding-top: 10px;
+        }
+        .tech-card .meta span { display: flex; align-items: center; gap: 4px; }
+
+        .tech-card .detail-panel {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.35s ease;
+        }
+        .tech-card.open .detail-panel {
+            max-height: 300px;
+        }
+        .detail-panel .when-use {
+            font-size: 0.83em;
+            color: #553c9a;
+            background: #faf5ff;
+            border-radius: 8px;
+            padding: 10px 12px;
+            margin-top: 10px;
+        }
+        .detail-panel .when-use strong { color: #6b46c1; }
+
+        .card-toggle {
+            font-size: 0.75em;
+            color: #805ad5;
+            text-align: right;
+            margin-top: 6px;
+            cursor: pointer;
+        }
+
+        /* Colores individuales */
+        .card-tps    { border-color: #3182ce; background: #ebf8ff; }
+        .card-tps h3 { color: #2b6cb0; }
+        .card-tps .badge { background: #3182ce; }
+
+        .card-cm     { border-color: #805ad5; background: #faf5ff; }
+        .card-cm h3  { color: #553c9a; }
+        .card-cm .badge { background: #805ad5; }
+
+        .card-quiz   { border-color: #2b6cb0; background: #ebf8ff; }
+        .card-quiz h3{ color: #2b6cb0; }
+        .card-quiz .badge { background: #2b6cb0; }
+
+        .card-st     { border-color: #6b46c1; background: #faf5ff; }
+        .card-st h3  { color: #553c9a; }
+        .card-st .badge { background: #6b46c1; }
+
+        .card-pb     { border-color: #4c51bf; background: #ebf4ff; }
+        .card-pb h3  { color: #3c366b; }
+        .card-pb .badge { background: #4c51bf; }
+
+        /* ── Diagrama de flujo ── */
+        .flow-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0;
+            padding: 10px 0;
+        }
+        .flow-start {
+            background: linear-gradient(135deg, #2b6cb0, #805ad5);
+            color: white;
+            padding: 16px 32px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.05em;
+            text-align: center;
+        }
+        .flow-arrow {
+            width: 3px;
+            height: 28px;
+            background: #a0aec0;
+            position: relative;
+        }
+        .flow-arrow::after {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-left: 7px solid transparent;
+            border-right: 7px solid transparent;
+            border-top: 8px solid #a0aec0;
+        }
+        .flow-decision {
+            position: relative;
+            width: 100%;
+            max-width: 680px;
+            display: flex;
+            align-items: stretch;
+            gap: 0;
+            min-height: 60px;
+        }
+        .flow-question {
+            flex: 1;
+            background: #ebf8ff;
+            border: 2px solid #90cdf4;
+            border-radius: 12px;
+            padding: 14px 18px;
+            font-size: 0.88em;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: background 0.2s, border-color 0.2s, transform 0.15s;
+        }
+        .flow-question:hover {
+            background: #bee3f8;
+            border-color: #3182ce;
+            transform: scale(1.02);
+        }
+        .flow-question.active {
+            background: #bee3f8;
+            border-color: #2b6cb0;
+        }
+        .flow-question .q-icon {
+            font-size: 1.2em;
+            margin-right: 10px;
+            flex-shrink: 0;
+        }
+        .flow-connector {
+            width: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3em;
+            color: #805ad5;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+        .flow-answer {
+            min-width: 180px;
+            max-width: 220px;
+            background: linear-gradient(135deg, #805ad5, #6b46c1);
+            color: white;
+            border-radius: 12px;
+            padding: 14px 16px;
+            font-size: 0.88em;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            transition: transform 0.15s;
+        }
+        .flow-question:hover + .flow-connector + .flow-answer,
+        .flow-question.active + .flow-connector + .flow-answer {
+            transform: scale(1.04);
+        }
+        .flow-answer.blue-ans {
+            background: linear-gradient(135deg, #2b6cb0, #3182ce);
+        }
+
+        /* ── Tips section ── */
+        .tips-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 18px;
+        }
+        .tip-card {
+            background: #faf5ff;
+            border: 1px solid #e9d8fd;
+            border-radius: 12px;
+            padding: 18px;
+        }
+        .tip-card h4 {
+            font-size: 0.95em;
+            color: #553c9a;
+            margin-bottom: 8px;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .tip-card p, .tip-card ul { font-size: 0.83em; color: #4a5568; }
+        .tip-card ul { padding-left: 18px; margin-top: 4px; }
+        .tip-card ul li { margin-bottom: 3px; }
+
+        /* ── Footer ── */
+        .footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 0.78em;
+            color: #a0aec0;
+        }
+        .footer a { color: #805ad5; text-decoration: none; }
+
+        /* ── Responsive ── */
+        @media (max-width: 768px) {
+            .container { padding: 12px; }
+            .header { padding: 28px 20px 24px; border-radius: 12px; }
+            .header h1 { font-size: 1.35em; }
+            .section { padding: 20px 16px; }
+            .cards-grid { grid-template-columns: 1fr; }
+            .flow-decision { flex-direction: column; align-items: stretch; }
+            .flow-connector { width: auto; height: 30px; transform: rotate(90deg); }
+            .flow-answer { max-width: 100%; min-width: auto; }
+            .tips-grid { grid-template-columns: 1fr; }
+        }
+
+        /* ── Utilidades ── */
+        .sr-only {
+            position: absolute; width: 1px; height: 1px;
+            padding: 0; margin: -1px; overflow: hidden;
+            clip: rect(0,0,0,0); border: 0;
+        }
+        .highlight {
+            background: #e9d8fd;
+            padding: 1px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+            color: #553c9a;
+        }
+        .highlight-blue {
+            background: #bee3f8;
+            padding: 1px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+            color: #2b6cb0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <!-- ═══ HEADER ═══ -->
+        <header class="header" role="banner">
+            <nav class="breadcrumb" aria-label="Ubicación en el curso">
+                Curso de Evaluación Formativa <span>›</span> Módulo 2 <span>›</span> Unidad 2.2
+            </nav>
+            <h1>¿Qué CAT uso en esta situación?</h1>
+            <p>Flujograma de decisión para las Técnicas de Evaluación en el Aula (CATs) — Parte II</p>
+        </header>
+
+        <!-- ═══ TARJETAS DE TÉCNICAS ═══ -->
+        <section class="section" aria-labelledby="sec-tecnicas">
+            <h2 class="section-title" id="sec-tecnicas">
+                <span class="icon" style="background:#ebf8ff;color:#2b6cb0;" aria-hidden="true">&#9881;</span>
+                Las 5 técnicas CAT de esta unidad
+            </h2>
+
+            <div class="cards-grid" role="list">
+
+                <!-- 1. Think-Pair-Share -->
+                <article class="tech-card card-tps" role="listitem" tabindex="0" onclick="toggleCard(this)" onkeydown="if(event.key==='Enter')toggleCard(this)" aria-expanded="false">
+                    <h3><span aria-hidden="true">&#128172;</span> Think-Pair-Share <span class="badge">Colaborativa</span></h3>
+                    <p>Los estudiantes piensan individualmente, discuten en parejas y luego comparten con el grupo.</p>
+                    <div class="meta">
+                        <span><span aria-hidden="true">&#9201;</span> 5-10 min</span>
+                        <span><span aria-hidden="true">&#128101;</span> Parejas / grupo completo</span>
+                    </div>
+                    <div class="detail-panel" aria-hidden="true">
+                        <div class="when-use">
+                            <strong>Cuándo usarla:</strong> Cuando quieres que cada estudiante procese la información individualmente antes de entrar en discusión grupal. Ideal para verificar comprensión inicial y fomentar la participación de todos.
+                        </div>
+                    </div>
+                    <div class="card-toggle" aria-hidden="true">Clic para más detalles ▾</div>
+                </article>
+
+                <!-- 2. Concept Map diagnóstico -->
+                <article class="tech-card card-cm" role="listitem" tabindex="0" onclick="toggleCard(this)" onkeydown="if(event.key==='Enter')toggleCard(this)" aria-expanded="false">
+                    <h3><span aria-hidden="true">&#128424;</span> Concept Map diagnóstico <span class="badge">Visual</span></h3>
+                    <p>Los estudiantes crean un mapa que muestra cómo conectan los conceptos clave del tema.</p>
+                    <div class="meta">
+                        <span><span aria-hidden="true">&#9201;</span> 10-20 min</span>
+                        <span><span aria-hidden="true">&#128101;</span> Individual / parejas</span>
+                    </div>
+                    <div class="detail-panel" aria-hidden="true">
+                        <div class="when-use">
+                            <strong>Cuándo usarla:</strong> Cuando quieres ver cómo los estudiantes organizan mentalmente los conceptos y qué conexiones establecen (o no) entre ellos. Revela lagunas conceptuales y malentendidos estructurales.
+                        </div>
+                    </div>
+                    <div class="card-toggle" aria-hidden="true">Clic para más detalles ▾</div>
+                </article>
+
+                <!-- 3. Quiz formativo -->
+                <article class="tech-card card-quiz" role="listitem" tabindex="0" onclick="toggleCard(this)" onkeydown="if(event.key==='Enter')toggleCard(this)" aria-expanded="false">
+                    <h3><span aria-hidden="true">&#128221;</span> Quiz formativo <span class="badge">Retención</span></h3>
+                    <p>Cuestionario breve de baja o nula calificación para reforzar la recuperación de contenidos.</p>
+                    <div class="meta">
+                        <span><span aria-hidden="true">&#9201;</span> 5-15 min</span>
+                        <span><span aria-hidden="true">&#128101;</span> Individual</span>
+                    </div>
+                    <div class="detail-panel" aria-hidden="true">
+                        <div class="when-use">
+                            <strong>Cuándo usarla:</strong> Cuando quieres reforzar la retención a largo plazo mediante el efecto de recuperación (testing effect). Funciona mejor cuando se aplica repetidamente a lo largo del curso.
+                        </div>
+                    </div>
+                    <div class="card-toggle" aria-hidden="true">Clic para más detalles ▾</div>
+                </article>
+
+                <!-- 4. Señales de tráfico -->
+                <article class="tech-card card-st" role="listitem" tabindex="0" onclick="toggleCard(this)" onkeydown="if(event.key==='Enter')toggleCard(this)" aria-expanded="false">
+                    <h3><span aria-hidden="true">&#128678;</span> Señales de tráfico <span class="badge">Metacognición</span></h3>
+                    <p>Los estudiantes usan colores (verde, amarillo, rojo) para indicar su nivel de comprensión.</p>
+                    <div class="meta">
+                        <span><span aria-hidden="true">&#9201;</span> 1-2 min</span>
+                        <span><span aria-hidden="true">&#128101;</span> Grupo completo</span>
+                    </div>
+                    <div class="detail-panel" aria-hidden="true">
+                        <div class="when-use">
+                            <strong>Cuándo usarla:</strong> Cuando quieres una lectura rápida y visual de cómo se siente el grupo respecto a su comprensión. Fomenta la autorregulación y la metacognición en los estudiantes.
+                        </div>
+                    </div>
+                    <div class="card-toggle" aria-hidden="true">Clic para más detalles ▾</div>
+                </article>
+
+                <!-- 5. Pregunta de bisagra -->
+                <article class="tech-card card-pb" role="listitem" tabindex="0" onclick="toggleCard(this)" onkeydown="if(event.key==='Enter')toggleCard(this)" aria-expanded="false">
+                    <h3><span aria-hidden="true">&#128260;</span> Pregunta de bisagra <span class="badge">Decisión</span></h3>
+                    <p>Pregunta estratégica en un punto clave: la respuesta determina si se avanza o se repasa.</p>
+                    <div class="meta">
+                        <span><span aria-hidden="true">&#9201;</span> 3-5 min</span>
+                        <span><span aria-hidden="true">&#128101;</span> Individual</span>
+                    </div>
+                    <div class="detail-panel" aria-hidden="true">
+                        <div class="when-use">
+                            <strong>Cuándo usarla:</strong> Cuando necesitas tomar una decisión instruccional (avanzar o repasar) basada en evidencia real de aprendizaje. Se coloca en un «punto bisagra» de la clase.
+                        </div>
+                    </div>
+                    <div class="card-toggle" aria-hidden="true">Clic para más detalles ▾</div>
+                </article>
+
+            </div>
+        </section>
+
+        <!-- ═══ DIAGRAMA DE FLUJO ═══ -->
+        <section class="section" aria-labelledby="sec-flujo">
+            <h2 class="section-title" id="sec-flujo">
+                <span class="icon" style="background:#faf5ff;color:#805ad5;" aria-hidden="true">&#9670;</span>
+                ¿Qué necesito saber? — Diagrama de decisión
+            </h2>
+            <p style="font-size:0.85em;color:#718096;margin-bottom:18px;">Parte de la pregunta que mejor describe tu necesidad y sigue la flecha hasta la técnica recomendada.</p>
+
+            <div class="flow-container" role="img" aria-label="Diagrama de flujo de decisión para seleccionar la técnica CAT adecuada. Cinco preguntas llevan cada una a una técnica específica.">
+
+                <!-- Inicio -->
+                <div class="flow-start">¿Qué necesito saber?</div>
+                <div class="flow-arrow" aria-hidden="true"></div>
+
+                <!-- Pregunta 1 -->
+                <div class="flow-decision">
+                    <div class="flow-question" tabindex="0" role="button" aria-label="Pregunta: ¿Quiero verificar comprensión individual antes de discusión? Respuesta: Think-Pair-Share" onclick="highlightFlow(this)" onkeydown="if(event.key==='Enter')highlightFlow(this)">
+                        <span class="q-icon" aria-hidden="true">&#10067;</span>
+                        ¿Quiero verificar comprensión individual <strong>antes de discusión</strong>?
+                    </div>
+                    <div class="flow-connector" aria-hidden="true">&#8594;</div>
+                    <div class="flow-answer blue-ans">&#128172; Think-Pair-Share</div>
+                </div>
+                <div class="flow-arrow" aria-hidden="true"></div>
+
+                <!-- Pregunta 2 -->
+                <div class="flow-decision">
+                    <div class="flow-question" tabindex="0" role="button" aria-label="Pregunta: ¿Quiero ver cómo conectan los conceptos? Respuesta: Concept Map diagnóstico" onclick="highlightFlow(this)" onkeydown="if(event.key==='Enter')highlightFlow(this)">
+                        <span class="q-icon" aria-hidden="true">&#10067;</span>
+                        ¿Quiero ver cómo <strong>conectan los conceptos</strong>?
+                    </div>
+                    <div class="flow-connector" aria-hidden="true">&#8594;</div>
+                    <div class="flow-answer">&#128424; Concept Map diagnóstico</div>
+                </div>
+                <div class="flow-arrow" aria-hidden="true"></div>
+
+                <!-- Pregunta 3 -->
+                <div class="flow-decision">
+                    <div class="flow-question" tabindex="0" role="button" aria-label="Pregunta: ¿Quiero que los estudiantes evalúen su propia comprensión? Respuesta: Señales de tráfico" onclick="highlightFlow(this)" onkeydown="if(event.key==='Enter')highlightFlow(this)">
+                        <span class="q-icon" aria-hidden="true">&#10067;</span>
+                        ¿Quiero que los estudiantes <strong>evalúen su propia comprensión</strong>?
+                    </div>
+                    <div class="flow-connector" aria-hidden="true">&#8594;</div>
+                    <div class="flow-answer">&#128678; Señales de tráfico</div>
+                </div>
+                <div class="flow-arrow" aria-hidden="true"></div>
+
+                <!-- Pregunta 4 -->
+                <div class="flow-decision">
+                    <div class="flow-question" tabindex="0" role="button" aria-label="Pregunta: ¿Necesito decidir si avanzo o repaso? Respuesta: Pregunta de bisagra" onclick="highlightFlow(this)" onkeydown="if(event.key==='Enter')highlightFlow(this)">
+                        <span class="q-icon" aria-hidden="true">&#10067;</span>
+                        ¿Necesito decidir si <strong>avanzo o repaso</strong>?
+                    </div>
+                    <div class="flow-connector" aria-hidden="true">&#8594;</div>
+                    <div class="flow-answer blue-ans">&#128260; Pregunta de bisagra</div>
+                </div>
+                <div class="flow-arrow" aria-hidden="true"></div>
+
+                <!-- Pregunta 5 -->
+                <div class="flow-decision">
+                    <div class="flow-question" tabindex="0" role="button" aria-label="Pregunta: ¿Quiero reforzar la retención a largo plazo? Respuesta: Quiz formativo" onclick="highlightFlow(this)" onkeydown="if(event.key==='Enter')highlightFlow(this)">
+                        <span class="q-icon" aria-hidden="true">&#10067;</span>
+                        ¿Quiero reforzar la <strong>retención a largo plazo</strong>?
+                    </div>
+                    <div class="flow-connector" aria-hidden="true">&#8594;</div>
+                    <div class="flow-answer blue-ans">&#128221; Quiz formativo</div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ═══ CÓMO PROCESAR RESPUESTAS ═══ -->
+        <section class="section" aria-labelledby="sec-tips">
+            <h2 class="section-title" id="sec-tips">
+                <span class="icon" style="background:#ebf8ff;color:#2b6cb0;" aria-hidden="true">&#128161;</span>
+                Cómo procesar las respuestas
+            </h2>
+
+            <div class="tips-grid">
+
+                <div class="tip-card">
+                    <h4><span aria-hidden="true">&#9889;</span> Actúa en el momento</h4>
+                    <p>La evaluación formativa pierde valor si no ajustas la enseñanza con base en lo observado.</p>
+                    <ul>
+                        <li>Decide de antemano qué harás si la mayoría acierta y qué harás si no.</li>
+                        <li>Ten preparada una actividad de refuerzo y una de profundización.</li>
+                    </ul>
+                </div>
+
+                <div class="tip-card">
+                    <h4><span aria-hidden="true">&#128202;</span> Busca patrones, no casos individuales</h4>
+                    <p>Enfócate en tendencias del grupo, no en corregir a cada estudiante.</p>
+                    <ul>
+                        <li>En <span class="highlight">Señales de tráfico</span>, cuenta los colores rápidamente.</li>
+                        <li>En <span class="highlight-blue">Preguntas de bisagra</span>, usa la regla del 80 %: si menos del 80 % acierta, repasa.</li>
+                    </ul>
+                </div>
+
+                <div class="tip-card">
+                    <h4><span aria-hidden="true">&#128273;</span> Haz visible el error como oportunidad</h4>
+                    <p>Las respuestas incorrectas son las más valiosas para el aprendizaje.</p>
+                    <ul>
+                        <li>En <span class="highlight-blue">Think-Pair-Share</span>, pide a las parejas que expliquen su razonamiento.</li>
+                        <li>En <span class="highlight">Concept Maps</span>, señala las conexiones faltantes, no las erróneas.</li>
+                    </ul>
+                </div>
+
+                <div class="tip-card">
+                    <h4><span aria-hidden="true">&#128338;</span> No califiques, retroalimenta</h4>
+                    <p>Estas técnicas son formativas: su propósito es informar, no calificar.</p>
+                    <ul>
+                        <li>En el <span class="highlight-blue">Quiz formativo</span>, muestra las respuestas correctas inmediatamente.</li>
+                        <li>Usa lenguaje descriptivo: «Noto que muchos confunden X con Y» en vez de asignar notas.</li>
+                    </ul>
+                </div>
+
+                <div class="tip-card">
+                    <h4><span aria-hidden="true">&#128736;</span> Combina técnicas según el momento</h4>
+                    <p>No tienes que elegir una sola. Una secuencia puede ser más efectiva.</p>
+                    <ul>
+                        <li><span class="highlight">Señales de tráfico</span> al inicio para sondear, luego <span class="highlight-blue">Think-Pair-Share</span> para profundizar.</li>
+                        <li><span class="highlight-blue">Pregunta de bisagra</span> a mitad de clase, <span class="highlight-blue">Quiz formativo</span> al cierre.</li>
+                    </ul>
+                </div>
+
+                <div class="tip-card">
+                    <h4><span aria-hidden="true">&#128221;</span> Registra para mejorar tu práctica</h4>
+                    <p>Lleva un registro breve de qué técnica usaste, qué descubriste y qué ajustaste.</p>
+                    <ul>
+                        <li>Dos líneas después de cada clase son suficientes.</li>
+                        <li>Con el tiempo, identificarás qué CATs funcionan mejor para cada tipo de contenido.</li>
+                    </ul>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ═══ FOOTER ═══ -->
+        <footer class="footer" role="contentinfo">
+            <p>Curso de Evaluación Formativa &mdash; Módulo 2: Técnicas de Evaluación en el Aula &mdash; Unidad 2.2: CATs Parte II</p>
+            <p style="margin-top:6px;">Recurso educativo interactivo &middot; Diseñado con principios DUA</p>
+        </footer>
+
+    </div>
+
+    <script>
+        /* Expandir / colapsar tarjetas de técnicas */
+        function toggleCard(card) {
+            const isOpen = card.classList.contains('open');
+            // Cerrar todas primero
+            document.querySelectorAll('.tech-card').forEach(c => {
+                c.classList.remove('open');
+                c.setAttribute('aria-expanded', 'false');
+                const panel = c.querySelector('.detail-panel');
+                if (panel) panel.setAttribute('aria-hidden', 'true');
+                const toggle = c.querySelector('.card-toggle');
+                if (toggle) toggle.textContent = 'Clic para más detalles ▾';
+            });
+            // Abrir la seleccionada si estaba cerrada
+            if (!isOpen) {
+                card.classList.add('open');
+                card.setAttribute('aria-expanded', 'true');
+                const panel = card.querySelector('.detail-panel');
+                if (panel) panel.setAttribute('aria-hidden', 'false');
+                const toggle = card.querySelector('.card-toggle');
+                if (toggle) toggle.textContent = 'Ocultar detalles ▴';
+            }
+        }
+
+        /* Resaltar fila del flujo */
+        function highlightFlow(el) {
+            document.querySelectorAll('.flow-question').forEach(q => q.classList.remove('active'));
+            el.classList.add('active');
+        }
+    </script>
+</body>
+</html>

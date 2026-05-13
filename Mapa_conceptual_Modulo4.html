@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa Conceptual - Instrumentos de Evaluaci&oacute;n Aut&eacute;ntica - M&oacute;dulo 4</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f4f8;
+            color: #2d3748;
+            min-height: 100vh;
+        }
+        .container { max-width: 1100px; margin: 0 auto; padding: 20px; }
+
+        /* ── Header ── */
+        .header {
+            background: linear-gradient(135deg, #2b6cb0, #553c9a);
+            color: white;
+            padding: 36px 30px;
+            border-radius: 16px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 20px rgba(43,108,176,0.3);
+        }
+        .header h1 { font-size: 1.7em; margin-bottom: 8px; }
+        .header p { font-size: 0.92em; opacity: 0.9; }
+
+        /* ── Central Node ── */
+        .central-node {
+            background: linear-gradient(135deg, #2b6cb0, #805ad5);
+            color: #fff;
+            text-align: center;
+            padding: 28px 24px;
+            border-radius: 50%;
+            width: 220px;
+            height: 220px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 10px;
+            font-size: 1.05em;
+            font-weight: 700;
+            line-height: 1.35;
+            box-shadow: 0 6px 28px rgba(85,60,154,0.35);
+            position: relative;
+            z-index: 2;
+        }
+
+        /* ── Connector lines from center ── */
+        .connector-zone {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 18px;
+        }
+        .connector-line {
+            width: 3px;
+            height: 30px;
+            background: linear-gradient(to bottom, #805ad5, #38a169);
+            margin: 0 auto;
+            border-radius: 2px;
+        }
+
+        /* ── Branch Grid ── */
+        .branches {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 22px;
+            margin-bottom: 28px;
+        }
+        @media (max-width: 900px) {
+            .branches { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 600px) {
+            .branches { grid-template-columns: 1fr; }
+            .central-node { width: 180px; height: 180px; font-size: 0.95em; }
+        }
+
+        /* ── Branch Card ── */
+        .branch {
+            background: #fff;
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+            transition: transform 0.22s, box-shadow 0.22s;
+            position: relative;
+        }
+        .branch:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.13);
+        }
+        .branch-header {
+            padding: 16px 20px;
+            color: #fff;
+            font-weight: 700;
+            font-size: 1.0em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .branch-header .icon { font-size: 1.35em; }
+        .branch-body { padding: 18px 20px 20px; }
+        .branch-body h4 {
+            font-size: 0.88em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+            opacity: 0.7;
+        }
+        .branch-body ul {
+            list-style: none;
+            padding: 0;
+        }
+        .branch-body ul li {
+            position: relative;
+            padding: 5px 0 5px 18px;
+            font-size: 0.86em;
+            line-height: 1.45;
+        }
+        .branch-body ul li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 12px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        /* ── Color Themes per Branch ── */
+        /* Rama 1: Eval Autentica — Azul */
+        .branch-blue .branch-header { background: linear-gradient(135deg, #2b6cb0, #3182ce); }
+        .branch-blue .branch-body ul li::before { background: #3182ce; }
+        .branch-blue .branch-body h4 { color: #2b6cb0; }
+
+        /* Rama 2: Rubricas — Verde */
+        .branch-green .branch-header { background: linear-gradient(135deg, #276749, #38a169); }
+        .branch-green .branch-body ul li::before { background: #38a169; }
+        .branch-green .branch-body h4 { color: #276749; }
+
+        /* Rama 3: Listas de Cotejo — Purpura */
+        .branch-purple .branch-header { background: linear-gradient(135deg, #553c9a, #805ad5); }
+        .branch-purple .branch-body ul li::before { background: #805ad5; }
+        .branch-purple .branch-body h4 { color: #553c9a; }
+
+        /* Rama 4: Escalas — Azul verdoso */
+        .branch-teal .branch-header { background: linear-gradient(135deg, #1a6d5e, #2f9e8f); }
+        .branch-teal .branch-body ul li::before { background: #2f9e8f; }
+        .branch-teal .branch-body h4 { color: #1a6d5e; }
+
+        /* Rama 5: Alineamiento — Azul oscuro-purpura */
+        .branch-indigo .branch-header { background: linear-gradient(135deg, #3c366b, #5a67d8); }
+        .branch-indigo .branch-body ul li::before { background: #5a67d8; }
+        .branch-indigo .branch-body h4 { color: #3c366b; }
+
+        /* ── Sub-items (types) ── */
+        .sub-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 8px;
+        }
+        .sub-item {
+            font-size: 0.78em;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-weight: 600;
+            cursor: default;
+        }
+        .branch-blue .sub-item { background: #ebf8ff; color: #2b6cb0; }
+        .branch-green .sub-item { background: #f0fff4; color: #276749; }
+        .branch-purple .sub-item { background: #faf5ff; color: #553c9a; }
+        .branch-teal .sub-item { background: #e6fffa; color: #1a6d5e; }
+        .branch-indigo .sub-item { background: #ebf4ff; color: #3c366b; }
+
+        /* ── Tooltip ── */
+        .tip {
+            position: relative;
+            cursor: help;
+            border-bottom: 1px dashed currentColor;
+        }
+        .tip .tiptext {
+            visibility: hidden;
+            opacity: 0;
+            background: #2d3748;
+            color: #fff;
+            font-size: 0.78em;
+            padding: 8px 12px;
+            border-radius: 8px;
+            position: absolute;
+            z-index: 10;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 220px;
+            text-align: center;
+            transition: opacity 0.2s;
+            font-weight: 400;
+            line-height: 1.4;
+            pointer-events: none;
+        }
+        .tip .tiptext::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #2d3748 transparent transparent transparent;
+        }
+        .tip:hover .tiptext,
+        .tip:focus .tiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* ── Convergence Section ── */
+        .convergence {
+            background: linear-gradient(135deg, #ebf8ff, #faf5ff);
+            border: 2px solid #805ad5;
+            border-radius: 14px;
+            padding: 26px 28px;
+            margin-bottom: 24px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(85,60,154,0.1);
+        }
+        .convergence h2 {
+            font-size: 1.2em;
+            color: #553c9a;
+            margin-bottom: 12px;
+        }
+        .convergence p {
+            font-size: 0.88em;
+            line-height: 1.55;
+            max-width: 720px;
+            margin: 0 auto;
+        }
+
+        /* ── Flow Arrow Section ── */
+        .alignment-flow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin: 16px 0;
+        }
+        .flow-step {
+            background: #fff;
+            border: 2px solid #5a67d8;
+            border-radius: 10px;
+            padding: 10px 16px;
+            font-size: 0.84em;
+            font-weight: 600;
+            color: #3c366b;
+            text-align: center;
+            min-width: 110px;
+        }
+        .flow-arrow {
+            font-size: 1.3em;
+            color: #805ad5;
+            font-weight: 700;
+        }
+        @media (max-width: 600px) {
+            .flow-arrow { transform: rotate(90deg); }
+            .alignment-flow { flex-direction: column; }
+        }
+
+        /* ── Cross-connections ── */
+        .cross-connections {
+            background: #fff;
+            border-radius: 14px;
+            padding: 24px 28px;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+        }
+        .cross-connections h2 {
+            font-size: 1.15em;
+            color: #2b6cb0;
+            margin-bottom: 14px;
+            text-align: center;
+        }
+        .conn-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
+        }
+        @media (max-width: 700px) {
+            .conn-grid { grid-template-columns: 1fr; }
+        }
+        .conn-card {
+            border-radius: 10px;
+            padding: 16px;
+            text-align: center;
+            font-size: 0.85em;
+            line-height: 1.5;
+        }
+        .conn-card h3 { font-size: 0.95em; margin-bottom: 6px; }
+        .conn-card.c1 { background: #faf5ff; border-left: 4px solid #805ad5; }
+        .conn-card.c1 h3 { color: #553c9a; }
+        .conn-card.c2 { background: #f0fff4; border-left: 4px solid #38a169; }
+        .conn-card.c2 h3 { color: #276749; }
+        .conn-card.c3 { background: #ebf8ff; border-left: 4px solid #3182ce; }
+        .conn-card.c3 h3 { color: #2b6cb0; }
+
+        /* ── Process Steps ── */
+        .steps-row {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+        .step-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 0.76em;
+            padding: 3px 9px;
+            border-radius: 14px;
+            font-weight: 600;
+        }
+        .branch-green .step-badge {
+            background: #c6f6d5;
+            color: #22543d;
+        }
+        .step-num {
+            background: #276749;
+            color: #fff;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7em;
+        }
+
+        /* ── Footer ── */
+        .footer {
+            text-align: center;
+            padding: 18px;
+            font-size: 0.78em;
+            color: #718096;
+            border-top: 1px solid #e2e8f0;
+            margin-top: 10px;
+        }
+
+        /* ── Expand/Collapse ── */
+        .branch-body.collapsible { max-height: 0; overflow: hidden; transition: max-height 0.35s ease; padding-top: 0; padding-bottom: 0; }
+        .branch-body.collapsible.open { max-height: 600px; padding-top: 18px; padding-bottom: 20px; }
+        .toggle-btn {
+            background: none;
+            border: none;
+            color: rgba(255,255,255,0.85);
+            cursor: pointer;
+            font-size: 1.1em;
+            margin-left: auto;
+            transition: transform 0.3s;
+            line-height: 1;
+        }
+        .toggle-btn.open { transform: rotate(180deg); }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- Header -->
+    <header class="header">
+        <h1>M&oacute;dulo 4 &mdash; Dise&ntilde;o de Instrumentos de Evaluaci&oacute;n Aut&eacute;ntica</h1>
+        <p>Curso: Evaluaci&oacute;n Formativa en Educaci&oacute;n Superior &bull; Mapa conceptual integrador</p>
+    </header>
+
+    <!-- Central Node -->
+    <div class="central-node" aria-label="Nodo central del mapa conceptual">
+        Instrumentos de<br>Evaluaci&oacute;n<br>Aut&eacute;ntica
+    </div>
+    <div class="connector-zone"><div class="connector-line"></div></div>
+
+    <!-- ═══ Branch Grid ═══ -->
+    <section class="branches" aria-label="Ramas del mapa conceptual">
+
+        <!-- RAMA 1 — Evaluaci&oacute;n Aut&eacute;ntica -->
+        <article class="branch branch-blue">
+            <div class="branch-header" onclick="toggleBranch(this)">
+                <span class="icon">&#127919;</span> Evaluaci&oacute;n Aut&eacute;ntica
+                <button class="toggle-btn open" aria-label="Expandir o contraer">&#9660;</button>
+            </div>
+            <div class="branch-body collapsible open">
+                <h4>Principios</h4>
+                <ul>
+                    <li><span class="tip" tabindex="0">Tareas del mundo real<span class="tiptext">Actividades que replican desaf&iacute;os profesionales genuinos, no ejercicios acad&eacute;micos artificiales.</span></span></li>
+                    <li><span class="tip" tabindex="0">Pensamiento complejo<span class="tiptext">Demanda an&aacute;lisis, s&iacute;ntesis y evaluaci&oacute;n, no solo recuerdo de informaci&oacute;n.</span></span></li>
+                    <li><span class="tip" tabindex="0">Criterios transparentes<span class="tiptext">Los estudiantes conocen de antemano c&oacute;mo ser&aacute;n evaluados.</span></span></li>
+                    <li><span class="tip" tabindex="0">M&uacute;ltiples soluciones<span class="tiptext">No hay una &uacute;nica respuesta correcta; se valoran distintos caminos v&aacute;lidos.</span></span></li>
+                </ul>
+                <h4 style="margin-top:12px;">Tipos</h4>
+                <div class="sub-items">
+                    <span class="sub-item">Proyectos</span>
+                    <span class="sub-item">Portafolios</span>
+                    <span class="sub-item">Estudios de caso</span>
+                    <span class="sub-item">Simulaciones</span>
+                </div>
+            </div>
+        </article>
+
+        <!-- RAMA 2 — R&uacute;bricas Anal&iacute;ticas -->
+        <article class="branch branch-green">
+            <div class="branch-header" onclick="toggleBranch(this)">
+                <span class="icon">&#128203;</span> R&uacute;bricas Anal&iacute;ticas
+                <button class="toggle-btn open" aria-label="Expandir o contraer">&#9660;</button>
+            </div>
+            <div class="branch-body collapsible open">
+                <h4>Componentes</h4>
+                <ul>
+                    <li><span class="tip" tabindex="0">Criterios derivados del RA<span class="tiptext">Cada criterio se alinea directamente con un resultado de aprendizaje del curso.</span></span></li>
+                    <li><span class="tip" tabindex="0">Niveles de desempe&ntilde;o<span class="tiptext">Escalas graduales (ej.: ejemplar, competente, en desarrollo, inicial).</span></span></li>
+                    <li><span class="tip" tabindex="0">Descriptores observables<span class="tiptext">Descripciones concretas y medibles de lo que se observa en cada nivel.</span></span></li>
+                </ul>
+                <h4 style="margin-top:12px;">Proceso de 5 pasos</h4>
+                <div class="steps-row">
+                    <span class="step-badge"><span class="step-num">1</span> Identificar RA</span>
+                    <span class="step-badge"><span class="step-num">2</span> Definir criterios</span>
+                    <span class="step-badge"><span class="step-num">3</span> Establecer niveles</span>
+                    <span class="step-badge"><span class="step-num">4</span> Redactar descriptores</span>
+                    <span class="step-badge"><span class="step-num">5</span> Validar y pilotear</span>
+                </div>
+            </div>
+        </article>
+
+        <!-- RAMA 3 — Listas de Cotejo -->
+        <article class="branch branch-purple">
+            <div class="branch-header" onclick="toggleBranch(this)">
+                <span class="icon">&#9745;</span> Listas de Cotejo
+                <button class="toggle-btn open" aria-label="Expandir o contraer">&#9660;</button>
+            </div>
+            <div class="branch-body collapsible open">
+                <h4>Caracter&iacute;sticas</h4>
+                <ul>
+                    <li><span class="tip" tabindex="0">Indicadores binarios<span class="tiptext">Cada &iacute;tem se marca como presente o ausente: S&iacute; / No.</span></span></li>
+                    <li><span class="tip" tabindex="0">Agrupados por categor&iacute;a<span class="tiptext">Los indicadores se organizan en dimensiones o &aacute;reas tem&aacute;ticas coherentes.</span></span></li>
+                    <li><span class="tip" tabindex="0">Presencia / Ausencia<span class="tiptext">Verifica si un elemento est&aacute; o no est&aacute; presente, sin gradaci&oacute;n intermedia.</span></span></li>
+                </ul>
+                <div class="sub-items" style="margin-top:12px;">
+                    <span class="sub-item">R&aacute;pida aplicaci&oacute;n</span>
+                    <span class="sub-item">Alta objetividad</span>
+                    <span class="sub-item">Ideal para procedimientos</span>
+                </div>
+            </div>
+        </article>
+
+        <!-- RAMA 4 — Escalas de Valoraci&oacute;n -->
+        <article class="branch branch-teal">
+            <div class="branch-header" onclick="toggleBranch(this)">
+                <span class="icon">&#128200;</span> Escalas de Valoraci&oacute;n
+                <button class="toggle-btn open" aria-label="Expandir o contraer">&#9660;</button>
+            </div>
+            <div class="branch-body collapsible open">
+                <h4>Caracter&iacute;sticas</h4>
+                <ul>
+                    <li><span class="tip" tabindex="0">Gradiente de desarrollo<span class="tiptext">Captura niveles progresivos de dominio, desde inicial hasta avanzado.</span></span></li>
+                    <li><span class="tip" tabindex="0">Criterios con descriptores graduales<span class="tiptext">Cada punto de la escala tiene una descripci&oacute;n espec&iacute;fica y diferenciada.</span></span></li>
+                </ul>
+                <div class="sub-items" style="margin-top:12px;">
+                    <span class="sub-item">Likert</span>
+                    <span class="sub-item">Num&eacute;rica</span>
+                    <span class="sub-item">Descriptiva</span>
+                    <span class="sub-item">Gr&aacute;fica</span>
+                </div>
+            </div>
+        </article>
+
+        <!-- RAMA 5 — Alineamiento Constructivo -->
+        <article class="branch branch-indigo" style="grid-column: span 2;">
+            <div class="branch-header" onclick="toggleBranch(this)">
+                <span class="icon">&#128279;</span> Alineamiento Constructivo
+                <button class="toggle-btn open" aria-label="Expandir o contraer">&#9660;</button>
+            </div>
+            <div class="branch-body collapsible open">
+                <h4>Cadena de alineamiento</h4>
+                <div class="alignment-flow">
+                    <div class="flow-step">Resultado de<br>Aprendizaje (RA)</div>
+                    <span class="flow-arrow">&rarr;</span>
+                    <div class="flow-step">Actividad<br>E-A</div>
+                    <span class="flow-arrow">&rarr;</span>
+                    <div class="flow-step">Evaluaci&oacute;n</div>
+                    <span class="flow-arrow">&rarr;</span>
+                    <div class="flow-step">Instrumento</div>
+                </div>
+                <h4 style="margin-top:14px;">Aspectos clave</h4>
+                <ul>
+                    <li><span class="tip" tabindex="0">Tipos de desalineamiento<span class="tiptext">Evaluaci&oacute;n que no mide lo que el RA declara, o actividades que no preparan para la evaluaci&oacute;n.</span></span></li>
+                    <li><span class="tip" tabindex="0">Auditor&iacute;a de alineamiento<span class="tiptext">Proceso sistem&aacute;tico para verificar coherencia entre RA, actividades e instrumentos.</span></span></li>
+                </ul>
+            </div>
+        </article>
+
+    </section>
+
+    <!-- ═══ Convergence Node ═══ -->
+    <section class="convergence" aria-label="Nodo de convergencia">
+        <h2>&#127775; Evaluaci&oacute;n Alineada</h2>
+        <p>Todos los instrumentos &mdash;r&uacute;bricas, listas de cotejo y escalas de valoraci&oacute;n&mdash; convergen en el dise&ntilde;o de una <strong>evaluaci&oacute;n alineada</strong> que garantiza coherencia entre lo que se ense&ntilde;a, lo que se practica y lo que se eval&uacute;a, al servicio del aprendizaje aut&eacute;ntico del estudiante.</p>
+    </section>
+
+    <!-- ═══ Cross-connections ═══ -->
+    <section class="cross-connections" aria-label="Conexiones transversales">
+        <h2>&#128260; Conexiones Transversales</h2>
+        <div class="conn-grid">
+            <div class="conn-card c1">
+                <h3>Convergencia de Instrumentos</h3>
+                R&uacute;bricas, listas de cotejo y escalas se complementan para evaluar distintas dimensiones de una misma tarea aut&eacute;ntica.
+            </div>
+            <div class="conn-card c2">
+                <h3>Retroalimentaci&oacute;n (M&oacute;dulo 3)</h3>
+                Los instrumentos generan datos que alimentan ciclos de retroalimentaci&oacute;n efectiva: descriptiva, oportuna y orientada a la mejora.
+            </div>
+            <div class="conn-card c3">
+                <h3>Evaluaci&oacute;n Formativa (M&oacute;dulos 1-2)</h3>
+                Los instrumentos aut&eacute;nticos son herramientas para la evaluaci&oacute;n formativa: recogen evidencia continua del progreso del estudiante.
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        Curso: Evaluaci&oacute;n Formativa en Educaci&oacute;n Superior &bull; M&oacute;dulo 4: Dise&ntilde;o de Instrumentos de Evaluaci&oacute;n Aut&eacute;ntica &bull; Mapa conceptual integrador
+    </footer>
+
+</div>
+
+<script>
+    function toggleBranch(headerEl) {
+        const body = headerEl.nextElementSibling;
+        const btn = headerEl.querySelector('.toggle-btn');
+        body.classList.toggle('open');
+        btn.classList.toggle('open');
+    }
+
+    // Open all branches by default (already set via class)
+    // Touch support for tooltips
+    document.querySelectorAll('.tip').forEach(function(tip) {
+        tip.addEventListener('click', function(e) {
+            // Close all other tooltips
+            document.querySelectorAll('.tip .tiptext').forEach(function(t) {
+                t.style.visibility = 'hidden';
+                t.style.opacity = '0';
+            });
+            var tt = this.querySelector('.tiptext');
+            if (tt) {
+                tt.style.visibility = 'visible';
+                tt.style.opacity = '1';
+            }
+            e.stopPropagation();
+        });
+    });
+    document.addEventListener('click', function() {
+        document.querySelectorAll('.tip .tiptext').forEach(function(t) {
+            t.style.visibility = '';
+            t.style.opacity = '';
+        });
+    });
+</script>
+
+</body>
+</html>

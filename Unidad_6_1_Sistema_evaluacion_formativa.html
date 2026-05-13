@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Evaluación Formativa - Unidad 6.1</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f4f8; color: #2d3748; line-height: 1.6; }
+        .container { max-width: 940px; margin: 0 auto; padding: 20px; }
+        .header { background: linear-gradient(135deg, #2b6cb0, #553c9a); color: white; padding: 36px; border-radius: 16px; text-align: center; margin-bottom: 30px; }
+        .header h1 { font-size: 1.7em; margin-bottom: 8px; }
+        .header p { font-size: 0.95em; opacity: 0.92; }
+        .section { background: white; border-radius: 14px; padding: 28px; margin-bottom: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); }
+        .section h2 { font-size: 1.3em; color: #2b6cb0; margin-bottom: 16px; border-bottom: 2px solid #ebf8ff; padding-bottom: 8px; }
+        .section h3 { font-size: 1.1em; color: #4a5568; margin-bottom: 10px; }
+
+        /* Cycle diagram */
+        .cycle-container { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 8px; padding: 20px 0; }
+        .cycle-step { background: linear-gradient(135deg, var(--step-color1), var(--step-color2)); color: white; border-radius: 14px; padding: 18px 16px; text-align: center; width: 150px; min-height: 110px; display: flex; flex-direction: column; justify-content: center; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; position: relative; }
+        .cycle-step:hover { transform: translateY(-4px); box-shadow: 0 6px 20px rgba(0,0,0,0.15); }
+        .cycle-step .step-num { font-size: 1.8em; font-weight: 700; opacity: 0.4; position: absolute; top: 6px; right: 12px; }
+        .cycle-step .step-icon { font-size: 1.6em; margin-bottom: 6px; }
+        .cycle-step .step-title { font-size: 0.88em; font-weight: 600; }
+        .cycle-arrow { font-size: 1.6em; color: #805ad5; font-weight: bold; }
+
+        .step-diag { --step-color1: #2b6cb0; --step-color2: #3182ce; }
+        .step-mon { --step-color1: #276749; --step-color2: #38a169; }
+        .step-cierre { --step-color1: #c05621; --step-color2: #dd6b20; }
+        .step-retro { --step-color1: #553c9a; --step-color2: #805ad5; }
+        .step-ajuste { --step-color1: #9b2c2c; --step-color2: #e53e3e; }
+
+        /* Tooltip */
+        .tooltip-box { display: none; background: #faf5ff; border: 2px solid #805ad5; border-radius: 12px; padding: 18px; margin-top: 16px; font-size: 0.88em; line-height: 1.55; }
+        .tooltip-box.active { display: block; animation: fadeIn 0.3s ease; }
+        .tooltip-box h4 { color: #553c9a; margin-bottom: 8px; font-size: 1em; }
+        .tooltip-box ul { margin-left: 18px; margin-top: 6px; }
+        .tooltip-box li { margin-bottom: 4px; }
+
+        /* Timeline / Chronogram */
+        .chronogram { display: grid; grid-template-columns: 1fr; gap: 0; }
+        .chrono-phase { display: grid; grid-template-columns: 120px 1fr; gap: 0; border-left: 4px solid; position: relative; }
+        .chrono-phase::before { content: ''; position: absolute; left: -9px; top: 18px; width: 14px; height: 14px; border-radius: 50%; background: white; border: 3px solid; }
+        .phase-apertura { border-left-color: #3182ce; }
+        .phase-apertura::before { border-color: #3182ce; }
+        .phase-ciclo1 { border-left-color: #38a169; }
+        .phase-ciclo1::before { border-color: #38a169; }
+        .phase-ciclo2 { border-left-color: #dd6b20; }
+        .phase-ciclo2::before { border-color: #dd6b20; }
+        .phase-ciclo3 { border-left-color: #805ad5; }
+        .phase-ciclo3::before { border-color: #805ad5; }
+        .phase-ciclo4 { border-left-color: #e53e3e; }
+        .phase-ciclo4::before { border-color: #e53e3e; }
+        .phase-cierre { border-left-color: #2b6cb0; }
+        .phase-cierre::before { border-color: #2b6cb0; }
+
+        .chrono-label { padding: 14px 12px; font-weight: 700; font-size: 0.82em; color: #4a5568; }
+        .chrono-content { padding: 14px 16px; font-size: 0.82em; border-bottom: 1px solid #edf2f7; }
+        .chrono-content .tag { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 0.78em; font-weight: 600; margin: 2px 2px; }
+        .tag-diag { background: #ebf8ff; color: #2b6cb0; }
+        .tag-mon { background: #f0fff4; color: #276749; }
+        .tag-cierre { background: #fffaf0; color: #c05621; }
+        .tag-retro { background: #faf5ff; color: #553c9a; }
+        .tag-ajuste { background: #fff5f5; color: #9b2c2c; }
+
+        /* Balance bar */
+        .balance-bar { display: flex; border-radius: 10px; overflow: hidden; height: 40px; margin: 12px 0; }
+        .bar-formativa { background: linear-gradient(90deg, #38a169, #48bb78); color: white; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 0.85em; }
+        .bar-sumativa { background: linear-gradient(90deg, #dd6b20, #ed8936); color: white; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 0.85em; }
+
+        /* Sustainability tips */
+        .tip-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 14px; }
+        .tip-card { background: #f0fff4; border: 1px solid #c6f6d5; border-radius: 10px; padding: 14px; font-size: 0.85em; }
+        .tip-card .tip-icon { font-size: 1.3em; margin-bottom: 6px; }
+        .tip-card strong { color: #276749; }
+
+        /* Legend */
+        .legend { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 14px; }
+        .legend-item { display: flex; align-items: center; gap: 6px; font-size: 0.8em; }
+        .legend-dot { width: 14px; height: 14px; border-radius: 50%; }
+
+        .footer { text-align: center; padding: 20px; font-size: 0.78em; color: #718096; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+
+        @media (max-width: 768px) {
+            .cycle-container { flex-direction: column; }
+            .cycle-arrow { transform: rotate(90deg); }
+            .chrono-phase { grid-template-columns: 1fr; }
+            .chrono-label { padding-bottom: 0; }
+            .tip-grid { grid-template-columns: 1fr; }
+            .header { padding: 24px 16px; }
+            .header h1 { font-size: 1.35em; }
+            .section { padding: 20px 16px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Sistema de Evaluaci&oacute;n Formativa</h1>
+            <p>Unidad 6.1 &mdash; De las estrategias al sistema: integraci&oacute;n de componentes</p>
+            <p style="margin-top:6px; font-size:0.85em; opacity:0.8;">M&oacute;dulo 6 &bull; Evaluaci&oacute;n Formativa en Educaci&oacute;n Superior</p>
+        </div>
+
+        <!-- Cycle Diagram -->
+        <div class="section">
+            <h2>El ciclo del sistema de evaluaci&oacute;n formativa</h2>
+            <p style="font-size:0.88em; color:#718096; margin-bottom:14px;">Haga clic en cada componente para ver detalles y estrategias asociadas.</p>
+
+            <div class="cycle-container">
+                <div class="cycle-step step-diag" onclick="showTooltip('diag')">
+                    <span class="step-num">1</span>
+                    <span class="step-icon">&#128269;</span>
+                    <span class="step-title">Evaluaci&oacute;n diagn&oacute;stica</span>
+                </div>
+                <span class="cycle-arrow">&#8594;</span>
+                <div class="cycle-step step-mon" onclick="showTooltip('mon')">
+                    <span class="step-num">2</span>
+                    <span class="step-icon">&#128200;</span>
+                    <span class="step-title">Monitoreo continuo</span>
+                </div>
+                <span class="cycle-arrow">&#8594;</span>
+                <div class="cycle-step step-cierre" onclick="showTooltip('cierre')">
+                    <span class="step-num">3</span>
+                    <span class="step-icon">&#9989;</span>
+                    <span class="step-title">Cierre formativo</span>
+                </div>
+                <span class="cycle-arrow">&#8594;</span>
+                <div class="cycle-step step-retro" onclick="showTooltip('retro')">
+                    <span class="step-num">4</span>
+                    <span class="step-icon">&#128172;</span>
+                    <span class="step-title">Retroalimentaci&oacute;n</span>
+                </div>
+                <span class="cycle-arrow">&#8594;</span>
+                <div class="cycle-step step-ajuste" onclick="showTooltip('ajuste')">
+                    <span class="step-num">5</span>
+                    <span class="step-icon">&#128260;</span>
+                    <span class="step-title">Ajuste</span>
+                </div>
+            </div>
+            <p style="text-align:center; font-size:0.82em; color:#805ad5; margin-top:8px;">&#8635; El ciclo se repite continuamente a lo largo del semestre</p>
+
+            <div class="tooltip-box" id="tip-diag">
+                <h4>&#128269; Evaluaci&oacute;n diagn&oacute;stica</h4>
+                <p><strong>Prop&oacute;sito:</strong> Mapear el punto de partida: conocimientos previos, concepciones err&oacute;neas, habilidades existentes.</p>
+                <p><strong>Cu&aacute;ndo:</strong> Inicio del curso e inicio de cada unidad.</p>
+                <p><strong>Estrategias:</strong></p>
+                <ul>
+                    <li>Cuestionario diagn&oacute;stico</li>
+                    <li>Background Knowledge Probe (M2)</li>
+                    <li>Mapa conceptual inicial</li>
+                    <li>Entrevista grupal breve</li>
+                </ul>
+            </div>
+            <div class="tooltip-box" id="tip-mon">
+                <h4>&#128200; Monitoreo continuo</h4>
+                <p><strong>Prop&oacute;sito:</strong> Recolecci&oacute;n frecuente y ligera de informaci&oacute;n sobre el progreso durante la instrucci&oacute;n.</p>
+                <p><strong>Cu&aacute;ndo:</strong> 1-2 veces por semana, 2-10 minutos.</p>
+                <p><strong>Estrategias:</strong></p>
+                <ul>
+                    <li>Minute Paper, Muddiest Point (M2)</li>
+                    <li>Polls digitales: Mentimeter, Kahoot (M5)</li>
+                    <li>Tickets de salida</li>
+                    <li>Chequeos r&aacute;pidos de comprensi&oacute;n</li>
+                </ul>
+            </div>
+            <div class="tooltip-box" id="tip-cierre">
+                <h4>&#9989; Cierre formativo</h4>
+                <p><strong>Prop&oacute;sito:</strong> Valorar el avance en los resultados de aprendizaje de una unidad o bloque tem&aacute;tico.</p>
+                <p><strong>Cu&aacute;ndo:</strong> Al final de cada unidad o bloque (cada 3-4 semanas).</p>
+                <p><strong>Estrategias:</strong></p>
+                <ul>
+                    <li>Autoevaluaci&oacute;n con r&uacute;brica (M2)</li>
+                    <li>Coevaluaci&oacute;n estructurada (M2)</li>
+                    <li>Portafolio parcial (M4)</li>
+                    <li>Proyecto de aplicaci&oacute;n (M4)</li>
+                </ul>
+            </div>
+            <div class="tooltip-box" id="tip-retro">
+                <h4>&#128172; Retroalimentaci&oacute;n</h4>
+                <p><strong>Prop&oacute;sito:</strong> Conectar la evaluaci&oacute;n con la mejora del aprendizaje. Tejido conectivo del sistema.</p>
+                <p><strong>Cu&aacute;ndo:</strong> Siempre, tras cada momento evaluativo.</p>
+                <p><strong>Estrategias:</strong></p>
+                <ul>
+                    <li>Modelo SBI: Situaci&oacute;n-Comportamiento-Impacto (M3)</li>
+                    <li>Feed forward (M3)</li>
+                    <li>Retroalimentaci&oacute;n entre pares (M2)</li>
+                    <li>Retroalimentaci&oacute;n automatizada v&iacute;a digital (M5)</li>
+                </ul>
+            </div>
+            <div class="tooltip-box" id="tip-ajuste">
+                <h4>&#128260; Ajuste</h4>
+                <p><strong>Prop&oacute;sito:</strong> Producir cambios reales en la ense&ntilde;anza y el aprendizaje basados en datos.</p>
+                <p><strong>Cu&aacute;ndo:</strong> Continuo &mdash; inmediato o planificado.</p>
+                <p><strong>Formas:</strong></p>
+                <ul>
+                    <li>Reteaching de conceptos no comprendidos</li>
+                    <li>Agrupaci&oacute;n diferenciada</li>
+                    <li>Modificaci&oacute;n de actividades y ritmo</li>
+                    <li>Recursos adicionales para estudiantes con dificultades</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Chronogram -->
+        <div class="section">
+            <h2>Cronograma semestral ejemplo (16 semanas)</h2>
+            <div class="legend">
+                <div class="legend-item"><span class="legend-dot" style="background:#3182ce;"></span> Diagn&oacute;stica</div>
+                <div class="legend-item"><span class="legend-dot" style="background:#38a169;"></span> Monitoreo</div>
+                <div class="legend-item"><span class="legend-dot" style="background:#dd6b20;"></span> Cierre</div>
+                <div class="legend-item"><span class="legend-dot" style="background:#805ad5;"></span> Retroalimentaci&oacute;n</div>
+                <div class="legend-item"><span class="legend-dot" style="background:#e53e3e;"></span> Ajuste</div>
+            </div>
+            <div class="chronogram" style="margin-top:18px;">
+                <div class="chrono-phase phase-apertura">
+                    <div class="chrono-label">Sem 1-2<br><small>Apertura</small></div>
+                    <div class="chrono-content">
+                        <span class="tag tag-diag">Diagn&oacute;stico integral</span>
+                        <span class="tag tag-mon">Primer CAT</span>
+                        <span class="tag tag-retro">Retro grupal</span>
+                        <br>Establecer expectativas y criterios de &eacute;xito
+                    </div>
+                </div>
+                <div class="chrono-phase phase-ciclo1">
+                    <div class="chrono-label">Sem 3-5<br><small>Ciclo 1</small></div>
+                    <div class="chrono-content">
+                        <span class="tag tag-mon">1 CAT/semana</span>
+                        <span class="tag tag-cierre">Autoeval. breve</span>
+                        <span class="tag tag-retro">Retro individual</span>
+                        <span class="tag tag-ajuste">Ajuste instrucc.</span>
+                    </div>
+                </div>
+                <div class="chrono-phase phase-ciclo2">
+                    <div class="chrono-label">Sem 6-8<br><small>Ciclo 2</small></div>
+                    <div class="chrono-content">
+                        <span class="tag tag-mon">Coevaluaci&oacute;n</span>
+                        <span class="tag tag-cierre">Cierre U1 + r&uacute;brica</span>
+                        <span class="tag tag-retro">Feed forward</span>
+                        <span class="tag tag-diag">Diagn&oacute;stico U2</span>
+                    </div>
+                </div>
+                <div class="chrono-phase phase-ciclo3">
+                    <div class="chrono-label">Sem 9-11<br><small>Ciclo 3</small></div>
+                    <div class="chrono-content">
+                        <span class="tag tag-mon">Polls digitales</span>
+                        <span class="tag tag-cierre">Portafolio parcial</span>
+                        <span class="tag tag-mon">Coeval. portafolio</span>
+                        <span class="tag tag-ajuste">Ajuste plan indiv.</span>
+                    </div>
+                </div>
+                <div class="chrono-phase phase-ciclo4">
+                    <div class="chrono-label">Sem 12-14<br><small>Ciclo 4</small></div>
+                    <div class="chrono-content">
+                        <span class="tag tag-mon">Monit. transferencia</span>
+                        <span class="tag tag-cierre">Cierre U2 auténtico</span>
+                        <span class="tag tag-cierre">Autoeval. reflexiva</span>
+                        <span class="tag tag-retro">Retro para final</span>
+                    </div>
+                </div>
+                <div class="chrono-phase phase-cierre">
+                    <div class="chrono-label">Sem 15-16<br><small>Cierre</small></div>
+                    <div class="chrono-content">
+                        <span class="tag tag-cierre">Producto integrador</span>
+                        <span class="tag tag-cierre">Autoeval. final</span>
+                        <span class="tag tag-retro">Retro de cierre</span>
+                        <br>R&uacute;brica anal&iacute;tica (formativa + sumativa)
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Balance -->
+        <div class="section">
+            <h2>Equilibrio formativo-sumativo: regla 70/30</h2>
+            <div class="balance-bar">
+                <div class="bar-formativa" style="width:70%;">70% Formativa</div>
+                <div class="bar-sumativa" style="width:30%;">30% Sumativa</div>
+            </div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:14px; font-size:0.85em;">
+                <div style="background:#f0fff4; border-radius:10px; padding:14px; border-left:4px solid #38a169;">
+                    <strong style="color:#276749;">Formativa (sin calificaci&oacute;n o peso m&iacute;nimo)</strong>
+                    <ul style="margin-left:16px; margin-top:6px;">
+                        <li>CATs semanales</li>
+                        <li>Autoevaluaciones</li>
+                        <li>Coevaluaciones</li>
+                        <li>Borradores con retroalimentaci&oacute;n</li>
+                        <li>Portafolio de proceso</li>
+                    </ul>
+                </div>
+                <div style="background:#fffaf0; border-radius:10px; padding:14px; border-left:4px solid #dd6b20;">
+                    <strong style="color:#c05621;">Sumativa (calificada)</strong>
+                    <ul style="margin-left:16px; margin-top:6px;">
+                        <li>Producto integrador final</li>
+                        <li>Presentaci&oacute;n/defensa</li>
+                        <li>Portafolio curado final</li>
+                        <li>Examen (si aplica)</li>
+                    </ul>
+                </div>
+            </div>
+            <p style="font-size:0.82em; color:#718096; margin-top:12px; font-style:italic;">Principio clave: lo formativo precede a lo sumativo. Los criterios son los mismos en ambas.</p>
+        </div>
+
+        <!-- Sustainability -->
+        <div class="section">
+            <h2>Carga evaluativa sostenible: sustituir, no acumular</h2>
+            <div class="tip-grid">
+                <div class="tip-card">
+                    <div class="tip-icon">&#128260;</div>
+                    <strong>Sustituir</strong><br>
+                    Reemplace un parcial por un portafolio con entregas formativas parciales.
+                </div>
+                <div class="tip-card">
+                    <div class="tip-icon">&#9889;</div>
+                    <strong>Automatizar</strong><br>
+                    Quizzes en l&iacute;nea con retroalimentaci&oacute;n autom&aacute;tica (Google Forms, Socrative).
+                </div>
+                <div class="tip-card">
+                    <div class="tip-icon">&#129309;</div>
+                    <strong>Delegar</strong><br>
+                    Coevaluaci&oacute;n bien dise&ntilde;ada: los pares retroalimentan, usted supervisa.
+                </div>
+                <div class="tip-card">
+                    <div class="tip-icon">&#128101;</div>
+                    <strong>Grupalizar</strong><br>
+                    Si el 80% tiene la misma dificultad, retroalimentaci&oacute;n grupal de 10 min.
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            M&oacute;dulo 6 &bull; Evaluaci&oacute;n Formativa en Educaci&oacute;n Superior &bull; Unidad 6.1
+        </div>
+    </div>
+
+    <script>
+        function showTooltip(id) {
+            var boxes = document.querySelectorAll('.tooltip-box');
+            for (var i = 0; i < boxes.length; i++) {
+                boxes[i].classList.remove('active');
+            }
+            var target = document.getElementById('tip-' + id);
+            if (target) {
+                target.classList.add('active');
+                target.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+        }
+    </script>
+</body>
+</html>

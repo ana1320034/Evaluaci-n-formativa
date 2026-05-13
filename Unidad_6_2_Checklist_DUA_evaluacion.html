@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checklist DUA para Evaluaci&oacute;n - Unidad 6.2</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f4f8; color: #2d3748; line-height: 1.6; }
+        .container { max-width: 940px; margin: 0 auto; padding: 20px; }
+        .header { background: linear-gradient(135deg, #276749, #38a169); color: white; padding: 36px; border-radius: 16px; text-align: center; margin-bottom: 30px; }
+        .header h1 { font-size: 1.7em; margin-bottom: 8px; }
+        .header p { font-size: 0.95em; opacity: 0.92; }
+        .section { background: white; border-radius: 14px; padding: 28px; margin-bottom: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); }
+
+        /* Progress bar */
+        .progress-container { background: #edf2f7; border-radius: 10px; height: 28px; overflow: hidden; margin-bottom: 8px; }
+        .progress-bar { height: 100%; background: linear-gradient(90deg, #38a169, #48bb78); border-radius: 10px; transition: width 0.5s ease; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 0.82em; min-width: 40px; }
+        .progress-label { font-size: 0.82em; color: #718096; text-align: center; }
+
+        /* Principle sections */
+        .principle { border-radius: 14px; margin-bottom: 20px; overflow: hidden; border: 2px solid; }
+        .principle-header { padding: 16px 20px; cursor: pointer; display: flex; align-items: center; justify-content: space-between; user-select: none; transition: background 0.2s; }
+        .principle-header:hover { filter: brightness(0.95); }
+        .principle-header h3 { font-size: 1.05em; color: white; }
+        .principle-header .toggle { font-size: 1.3em; color: white; transition: transform 0.3s; }
+        .principle-header .toggle.open { transform: rotate(180deg); }
+        .principle-body { padding: 0; max-height: 0; overflow: hidden; transition: max-height 0.4s ease, padding 0.3s ease; }
+        .principle-body.open { max-height: 2000px; padding: 16px 20px; }
+
+        .p-representacion { border-color: #3182ce; }
+        .p-representacion .principle-header { background: linear-gradient(135deg, #2b6cb0, #3182ce); }
+        .p-representacion .principle-body { background: #ebf8ff; }
+
+        .p-accion { border-color: #38a169; }
+        .p-accion .principle-header { background: linear-gradient(135deg, #276749, #38a169); }
+        .p-accion .principle-body { background: #f0fff4; }
+
+        .p-implicacion { border-color: #805ad5; }
+        .p-implicacion .principle-header { background: linear-gradient(135deg, #553c9a, #805ad5); }
+        .p-implicacion .principle-body { background: #faf5ff; }
+
+        .p-transversal { border-color: #dd6b20; }
+        .p-transversal .principle-header { background: linear-gradient(135deg, #c05621, #dd6b20); }
+        .p-transversal .principle-body { background: #fffaf0; }
+
+        /* Checklist items */
+        .check-item { display: flex; align-items: flex-start; gap: 12px; padding: 12px 0; border-bottom: 1px solid rgba(0,0,0,0.06); }
+        .check-item:last-child { border-bottom: none; }
+        .check-btn { width: 32px; height: 32px; border-radius: 50%; border: 2px solid #cbd5e0; background: white; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1em; transition: all 0.2s; flex-shrink: 0; margin-top: 2px; }
+        .check-btn.checked { background: #38a169; border-color: #38a169; color: white; }
+        .check-btn.partial { background: #dd6b20; border-color: #dd6b20; color: white; }
+        .check-btn.unchecked { background: #fff5f5; border-color: #e53e3e; color: #e53e3e; }
+        .check-content { flex: 1; }
+        .check-text { font-size: 0.88em; font-weight: 500; margin-bottom: 4px; }
+        .check-example { font-size: 0.8em; color: #718096; font-style: italic; display: none; margin-top: 6px; padding: 8px 12px; background: rgba(255,255,255,0.6); border-radius: 8px; border-left: 3px solid; }
+        .check-example.visible { display: block; }
+        .show-example { font-size: 0.78em; color: #805ad5; cursor: pointer; text-decoration: underline; margin-top: 4px; display: inline-block; }
+
+        /* Status legend */
+        .status-legend { display: flex; gap: 20px; margin-bottom: 16px; flex-wrap: wrap; }
+        .status-item { display: flex; align-items: center; gap: 6px; font-size: 0.82em; }
+        .status-dot { width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.7em; color: white; font-weight: bold; }
+
+        /* Key message */
+        .key-msg { background: linear-gradient(135deg, #faf5ff, #ebf8ff); border: 2px solid #805ad5; border-radius: 14px; padding: 20px; text-align: center; margin-top: 8px; }
+        .key-msg p { font-size: 0.92em; }
+        .key-msg strong { color: #553c9a; }
+
+        .footer { text-align: center; padding: 20px; font-size: 0.78em; color: #718096; }
+
+        @media (max-width: 768px) {
+            .header { padding: 24px 16px; }
+            .header h1 { font-size: 1.35em; }
+            .section { padding: 20px 16px; }
+            .status-legend { flex-direction: column; gap: 8px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Checklist DUA para Evaluaci&oacute;n</h1>
+            <p>Unidad 6.2 &mdash; Aplicaci&oacute;n del Dise&ntilde;o Universal para el Aprendizaje al sistema de evaluaci&oacute;n</p>
+            <p style="margin-top:6px; font-size:0.85em; opacity:0.8;">M&oacute;dulo 6 &bull; Evaluaci&oacute;n Formativa en Educaci&oacute;n Superior</p>
+        </div>
+
+        <!-- Progress -->
+        <div class="section">
+            <h2 style="font-size:1.1em; color:#2b6cb0; margin-bottom:12px;">Progreso de la auditor&iacute;a DUA</h2>
+            <div class="progress-container">
+                <div class="progress-bar" id="progressBar" style="width:0%;">0 / 19</div>
+            </div>
+            <div class="progress-label" id="progressLabel">Haga clic en los c&iacute;rculos para marcar el estado de cada &iacute;tem</div>
+
+            <div class="status-legend" style="margin-top:14px;">
+                <div class="status-item"><span class="status-dot" style="background:#38a169;">&#10003;</span> Cumple</div>
+                <div class="status-item"><span class="status-dot" style="background:#dd6b20;">~</span> Parcial</div>
+                <div class="status-item"><span class="status-dot" style="background:#e53e3e;">&#10007;</span> No cumple</div>
+                <div class="status-item"><span class="status-dot" style="background:#cbd5e0; color:#718096;">?</span> Sin evaluar</div>
+            </div>
+        </div>
+
+        <!-- Principle 1: Representation -->
+        <div class="principle p-representacion">
+            <div class="principle-header" onclick="togglePrinciple(this)">
+                <h3>&#127912; Principio I: M&uacute;ltiples formas de representaci&oacute;n</h3>
+                <span class="toggle open">&#9660;</span>
+            </div>
+            <div class="principle-body open">
+                <p style="font-size:0.85em; color:#4a5568; margin-bottom:12px;"><strong>Pregunta clave:</strong> &iquest;C&oacute;mo presento las evaluaciones a mis estudiantes?</p>
+
+                <div class="check-item">
+                    <div class="check-btn" onclick="cycleCheck(this)" data-state="none">?</div>
+                    <div class="check-content">
+                        <div class="check-text">Las instrucciones de cada evaluaci&oacute;n est&aacute;n disponibles en al menos dos formatos (escrito + otro).</div>
+                        <span class="show-example" onclick="toggleExample(this)">Ver ejemplo de ajuste</span>
+                        <div class="check-example" style="border-color:#3182ce;">Agregue un video corto (2-3 min) explicando la consigna, o un diagrama visual del proceso esperado junto al texto escrito.</div>
+                    </div>
+                </div>
+
+                <div class="check-item">
+                    <div class="check-btn" onclick="cycleCheck(this)" data-state="none">?</div>
+                    <div class="check-content">
+                        <div class="check-text">Los criterios de evaluaci&oacute;n (r&uacute;bricas, checklists) se comparten con anticipaci&oacute;n.</div>
+                        <span class="show-example" onclick="toggleExample(this)">Ver ejemplo de ajuste</span>
+                        <div class="check-example" style="border-color:#3182ce;">Publique la r&uacute;brica el mismo d&iacute;a que asigna la tarea, no el d&iacute;a de la entrega. Dedique 10 min en clase a analizarla.</div>
+                    </div>
+                </div>
+
+                <div class="check-item">
+                    <div class="check-btn" onclick="cycleCheck(this)" data-state="none">?</div>
+                    <div class="check-content">
+                        <div class="check-text">Se incluyen ejemplos o modelos de desempe&ntilde;o esperado en distintos niveles.</div>
+                        <span class="show-example" onclick="toggleExample(this)">Ver ejemplo de ajuste</span>
+                        <div class="check-example" style="border-color:#3182ce;">Comparta un trabajo de nivel &ldquo;Excelente&rdquo; y otro de nivel &ldquo;Suficiente&rdquo; (anonimizados) para que los estudiantes calibren expectativas.</div>
+                    </div>
+                </div>
+
+                <div class="check-item">
+                    <div class="check-btn" onclick="cycleCheck(this)" data-state="none">?</div>
+                    <div class="check-content">
+                        <div class="check-text">El vocabulario es claro y los t&eacute;rminos t&eacute;cnicos est&aacute;n definidos.</div>
+                        <span class="show-example" onclick="toggleExample(this)">Ver ejemplo de ajuste</span>
+                        <div class="check-example" style="border-color:#3182ce;">Agregue un glosario breve al final de la consigna, o incluya definiciones entre par&eacute;ntesis la primera vez que usa un t&eacute;rmino t&eacute;cnico.</div>
+                    </div>
+                </div>
+
+                <div class="check-item">
+                    <div class="check-btn" onclick="cycleCheck(this)" data-state="none">?</div>
+                    <div class="check-content">
+                        <div class="check-text">Los instrumentos usan dise&ntilde;o visual accesible (contraste, tama&ntilde;o, organizaci&oacute;n espacial).</div>
+                        <span class="show-example" onclick="toggleExample(this)">Ver ejemplo de ajuste</span>
+                        <div class="check-example" style="border-color:#3182ce;">Use fuente m&iacute;nima 12pt, interlineado 1.5, contraste alto (texto oscuro sobre fondo claro), y encabezados claros para organizar secciones.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Principle 2: Action & Expression -->
+        <div class="principle p-accion">
+            <div class="principle-header" onclick="togglePrinciple(this)">
+                <h3>&#9997;&#65039; Principio II: M&uacute;ltiples formas de acci&oacute;n y expresi&oacute;n</h3>
+                <span class="toggle open">&#9660;</span>
+            </div>
+            <div class="principle-body open">
+                <p style="font-size:0.85em; color:#4a5568; margin-bottom:12px;"><strong>Pregunta clave:</strong> &iquest;C&oacute;mo puede el estudiante demostrar lo que aprendi&oacute;?</p>
+
+                <div class="check-item">
+                    <div class="check-btn" onclick="cycleCheck(this)" data-state="none">?</div>
+                    <div class="check-content">
+                        <div class="check-text">Al menos una evaluaci&oacute;n ofrece opciones de formato de entrega.</div>
+                        <span class="show-example" onclick="toggleExample(this)">Ver ejemplo de ajuste</span>
+                        <div class="check-example" style="border-color:#38a169;">Permita que el an&aacute;lisis de caso se entregue como ensayo escrito, video-presentaci&oacute;n, podcast o infograf&iacute;a comentada. Misma r&uacute;brica para todos.</div>
+                    </div>
+                </div>
+
+                <div class="check-item">
+                    <div class="check-btn" onclick="cycleCheck(this)" data-state="none">?</div>
+                    <div class="check-content">
+                        <div class="check-text">Se permite el uso de herramientas de apoyo que no comprometen el RA evaluado.</div>
+                        <span class="show-example" onclick="toggleExample(this)">Ver ejemplo de ajuste</span>
+                        <div class="check-example" style="border-color:#38a169;">Si eval&uacute;a pensamiento cr&iacute;tico (no redacci&oacute;n), permita corrector ortogr&aacute;fico. Si eval&uacute;a an&aacute;lisis (no c&aacute;lculo), permita calculadora.</div>
+                    </div>
+                </div>
+
+                <div class="check-item">
+                    <div class="check-btn" onclick="cycleCheck(this)" data-state="none">?</div>
+                    <div class="check-content">
+                        <div class="check-text">Los instrumentos incluyen variedad de tipos de respuesta.</div>
+                        <span class="show-example" onclick="toggleExample(this)">Ver ejemplo de ajuste</span>
+                        <div class="check-example" style="border-color:#38a169;">Combine preguntas de selecci&oacute;n m&uacute;ltiple, respuesta corta, representaci&oacute;n visual (diagrama) y an&aacute;lisis extendido en un mismo instrumento.</div>
+                    </div>
+                </div>
+
+                <div class="check-item">
+                    <div class="check-btn" onclick="cycleCheck(this)" data-state="none">?</div>
+                    <div class="check-content">
+                        <div class="check-text">Existen apoyos procedimentales (gu&iacute;as paso a paso, plantillas, organizadores).</div>
+                        <span class="show-example" onclick="toggleExample(this)">Ver ejemplo de ajuste</span>
+                        <div class="check-example" style="border-color:#38a169;">Proporcione una plantilla con la estructura del informe (secci&oacute;n, descripci&oacute;n, extensi&oacute;n sugerida) para que el estudiante se enfoque en el contenido.</div>
+                    </div>
+                </div>
+
+                <div class="check-item">
+                    <div class="check-btn" onclick="cycleCheck(this)" data-state="none">?</div>
+                    <div class="check-content">
+                        <div class="check-text">Los plazos son razonables y existe un mecanismo para situaciones excepcionales.</div>
+                        <span class="show-example" onclick="toggleExample(this)">Ver ejemplo de ajuste</span>
+                        <div class="check-example" style="border-color:#38a169;">Establezca una pol&iacute;tica clara: &ldquo;1 extensi&oacute;n de 48h por semestre sin justificaci&oacute;n requerida&rdquo;. Esto reduce ansiedad y burocracia.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Principle 3: Engagement -->
+        <div class="principle p-implicacion">
+            <div class="principle-header" onclick="togglePrinciple(this)">
+                <h3>&#128161; Principio III: M&uacute;ltiples formas de implicaci&oacute;n</h3>
+                <span class="toggle open">&#9660;</span>
+            </div>
+            <div class="principle-body open">
+                <p style="font-size:0.85em; color:#4a5568; margin-bottom:12px;"><strong>Pregunta clave:</strong> &iquest;C&oacute;mo motivo al estudiante a involucrarse en la evaluaci&oacute;n?</p>
+
+                <div class="check-item">
+                    <div class="check-btn" onclick="cycleCheck(this)" data-state="none">?</div>
+                    <div class="check-content">
+                        <div class="check-text">Las evaluaciones formativas son de bajo riesgo (sin calificaci&oacute;n o con peso m&iacute;nimo).</div>
+                        <span class="show-example" onclick="toggleExample(this)">Ver ejemplo de ajuste</span>
+                        <div class="check-example" style="border-color:#805ad5;">Asigne m&aacute;ximo 5% por participaci&oacute;n en actividades formativas. El objetivo es informaci&oacute;n, no presi&oacute;n.</div>
+                    </div>
+                </div>
+
+                <div class="check-item">
+                    <div class="check-btn" onclick="cycleCheck(this)" data-state="none">?</div>
+                    <div class="check-content">
+                        <div class="check-text">El estudiante tiene alg&uacute;n grado de elecci&oacute;n en al menos una evaluaci&oacute;n.</div>
+                        <span class="show-example" onclick="toggleExample(this)">Ver ejemplo de ajuste</span>
+                        <div class="check-example" style="border-color:#805ad5;">Permita elegir el tema del proyecto, el caso a analizar, o el formato de presentaci&oacute;n. La elecci&oacute;n aumenta la agencia y el compromiso.</div>
+                    </div>
+                </div>
+
+                <div class="check-item">
+                    <div class="check-btn" onclick="cycleCheck(this)" data-state="none">?</div>
+                    <div class="check-content">
+                        <div class="check-text">Hay oportunidades de autoevaluaci&oacute;n y reflexi&oacute;n metacognitiva.</div>
+                        <span class="show-example" onclick="toggleExample(this)">Ver ejemplo de ajuste</span>
+                        <div class="check-example" style="border-color:#805ad5;">Incluya al final de cada entrega: &ldquo;&iquest;Qu&eacute; parte refleja mejor su aprendizaje? &iquest;Qu&eacute; mejorar&iacute;a si tuviera m&aacute;s tiempo?&rdquo;</div>
+                    </div>
+                </div>
+
+                <div class="check-item">
+                    <div class="check-btn" onclick="cycleCheck(this)" data-state="none">?</div>
+                    <div class="check-content">
+                        <div class="check-text">Se explicita el prop&oacute;sito de cada evaluaci&oacute;n al estudiante.</div>
+                        <span class="show-example" onclick="toggleExample(this)">Ver ejemplo de ajuste</span>
+                        <div class="check-example" style="border-color:#805ad5;">Inicie cada consigna con: &ldquo;Esta actividad tiene como prop&oacute;sito ayudarle a...&rdquo; en lugar de &ldquo;Entregue lo siguiente...&rdquo;</div>
+                    </div>
+                </div>
+
+                <div class="check-item">
+                    <div class="check-btn" onclick="cycleCheck(this)" data-state="none">?</div>
+                    <div class="check-content">
+                        <div class="check-text">La retroalimentaci&oacute;n es oportuna y accionable (el estudiante puede usarla para mejorar).</div>
+                        <span class="show-example" onclick="toggleExample(this)">Ver ejemplo de ajuste</span>
+                        <div class="check-example" style="border-color:#805ad5;">Entregue retroalimentaci&oacute;n formativa al menos 1 semana antes de la entrega sumativa. Incluya siempre al menos 1 sugerencia concreta de mejora.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Transversal -->
+        <div class="principle p-transversal">
+            <div class="principle-header" onclick="togglePrinciple(this)">
+                <h3>&#127760; Criterios transversales</h3>
+                <span class="toggle open">&#9660;</span>
+            </div>
+            <div class="principle-body open">
+                <p style="font-size:0.85em; color:#4a5568; margin-bottom:12px;"><strong>Pregunta clave:</strong> &iquest;Funciona el sistema para la diversidad real de mi grupo?</p>
+
+                <div class="check-item">
+                    <div class="check-btn" onclick="cycleCheck(this)" data-state="none">?</div>
+                    <div class="check-content">
+                        <div class="check-text">El sistema no depende de una sola modalidad de evaluaci&oacute;n.</div>
+                        <span class="show-example" onclick="toggleExample(this)">Ver ejemplo de ajuste</span>
+                        <div class="check-example" style="border-color:#dd6b20;">Si todo es escrito, agregue al menos 1 evaluaci&oacute;n oral, visual o pr&aacute;ctica. La diversidad de formatos beneficia a todos.</div>
+                    </div>
+                </div>
+
+                <div class="check-item">
+                    <div class="check-btn" onclick="cycleCheck(this)" data-state="none">?</div>
+                    <div class="check-content">
+                        <div class="check-text">Se consideran diversas formas de diversidad: funcional, cultural, ling&uuml;&iacute;stica, socioecon&oacute;mica.</div>
+                        <span class="show-example" onclick="toggleExample(this)">Ver ejemplo de ajuste</span>
+                        <div class="check-example" style="border-color:#dd6b20;">Revise que los casos y ejemplos no asuman un &uacute;nico contexto cultural. Ofrezca opciones de horario para evaluaciones sincr&oacute;nicas.</div>
+                    </div>
+                </div>
+
+                <div class="check-item">
+                    <div class="check-btn" onclick="cycleCheck(this)" data-state="none">?</div>
+                    <div class="check-content">
+                        <div class="check-text">Las evaluaciones digitales son accesibles (lectores de pantalla, navegaci&oacute;n por teclado).</div>
+                        <span class="show-example" onclick="toggleExample(this)">Ver ejemplo de ajuste</span>
+                        <div class="check-example" style="border-color:#dd6b20;">Use alt-text en im&aacute;genes, etiquetas en formularios, y pruebe que su cuestionario en l&iacute;nea sea navegable con Tab y Enter.</div>
+                    </div>
+                </div>
+
+                <div class="check-item">
+                    <div class="check-btn" onclick="cycleCheck(this)" data-state="none">?</div>
+                    <div class="check-content">
+                        <div class="check-text">El dise&ntilde;o inclusivo es proactivo, no reactivo (no depende de solicitudes individuales).</div>
+                        <span class="show-example" onclick="toggleExample(this)">Ver ejemplo de ajuste</span>
+                        <div class="check-example" style="border-color:#dd6b20;">En lugar de esperar solicitudes de adaptaci&oacute;n, incluya opciones de formato y apoyo desde el inicio para todos los estudiantes.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Key message -->
+        <div class="section">
+            <div class="key-msg">
+                <p style="font-size:1.1em; margin-bottom:8px;"><strong>Principio fundamental</strong></p>
+                <p>Si la barrera es el instrumento, el problema es el dise&ntilde;o, no el estudiante.<br>
+                <strong>Dise&ntilde;ar para los m&aacute;rgenes beneficia a todos.</strong></p>
+                <p style="font-size:0.82em; color:#718096; margin-top:10px;">DUA proactivo &gt; Adaptaciones reactivas</p>
+            </div>
+        </div>
+
+        <div class="footer">
+            M&oacute;dulo 6 &bull; Evaluaci&oacute;n Formativa en Educaci&oacute;n Superior &bull; Unidad 6.2
+        </div>
+    </div>
+
+    <script>
+        var states = ['none', 'checked', 'partial', 'unchecked'];
+        var stateSymbols = { none: '?', checked: '✓', partial: '~', unchecked: '✗' };
+
+        function cycleCheck(btn) {
+            var current = btn.getAttribute('data-state');
+            var idx = states.indexOf(current);
+            var next = states[(idx + 1) % states.length];
+            btn.setAttribute('data-state', next);
+            btn.className = 'check-btn ' + (next === 'none' ? '' : next);
+            btn.textContent = stateSymbols[next];
+            updateProgress();
+        }
+
+        function updateProgress() {
+            var btns = document.querySelectorAll('.check-btn');
+            var total = btns.length;
+            var checked = 0;
+            var partial = 0;
+            for (var i = 0; i < btns.length; i++) {
+                var s = btns[i].getAttribute('data-state');
+                if (s === 'checked') checked++;
+                else if (s === 'partial') partial++;
+            }
+            var score = checked + (partial * 0.5);
+            var pct = Math.round((score / total) * 100);
+            var bar = document.getElementById('progressBar');
+            bar.style.width = Math.max(pct, 5) + '%';
+            bar.textContent = checked + ' cumple, ' + partial + ' parcial de ' + total;
+            var label = document.getElementById('progressLabel');
+            if (pct >= 80) label.textContent = 'Excelente: su sistema es altamente inclusivo.';
+            else if (pct >= 60) label.textContent = 'Buen avance. Revise los items pendientes para fortalecer la inclusividad.';
+            else if (pct >= 30) label.textContent = 'Hay oportunidades importantes de mejora en inclusividad.';
+            else label.textContent = 'Haga clic en los circulos para marcar el estado de cada item.';
+        }
+
+        function togglePrinciple(header) {
+            var body = header.nextElementSibling;
+            var toggle = header.querySelector('.toggle');
+            body.classList.toggle('open');
+            toggle.classList.toggle('open');
+        }
+
+        function toggleExample(link) {
+            var example = link.nextElementSibling;
+            example.classList.toggle('visible');
+            link.textContent = example.classList.contains('visible') ? 'Ocultar ejemplo' : 'Ver ejemplo de ajuste';
+        }
+    </script>
+</body>
+</html>

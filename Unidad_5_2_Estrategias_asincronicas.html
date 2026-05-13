@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estrategias Asincr&oacute;nicas de Evaluaci&oacute;n Formativa - M&oacute;dulo 5, Unidad 5.2</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f4f8; color: #2d3748; line-height: 1.6; }
+        .container { max-width: 940px; margin: 0 auto; padding: 20px; }
+        .header { background: linear-gradient(135deg, #276749, #38a169); color: white; padding: 36px; border-radius: 16px; text-align: center; margin-bottom: 30px; }
+        .header h1 { font-size: 1.6em; margin-bottom: 8px; }
+        .header p { font-size: 0.92em; opacity: 0.92; }
+
+        .cycle-section { background: white; border-radius: 14px; padding: 28px; margin-bottom: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); }
+        .cycle-section h2 { font-size: 1.2em; color: #276749; margin-bottom: 20px; text-align: center; }
+
+        .cycle-flow { display: flex; align-items: stretch; justify-content: center; gap: 0; flex-wrap: wrap; margin-bottom: 20px; }
+        .cycle-step { flex: 1; min-width: 180px; max-width: 220px; text-align: center; position: relative; }
+        .cycle-icon { width: 70px; height: 70px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 12px; font-size: 1.8em; color: white; font-weight: 700; }
+        .cycle-step:nth-child(1) .cycle-icon { background: linear-gradient(135deg, #2b6cb0, #3182ce); }
+        .cycle-step:nth-child(2) .cycle-icon { background: linear-gradient(135deg, #805ad5, #9f7aea); }
+        .cycle-step:nth-child(3) .cycle-icon { background: linear-gradient(135deg, #dd6b20, #ed8936); }
+        .cycle-step:nth-child(4) .cycle-icon { background: linear-gradient(135deg, #38a169, #48bb78); }
+        .cycle-label { font-weight: 700; font-size: 0.95em; margin-bottom: 4px; }
+        .cycle-desc { font-size: 0.78em; color: #718096; padding: 0 8px; }
+        .cycle-arrow { display: flex; align-items: center; justify-content: center; font-size: 1.5em; color: #a0aec0; min-width: 30px; padding-top: 10px; }
+
+        .strategies-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px; }
+        .strategy-card { background: white; border-radius: 14px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.07); }
+        .strategy-header { padding: 16px 20px; color: white; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+        .strategy-header h3 { font-size: 0.95em; }
+        .strategy-header .phase-tag { font-size: 0.72em; background: rgba(255,255,255,0.25); padding: 3px 10px; border-radius: 12px; }
+        .s1 .strategy-header { background: linear-gradient(135deg, #2b6cb0, #3182ce); }
+        .s2 .strategy-header { background: linear-gradient(135deg, #805ad5, #9f7aea); }
+        .s3 .strategy-header { background: linear-gradient(135deg, #dd6b20, #ed8936); }
+        .s4 .strategy-header { background: linear-gradient(135deg, #38a169, #48bb78); }
+        .s5 .strategy-header { background: linear-gradient(135deg, #553c9a, #805ad5); }
+        .strategy-body { padding: 0 20px; max-height: 0; overflow: hidden; transition: max-height 0.4s ease, padding 0.3s ease; }
+        .strategy-body.open { max-height: 600px; padding: 16px 20px; }
+        .strategy-body ul { list-style: none; padding: 0; }
+        .strategy-body li { padding: 6px 0; font-size: 0.85em; border-bottom: 1px solid #f7fafc; display: flex; align-items: flex-start; gap: 8px; }
+        .strategy-body li:last-child { border-bottom: none; }
+        .strategy-body li::before { content: "\2713"; color: #38a169; font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+        .tool-tag { display: inline-block; background: #ebf8ff; color: #2b6cb0; padding: 2px 8px; border-radius: 8px; font-size: 0.75em; font-weight: 600; margin: 2px; }
+        .strategy-tools { margin-top: 10px; padding-top: 10px; border-top: 1px solid #e2e8f0; }
+        .strategy-tools span.label { font-size: 0.78em; color: #718096; font-weight: 600; display: block; margin-bottom: 4px; }
+
+        .full-width { grid-column: 1 / -1; }
+
+        .dua-section { background: white; border-radius: 14px; padding: 28px; margin-bottom: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); }
+        .dua-section h2 { font-size: 1.2em; color: #553c9a; margin-bottom: 20px; text-align: center; }
+        .dua-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+        .dua-card { border-radius: 12px; padding: 20px; text-align: center; }
+        .dua-card h3 { font-size: 0.92em; margin-bottom: 10px; }
+        .dua-card ul { list-style: none; text-align: left; padding: 0; }
+        .dua-card li { font-size: 0.8em; padding: 4px 0; }
+        .dua-1 { background: #ebf8ff; border: 2px solid #3182ce; }
+        .dua-1 h3 { color: #2b6cb0; }
+        .dua-2 { background: #f0fff4; border: 2px solid #38a169; }
+        .dua-2 h3 { color: #276749; }
+        .dua-3 { background: #faf5ff; border: 2px solid #805ad5; }
+        .dua-3 h3 { color: #553c9a; }
+
+        .checklist-section { background: white; border-radius: 14px; padding: 28px; margin-bottom: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); border-left: 5px solid #dd6b20; }
+        .checklist-section h2 { font-size: 1.1em; color: #c05621; margin-bottom: 16px; }
+        .checklist { list-style: none; padding: 0; }
+        .checklist li { padding: 8px 0; font-size: 0.85em; border-bottom: 1px solid #f7fafc; display: flex; align-items: flex-start; gap: 10px; }
+        .check-num { width: 26px; height: 26px; border-radius: 50%; background: #fffaf0; border: 2px solid #dd6b20; color: #c05621; display: flex; align-items: center; justify-content: center; font-size: 0.75em; font-weight: 700; flex-shrink: 0; }
+
+        .footer { text-align: center; padding: 20px; color: #a0aec0; font-size: 0.78em; }
+
+        .arrow-toggle { transition: transform 0.3s; display: inline-block; }
+        .arrow-toggle.open { transform: rotate(180deg); }
+
+        @media (max-width: 768px) {
+            .container { padding: 12px; }
+            .header { padding: 24px 16px; }
+            .header h1 { font-size: 1.3em; }
+            .strategies-grid { grid-template-columns: 1fr; }
+            .dua-grid { grid-template-columns: 1fr; }
+            .cycle-flow { flex-direction: column; align-items: center; }
+            .cycle-arrow { transform: rotate(90deg); min-width: auto; padding: 4px 0; }
+            .cycle-step { max-width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Ciclo de Evaluaci&oacute;n Formativa Asincr&oacute;nica</h1>
+            <p>M&oacute;dulo 5 &bull; Unidad 5.2 &bull; Estrategias para contextos virtuales y asincr&oacute;nicos</p>
+        </div>
+
+        <!-- Cycle Diagram -->
+        <div class="cycle-section">
+            <h2>El ciclo formativo en entornos asincr&oacute;nicos</h2>
+            <div class="cycle-flow">
+                <div class="cycle-step">
+                    <div class="cycle-icon">D</div>
+                    <div class="cycle-label">Diagnosticar</div>
+                    <div class="cycle-desc">Identificar conocimientos previos y necesidades de aprendizaje</div>
+                </div>
+                <div class="cycle-arrow">&rarr;</div>
+                <div class="cycle-step">
+                    <div class="cycle-icon">M</div>
+                    <div class="cycle-label">Monitorear</div>
+                    <div class="cycle-desc">Seguir el progreso y detectar dificultades en tiempo diferido</div>
+                </div>
+                <div class="cycle-arrow">&rarr;</div>
+                <div class="cycle-step">
+                    <div class="cycle-icon">R</div>
+                    <div class="cycle-label">Retroalimentar</div>
+                    <div class="cycle-desc">Ofrecer feedback oportuno, espec&iacute;fico y orientado a la mejora</div>
+                </div>
+                <div class="cycle-arrow">&rarr;</div>
+                <div class="cycle-step">
+                    <div class="cycle-icon">A</div>
+                    <div class="cycle-label">Ajustar</div>
+                    <div class="cycle-desc">Modificar la ense&ntilde;anza y el dise&ntilde;o seg&uacute;n la evidencia recogida</div>
+                </div>
+            </div>
+            <p style="text-align:center; font-size:0.82em; color:#718096; margin-top:8px;">El ciclo es continuo: los ajustes generan nuevos datos para diagnosticar y el proceso se repite.</p>
+        </div>
+
+        <!-- Strategy Cards -->
+        <div class="strategies-grid">
+            <div class="strategy-card s1">
+                <div class="strategy-header" onclick="toggleStrategy(this)">
+                    <h3>1. Foros reflexivos estructurados</h3>
+                    <span class="phase-tag">Diagnosticar + Monitorear</span>
+                    <span class="arrow-toggle">&#9660;</span>
+                </div>
+                <div class="strategy-body">
+                    <ul>
+                        <li>Formular preguntas de orden superior (analizar, evaluar, crear)</li>
+                        <li>Establecer protocolo de respuesta: extensi&oacute;n, fuentes, comentario a pares</li>
+                        <li>Programar intervenciones docentes estrat&eacute;gicas (no comentar todo)</li>
+                        <li>S&iacute;ntesis semanal del docente destacando tendencias</li>
+                        <li>T&eacute;cnica del &laquo;s&aacute;ndwich&raquo;: valor + pregunta/contra + sugerencia</li>
+                    </ul>
+                    <div class="strategy-tools">
+                        <span class="label">Herramientas sugeridas:</span>
+                        <span class="tool-tag">Foros Moodle/Canvas</span>
+                        <span class="tool-tag">Padlet</span>
+                        <span class="tool-tag">Flip</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="strategy-card s2">
+                <div class="strategy-header" onclick="toggleStrategy(this)">
+                    <h3>2. Cuestionarios con auto-feedback</h3>
+                    <span class="phase-tag">Monitorear</span>
+                    <span class="arrow-toggle">&#9660;</span>
+                </div>
+                <div class="strategy-body">
+                    <ul>
+                        <li>Retroalimentaci&oacute;n espec&iacute;fica por cada opci&oacute;n (no solo correcto/incorrecto)</li>
+                        <li>Permitir 2-3 intentos con preguntas reordenadas</li>
+                        <li>Diagnosticar errores conceptuales espec&iacute;ficos</li>
+                        <li>Mostrar respuestas correctas con explicaciones tras &uacute;ltimo intento</li>
+                        <li>Usar anal&iacute;ticas de preguntas para reforzar temas</li>
+                    </ul>
+                    <div class="strategy-tools">
+                        <span class="label">Herramientas sugeridas:</span>
+                        <span class="tool-tag">Cuestionarios Moodle</span>
+                        <span class="tool-tag">Quizizz</span>
+                        <span class="tool-tag">Edpuzzle</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="strategy-card s3">
+                <div class="strategy-header" onclick="toggleStrategy(this)">
+                    <h3>3. Portafolios con checkpoints</h3>
+                    <span class="phase-tag">Monitorear + Retroalimentar</span>
+                    <span class="arrow-toggle">&#9660;</span>
+                </div>
+                <div class="strategy-body">
+                    <ul>
+                        <li>Checkpoint 1 (sem. 2): Planificaci&oacute;n y selecci&oacute;n de evidencias</li>
+                        <li>Checkpoint 2 (sem. 4): Primer borrador con reflexi&oacute;n</li>
+                        <li>Checkpoint 3 (sem. 6): Versi&oacute;n revisada con retroalimentaci&oacute;n entre pares</li>
+                        <li>Entrega final (sem. 8): Portafolio completo con metarreflexion</li>
+                        <li>Cada checkpoint con r&uacute;brica simplificada y feed forward</li>
+                    </ul>
+                    <div class="strategy-tools">
+                        <span class="label">Herramientas sugeridas:</span>
+                        <span class="tool-tag">Google Sites</span>
+                        <span class="tool-tag">Mahara</span>
+                        <span class="tool-tag">Seesaw</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="strategy-card s4">
+                <div class="strategy-header" onclick="toggleStrategy(this)">
+                    <h3>4. Retroalimentaci&oacute;n audio/video</h3>
+                    <span class="phase-tag">Retroalimentar</span>
+                    <span class="arrow-toggle">&#9660;</span>
+                </div>
+                <div class="strategy-body">
+                    <ul>
+                        <li>Grabaciones de 2-3 min por estudiante o grupo</li>
+                        <li>M&aacute;s eficiente que escribir comentarios extensos</li>
+                        <li>Combinar se&ntilde;alizaci&oacute;n visual + explicaci&oacute;n verbal</li>
+                        <li>Percibida como m&aacute;s personal y detallada</li>
+                        <li>Construye presencia docente en entornos virtuales</li>
+                    </ul>
+                    <div class="strategy-tools">
+                        <span class="label">Herramientas sugeridas:</span>
+                        <span class="tool-tag">Loom</span>
+                        <span class="tool-tag">Moodle (audio)</span>
+                        <span class="tool-tag">Google Docs (voz)</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="strategy-card s5 full-width">
+                <div class="strategy-header" onclick="toggleStrategy(this)">
+                    <h3>5. Anal&iacute;ticas del LMS como retroalimentaci&oacute;n indirecta</h3>
+                    <span class="phase-tag">Diagnosticar + Ajustar</span>
+                    <span class="arrow-toggle">&#9660;</span>
+                </div>
+                <div class="strategy-body">
+                    <ul>
+                        <li>Tiempo de conexi&oacute;n: detectar estudiantes ausentes (alerta temprana)</li>
+                        <li>Progreso en actividades: verificar si siguen la secuencia dise&ntilde;ada</li>
+                        <li>Patrones de entrega: identificar dificultades de gesti&oacute;n del tiempo</li>
+                        <li>Resultados de cuestionarios: detectar errores conceptuales extendidos</li>
+                        <li>Acceso a recursos: saber qu&eacute; materiales se usan y cu&aacute;les se ignoran</li>
+                    </ul>
+                    <div class="strategy-tools">
+                        <span class="label">Herramientas sugeridas:</span>
+                        <span class="tool-tag">Moodle Analytics</span>
+                        <span class="tool-tag">Canvas New Analytics</span>
+                        <span class="tool-tag">Blackboard Retention Center</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- DUA Section -->
+        <div class="dua-section">
+            <h2>DUA en Contextos Digitales: Tres Principios</h2>
+            <div class="dua-grid">
+                <div class="dua-card dua-1">
+                    <h3>Representaci&oacute;n</h3>
+                    <p style="font-size:0.78em; color:#2b6cb0; margin-bottom:8px; font-style:italic;">&iquest;C&oacute;mo se presenta la informaci&oacute;n?</p>
+                    <ul>
+                        <li>&#128214; Contenido en texto + video + audio</li>
+                        <li>&#128196; Subt&iacute;tulos en todos los videos</li>
+                        <li>&#128247; Texto alternativo en im&aacute;genes</li>
+                        <li>&#128218; T&eacute;rminos definidos claramente</li>
+                        <li>&#128202; Organizadores gr&aacute;ficos de s&iacute;ntesis</li>
+                    </ul>
+                </div>
+                <div class="dua-card dua-2">
+                    <h3>Acci&oacute;n y Expresi&oacute;n</h3>
+                    <p style="font-size:0.78em; color:#276749; margin-bottom:8px; font-style:italic;">&iquest;C&oacute;mo demuestran aprendizaje?</p>
+                    <ul>
+                        <li>&#9999;&#65039; Opciones de formato: texto, video, infograf&iacute;a</li>
+                        <li>&#128221; Plantillas y modelos proporcionados</li>
+                        <li>&#128197; Tareas divididas en checkpoints</li>
+                        <li>&#128736;&#65039; Libertad de herramientas</li>
+                        <li>&#9200; Flexibilidad de plazos</li>
+                    </ul>
+                </div>
+                <div class="dua-card dua-3">
+                    <h3>Compromiso</h3>
+                    <p style="font-size:0.78em; color:#553c9a; margin-bottom:8px; font-style:italic;">&iquest;C&oacute;mo se motivan?</p>
+                    <ul>
+                        <li>&#127919; Conexi&oacute;n con problemas reales</li>
+                        <li>&#127793; Autonom&iacute;a y elecci&oacute;n</li>
+                        <li>&#128172; Colaboraci&oacute;n y comunidad</li>
+                        <li>&#128140; Retroalimentaci&oacute;n frecuente y oportuna</li>
+                        <li>&#127942; Reconocimiento del progreso</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Checklist -->
+        <div class="checklist-section">
+            <h2>Lista de verificaci&oacute;n r&aacute;pida antes de publicar</h2>
+            <ul class="checklist">
+                <li><span class="check-num">1</span><span>&iquest;Los estudiantes saben POR QU&Eacute; hacen esta actividad y qu&eacute; aprender&aacute;n?</span></li>
+                <li><span class="check-num">2</span><span>&iquest;Las instrucciones son completas, sin ambig&uuml;edades, en un solo lugar?</span></li>
+                <li><span class="check-num">3</span><span>&iquest;Tienen la r&uacute;brica o criterios ANTES de empezar?</span></li>
+                <li><span class="check-num">4</span><span>&iquest;Est&aacute; definido cu&aacute;ndo y c&oacute;mo recibir&aacute;n retroalimentaci&oacute;n?</span></li>
+                <li><span class="check-num">5</span><span>&iquest;Hay al menos dos formas de acceder al contenido y dos de demostrar aprendizaje?</span></li>
+                <li><span class="check-num">6</span><span>&iquest;El tiempo asignado es realista para estudiantes con otras responsabilidades?</span></li>
+                <li><span class="check-num">7</span><span>&iquest;La actividad funciona en celular y sin software especial?</span></li>
+            </ul>
+        </div>
+
+        <div class="footer">
+            Evaluaci&oacute;n Formativa en Educaci&oacute;n Superior &bull; M&oacute;dulo 5, Unidad 5.2 &bull; Estrategias Asincr&oacute;nicas
+        </div>
+    </div>
+
+    <script>
+        function toggleStrategy(el) {
+            var body = el.parentElement.querySelector('.strategy-body');
+            var arrow = el.querySelector('.arrow-toggle');
+            body.classList.toggle('open');
+            arrow.classList.toggle('open');
+        }
+        // Open all cards by default
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.strategy-body').forEach(function(b) { b.classList.add('open'); });
+            document.querySelectorAll('.arrow-toggle').forEach(function(a) { a.classList.add('open'); });
+        });
+    </script>
+</body>
+</html>

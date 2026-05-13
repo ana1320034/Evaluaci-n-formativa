@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Evaluaci&oacute;n Formativa en Educaci&oacute;n Superior — Recursos Interactivos</title>
+<style>
+:root{--bg:#f0f4f8;--text:#1e293b;--muted:#64748b;--card:#fff;--border:#e2e8f0;--radius:12px}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+.container{max-width:1000px;margin:0 auto;padding:20px}
+.hero{background:linear-gradient(135deg,#1B6B93,#2E9BC1,#4EABD1);color:#fff;padding:48px 32px;border-radius:var(--radius);text-align:center;margin-bottom:32px;box-shadow:0 4px 24px rgba(27,107,147,0.3)}
+.hero h1{font-size:1.8em;margin-bottom:8px}
+.hero p{opacity:0.9;font-size:1.05em;max-width:700px;margin:0 auto}
+.hero .badge{display:inline-block;background:rgba(255,255,255,0.2);padding:4px 16px;border-radius:20px;font-size:13px;margin-bottom:12px;letter-spacing:1px}
+.module{margin-bottom:28px}
+.module-header{display:flex;align-items:center;gap:12px;padding:16px 20px;border-radius:var(--radius) var(--radius) 0 0;color:#fff;cursor:pointer;user-select:none}
+.module-header h2{font-size:1.15em;flex:1}
+.module-header .toggle{font-size:1.3em;transition:transform 0.3s}
+.module-header .toggle.open{transform:rotate(90deg)}
+.module-body{background:var(--card);border:1px solid var(--border);border-top:none;border-radius:0 0 var(--radius) var(--radius);overflow:hidden}
+.module-body.collapsed{display:none}
+.unit{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+.unit:last-child{border-bottom:none}
+.unit-title{flex:1;min-width:200px;font-weight:600;font-size:0.95em}
+.unit-links{display:flex;flex-wrap:wrap;gap:8px}
+.btn{display:inline-flex;align-items:center;gap:5px;padding:7px 14px;border-radius:6px;font-size:0.82em;font-weight:600;text-decoration:none;transition:all 0.2s;border:2px solid transparent}
+.btn-activity{background:#1B6B93;color:#fff}.btn-activity:hover{background:#14506E}
+.btn-info{background:#F0A500;color:#fff}.btn-info:hover{background:#d49200}
+.btn-map{background:#6366f1;color:#fff}.btn-map:hover{background:#4f46e5}
+.footer{text-align:center;padding:24px 16px;color:var(--muted);font-size:0.85em;border-top:1px solid var(--border);margin-top:32px}
+.legend{display:flex;justify-content:center;gap:20px;flex-wrap:wrap;margin-bottom:24px;font-size:0.88em}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.dot{width:12px;height:12px;border-radius:3px;display:inline-block}
+@media(max-width:600px){.hero{padding:28px 16px}.hero h1{font-size:1.4em}.unit{flex-direction:column;align-items:flex-start}.btn{width:100%;justify-content:center}}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="hero">
+    <div class="badge">CURSO VIRTUAL</div>
+    <h1>Evaluaci&oacute;n Formativa en Educaci&oacute;n Superior</h1>
+    <p>Recursos interactivos: actividades con retroalimentaci&oacute;n IA, infograf&iacute;as y mapas conceptuales</p>
+  </div>
+  <div class="legend">
+    <span><span class="dot" style="background:#1B6B93"></span> Actividad con IA</span>
+    <span><span class="dot" style="background:#F0A500"></span> Infograf&iacute;a interactiva</span>
+    <span><span class="dot" style="background:#6366f1"></span> Mapa conceptual</span>
+  </div>
+
+  <!-- MÓDULO 1 -->
+  <div class="module">
+    <div class="module-header" style="background:linear-gradient(135deg,#1B6B93,#2E9BC1)" onclick="toggleModule(this)">
+      <h2>M&oacute;dulo 1 — Fundamentos de la Evaluaci&oacute;n Formativa</h2>
+      <span class="toggle open">&#9654;</span>
+    </div>
+    <div class="module-body">
+      <div class="unit">
+        <div class="unit-title">1.1 &iquest;Qu&eacute; es la Evaluaci&oacute;n Formativa?</div>
+        <div class="unit-links">
+          <a class="btn btn-activity" href="actividades/M1_U1_Actividad.html" target="_blank">&#129302; Actividad IA</a>
+          <a class="btn btn-info" href="infografias/Unidad_1_1_Conceptos_clave.html" target="_blank">&#128202; Infograf&iacute;a</a>
+        </div>
+      </div>
+      <div class="unit">
+        <div class="unit-title">1.2 Aportes Te&oacute;ricos Fundamentales</div>
+        <div class="unit-links">
+          <a class="btn btn-activity" href="actividades/M1_U2_Actividad.html" target="_blank">&#129302; Actividad IA</a>
+          <a class="btn btn-info" href="infografias/Unidad_1_2_Tres_marcos_teoricos.html" target="_blank">&#128202; Infograf&iacute;a</a>
+        </div>
+      </div>
+      <div class="unit">
+        <div class="unit-title">1.3 Formativa vs. Sumativa</div>
+        <div class="unit-links">
+          <a class="btn btn-activity" href="actividades/M1_U3_Actividad.html" target="_blank">&#129302; Actividad IA</a>
+          <a class="btn btn-info" href="infografias/Unidad_1_3_Formativa_vs_Sumativa.html" target="_blank">&#128202; Infograf&iacute;a</a>
+        </div>
+      </div>
+      <div class="unit">
+        <div class="unit-title">1.4 Impacto en el Aprendizaje</div>
+        <div class="unit-links">
+          <a class="btn btn-activity" href="actividades/M1_U4_Actividad.html" target="_blank">&#129302; Actividad IA</a>
+          <a class="btn btn-info" href="infografias/Unidad_1_4_Datos_de_impacto.html" target="_blank">&#128202; Infograf&iacute;a</a>
+        </div>
+      </div>
+      <div class="unit">
+        <div class="unit-title" style="color:#6366f1">&#128506; Mapa Conceptual del M&oacute;dulo 1</div>
+        <div class="unit-links">
+          <a class="btn btn-map" href="mapas/Mapa_conceptual_Modulo1.html" target="_blank">&#128506; Ver mapa</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MÓDULO 2 -->
+  <div class="module">
+    <div class="module-header" style="background:linear-gradient(135deg,#E67E22,#F39C12)" onclick="toggleModule(this)">
+      <h2>M&oacute;dulo 2 — Estrategias y T&eacute;cnicas de Evaluaci&oacute;n Formativa</h2>
+      <span class="toggle">&#9654;</span>
+    </div>
+    <div class="module-body collapsed">
+      <div class="unit">
+        <div class="unit-title">2.1 T&eacute;cnicas de Aula (CATs) — Parte 1</div>
+        <div class="unit-links">
+          <a class="btn btn-activity" href="actividades/M2_U1_Actividad.html" target="_blank">&#129302; Actividad IA</a>
+          <a class="btn btn-info" href="infografias/Unidad_2_1_CATs_referencia_rapida.html" target="_blank">&#128202; Infograf&iacute;a</a>
+        </div>
+      </div>
+      <div class="unit">
+        <div class="unit-title">2.2 T&eacute;cnicas de Aula (CATs) — Parte 2</div>
+        <div class="unit-links">
+          <a class="btn btn-activity" href="actividades/M2_U2_Actividad.html" target="_blank">&#129302; Actividad IA</a>
+          <a class="btn btn-info" href="infografias/Unidad_2_2_CATs_flujograma_decision.html" target="_blank">&#128202; Infograf&iacute;a</a>
+        </div>
+      </div>
+      <div class="unit">
+        <div class="unit-title">2.3 Autoevaluaci&oacute;n</div>
+        <div class="unit-links">
+          <a class="btn btn-activity" href="actividades/M2_U3_Actividad.html" target="_blank">&#129302; Actividad IA</a>
+          <a class="btn btn-info" href="infografias/Unidad_2_3_Autoevaluacion_guia.html" target="_blank">&#128202; Infograf&iacute;a</a>
+        </div>
+      </div>
+      <div class="unit">
+        <div class="unit-title">2.4 Coevaluaci&oacute;n</div>
+        <div class="unit-links">
+          <a class="btn btn-activity" href="actividades/M2_U4_Actividad.html" target="_blank">&#129302; Actividad IA</a>
+          <a class="btn btn-info" href="infografias/Unidad_2_4_Coevaluacion_protocolos.html" target="_blank">&#128202; Infograf&iacute;a</a>
+        </div>
+      </div>
+      <div class="unit">
+        <div class="unit-title" style="color:#6366f1">&#128506; Mapa Conceptual del M&oacute;dulo 2</div>
+        <div class="unit-links">
+          <a class="btn btn-map" href="mapas/Mapa_conceptual_Modulo2.html" target="_blank">&#128506; Ver mapa</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MÓDULO 3 -->
+  <div class="module">
+    <div class="module-header" style="background:linear-gradient(135deg,#27AE60,#2ECC71)" onclick="toggleModule(this)">
+      <h2>M&oacute;dulo 3 — Retroalimentaci&oacute;n Efectiva</h2>
+      <span class="toggle">&#9654;</span>
+    </div>
+    <div class="module-body collapsed">
+      <div class="unit">
+        <div class="unit-title">3.1 El Poder de la Retroalimentaci&oacute;n</div>
+        <div class="unit-links">
+          <a class="btn btn-activity" href="actividades/M3_U1_Actividad.html" target="_blank">&#129302; Actividad IA</a>
+          <a class="btn btn-info" href="infografias/Unidad_3_1_Niveles_retroalimentacion.html" target="_blank">&#128202; Infograf&iacute;a</a>
+        </div>
+      </div>
+      <div class="unit">
+        <div class="unit-title">3.2 Modelo Feed Up / Feed Back / Feed Forward</div>
+        <div class="unit-links">
+          <a class="btn btn-activity" href="actividades/M3_U2_Actividad.html" target="_blank">&#129302; Actividad IA</a>
+          <a class="btn btn-info" href="infografias/Unidad_3_2_Modelo_Feed.html" target="_blank">&#128202; Infograf&iacute;a</a>
+        </div>
+      </div>
+      <div class="unit">
+        <div class="unit-title">3.3 Retroalimentaci&oacute;n Eficiente</div>
+        <div class="unit-links">
+          <a class="btn btn-activity" href="actividades/M3_U3_Actividad.html" target="_blank">&#129302; Actividad IA</a>
+          <a class="btn btn-info" href="infografias/Unidad_3_3_Retroalimentacion_eficiente.html" target="_blank">&#128202; Infograf&iacute;a</a>
+        </div>
+      </div>
+      <div class="unit">
+        <div class="unit-title" style="color:#6366f1">&#128506; Mapa Conceptual del M&oacute;dulo 3</div>
+        <div class="unit-links">
+          <a class="btn btn-map" href="mapas/Mapa_conceptual_Modulo3.html" target="_blank">&#128506; Ver mapa</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MÓDULO 4 -->
+  <div class="module">
+    <div class="module-header" style="background:linear-gradient(135deg,#8E44AD,#9B59B6)" onclick="toggleModule(this)">
+      <h2>M&oacute;dulo 4 — Evaluaci&oacute;n Aut&eacute;ntica e Instrumentos</h2>
+      <span class="toggle">&#9654;</span>
+    </div>
+    <div class="module-body collapsed">
+      <div class="unit">
+        <div class="unit-title">4.1 Principios de la Evaluaci&oacute;n Aut&eacute;ntica</div>
+        <div class="unit-links">
+          <a class="btn btn-activity" href="actividades/M4_U1_Actividad.html" target="_blank">&#129302; Actividad IA</a>
+          <a class="btn btn-info" href="infografias/Unidad_4_1_Espectro_autenticidad.html" target="_blank">&#128202; Infograf&iacute;a</a>
+        </div>
+      </div>
+      <div class="unit">
+        <div class="unit-title">4.2 Dise&ntilde;o de R&uacute;bricas Anal&iacute;ticas</div>
+        <div class="unit-links">
+          <a class="btn btn-activity" href="actividades/M4_U2_Actividad.html" target="_blank">&#129302; Actividad IA</a>
+          <a class="btn btn-info" href="infografias/Unidad_4_2_Anatomia_rubrica.html" target="_blank">&#128202; Infograf&iacute;a</a>
+        </div>
+      </div>
+      <div class="unit">
+        <div class="unit-title">4.3 Listas de Cotejo y Escalas</div>
+        <div class="unit-links">
+          <a class="btn btn-activity" href="actividades/M4_U3_Actividad.html" target="_blank">&#129302; Actividad IA</a>
+          <a class="btn btn-info" href="infografias/Unidad_4_3_Arbol_decision_instrumentos.html" target="_blank">&#128202; Infograf&iacute;a</a>
+        </div>
+      </div>
+      <div class="unit">
+        <div class="unit-title">4.4 Alineamiento Constructivo</div>
+        <div class="unit-links">
+          <a class="btn btn-activity" href="actividades/M4_U4_Actividad.html" target="_blank">&#129302; Actividad IA</a>
+          <a class="btn btn-info" href="infografias/Unidad_4_4_Alineamiento_constructivo.html" target="_blank">&#128202; Infograf&iacute;a</a>
+        </div>
+      </div>
+      <div class="unit">
+        <div class="unit-title" style="color:#6366f1">&#128506; Mapa Conceptual del M&oacute;dulo 4</div>
+        <div class="unit-links">
+          <a class="btn btn-map" href="mapas/Mapa_conceptual_Modulo4.html" target="_blank">&#128506; Ver mapa</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MÓDULO 5 -->
+  <div class="module">
+    <div class="module-header" style="background:linear-gradient(135deg,#2980B9,#3498DB)" onclick="toggleModule(this)">
+      <h2>M&oacute;dulo 5 — Herramientas Digitales y Contextos Virtuales</h2>
+      <span class="toggle">&#9654;</span>
+    </div>
+    <div class="module-body collapsed">
+      <div class="unit">
+        <div class="unit-title">5.1 Panorama de Herramientas Digitales</div>
+        <div class="unit-links">
+          <a class="btn btn-activity" href="actividades/M5_U1_Actividad.html" target="_blank">&#129302; Actividad IA</a>
+          <a class="btn btn-info" href="infografias/Unidad_5_1_Matriz_herramientas_digitales.html" target="_blank">&#128202; Infograf&iacute;a</a>
+        </div>
+      </div>
+      <div class="unit">
+        <div class="unit-title">5.2 Evaluaci&oacute;n en Contextos Virtuales</div>
+        <div class="unit-links">
+          <a class="btn btn-activity" href="actividades/M5_U2_Actividad.html" target="_blank">&#129302; Actividad IA</a>
+          <a class="btn btn-info" href="infografias/Unidad_5_2_Estrategias_asincronicas.html" target="_blank">&#128202; Infograf&iacute;a</a>
+        </div>
+      </div>
+      <div class="unit">
+        <div class="unit-title">5.3 Anal&iacute;ticas de Aprendizaje</div>
+        <div class="unit-links">
+          <a class="btn btn-activity" href="actividades/M5_U3_Actividad.html" target="_blank">&#129302; Actividad IA</a>
+          <a class="btn btn-info" href="infografias/Unidad_5_3_Analiticas_dashboard.html" target="_blank">&#128202; Infograf&iacute;a</a>
+        </div>
+      </div>
+      <div class="unit">
+        <div class="unit-title" style="color:#6366f1">&#128506; Mapa Conceptual del M&oacute;dulo 5</div>
+        <div class="unit-links">
+          <a class="btn btn-map" href="mapas/Mapa_conceptual_Modulo5.html" target="_blank">&#128506; Ver mapa</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MÓDULO 6 -->
+  <div class="module">
+    <div class="module-header" style="background:linear-gradient(135deg,#C0392B,#E74C3C)" onclick="toggleModule(this)">
+      <h2>M&oacute;dulo 6 — Integraci&oacute;n y Plan de Implementaci&oacute;n</h2>
+      <span class="toggle">&#9654;</span>
+    </div>
+    <div class="module-body collapsed">
+      <div class="unit">
+        <div class="unit-title">6.1 De Estrategias al Sistema</div>
+        <div class="unit-links">
+          <a class="btn btn-activity" href="actividades/M6_U1_Actividad.html" target="_blank">&#129302; Actividad IA</a>
+          <a class="btn btn-info" href="infografias/Unidad_6_1_Sistema_evaluacion_formativa.html" target="_blank">&#128202; Infograf&iacute;a</a>
+        </div>
+      </div>
+      <div class="unit">
+        <div class="unit-title">6.2 DUA y Sistema de Evaluaci&oacute;n</div>
+        <div class="unit-links">
+          <a class="btn btn-activity" href="actividades/M6_U2_Actividad.html" target="_blank">&#129302; Actividad IA</a>
+          <a class="btn btn-info" href="infografias/Unidad_6_2_Checklist_DUA_evaluacion.html" target="_blank">&#128202; Infograf&iacute;a</a>
+        </div>
+      </div>
+      <div class="unit">
+        <div class="unit-title">6.3 Implementaci&oacute;n y Mejora Continua</div>
+        <div class="unit-links">
+          <a class="btn btn-activity" href="actividades/M6_U3_Actividad.html" target="_blank">&#129302; Actividad IA</a>
+          <a class="btn btn-info" href="infografias/Unidad_6_3_Ciclo_mejora_continua.html" target="_blank">&#128202; Infograf&iacute;a</a>
+        </div>
+      </div>
+      <div class="unit">
+        <div class="unit-title" style="color:#6366f1">&#128506; Mapa Conceptual del M&oacute;dulo 6</div>
+        <div class="unit-links">
+          <a class="btn btn-map" href="mapas/Mapa_conceptual_Modulo6.html" target="_blank">&#128506; Ver mapa</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    Evaluaci&oacute;n Formativa en Educaci&oacute;n Superior &middot; Todos los derechos reservados
+  </div>
+</div>
+<script>
+function toggleModule(header){
+  const body=header.nextElementSibling;
+  const toggle=header.querySelector('.toggle');
+  body.classList.toggle('collapsed');
+  toggle.classList.toggle('open');
+}
+</script>
+</body>
+</html>

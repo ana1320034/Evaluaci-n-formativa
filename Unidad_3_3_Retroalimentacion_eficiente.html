@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retroalimentacion Eficiente - Unidad 3.3</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f4f8; color: #2d3748; line-height: 1.6; }
+        .container { max-width: 940px; margin: 0 auto; padding: 20px; }
+
+        .header {
+            background: linear-gradient(135deg, #276749, #38a169);
+            color: white; padding: 36px; border-radius: 16px;
+            text-align: center; margin-bottom: 30px;
+        }
+        .header h1 { font-size: 1.7em; margin-bottom: 8px; }
+        .header p { font-size: 0.92em; opacity: 0.9; }
+
+        .section { background: white; border-radius: 14px; padding: 28px; margin-bottom: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); }
+        .section h2 { font-size: 1.3em; margin-bottom: 16px; color: #276749; }
+
+        /* Strategy cards */
+        .strategies-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        .strategy-card {
+            border-radius: 12px; padding: 22px; position: relative;
+            border: 1px solid #e2e8f0;
+            background: white;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+        }
+        .strategy-card .strategy-number {
+            position: absolute; top: -12px; left: 18px;
+            background: #38a169; color: white;
+            width: 28px; height: 28px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700; font-size: 0.85em;
+        }
+        .strategy-card h3 { font-size: 0.95em; color: #276749; margin-bottom: 8px; margin-top: 6px; }
+        .strategy-card p { font-size: 0.82em; color: #4a5568; }
+        .strategy-card .time-badge {
+            display: inline-block; margin-top: 10px;
+            background: #f0fff4; color: #276749; border: 1px solid #c6f6d5;
+            padding: 4px 12px; border-radius: 20px; font-size: 0.75em; font-weight: 600;
+        }
+        .strategy-full { grid-column: 1 / -1; }
+
+        /* Comparison table */
+        .comp-table { width: 100%; border-collapse: separate; border-spacing: 0; border-radius: 10px; overflow: hidden; margin-top: 12px; }
+        .comp-table th {
+            padding: 12px 14px; text-align: left; font-size: 0.82em;
+            background: #276749; color: white;
+        }
+        .comp-table td {
+            padding: 10px 14px; font-size: 0.82em;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .comp-table tr:nth-child(even) { background: #f7fafc; }
+        .comp-table tr:last-child td { border-bottom: none; }
+
+        .quality-high { color: #276749; font-weight: 600; }
+        .quality-med { color: #c05621; font-weight: 600; }
+        .quality-var { color: #4a5568; font-weight: 600; }
+
+        /* Decision diagram */
+        .decision-container {
+            display: flex; flex-direction: column; align-items: center; gap: 12px;
+            margin: 20px 0;
+        }
+        .decision-node {
+            padding: 16px 28px; border-radius: 12px;
+            text-align: center; font-size: 0.88em; font-weight: 600;
+            max-width: 420px; width: 100%;
+        }
+        .decision-question {
+            background: #fffaf0; border: 2px solid #dd6b20; color: #c05621;
+        }
+        .decision-arrows {
+            display: flex; justify-content: center; gap: 40px;
+            width: 100%; max-width: 500px;
+        }
+        .decision-branch {
+            display: flex; flex-direction: column; align-items: center; gap: 8px;
+            width: 45%;
+        }
+        .decision-arrow-label {
+            font-size: 0.78em; font-weight: 600; color: #718096;
+            background: #f7fafc; padding: 3px 10px; border-radius: 10px;
+        }
+        .decision-result {
+            padding: 14px 20px; border-radius: 10px;
+            text-align: center; font-size: 0.82em;
+            width: 100%;
+        }
+        .result-grupal { background: #f0fff4; border: 2px solid #38a169; color: #276749; }
+        .result-individual { background: #ebf8ff; border: 2px solid #3182ce; color: #2b6cb0; }
+
+        /* Formula box */
+        .formula-box {
+            background: linear-gradient(135deg, #f0fff4, #fffaf0);
+            border: 2px solid #38a169; border-radius: 14px;
+            padding: 24px; text-align: center; margin-top: 12px;
+        }
+        .formula-box .formula {
+            font-size: 1em; font-weight: 700; color: #276749;
+            margin-bottom: 8px;
+        }
+        .formula-box .formula-desc { font-size: 0.82em; color: #4a5568; }
+
+        .footer {
+            text-align: center; padding: 20px; font-size: 0.78em; color: #718096;
+        }
+
+        @media (max-width: 768px) {
+            .strategies-grid { grid-template-columns: 1fr; }
+            .strategy-full { grid-column: 1; }
+            .decision-arrows { flex-direction: column; gap: 12px; align-items: center; }
+            .decision-branch { width: 80%; }
+            .container { padding: 12px; }
+            .header { padding: 24px 16px; }
+            .header h1 { font-size: 1.3em; }
+            .section { padding: 20px 16px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <!-- Header -->
+        <div class="header">
+            <h1>Retroalimentacion Eficiente</h1>
+            <p>5 estrategias para retroalimentar con calidad sin agotarse — Unidad 3.3 | Modulo 3</p>
+        </div>
+
+        <!-- Strategy cards -->
+        <div class="section">
+            <h2>5 estrategias de eficiencia</h2>
+            <div class="strategies-grid">
+                <div class="strategy-card">
+                    <div class="strategy-number">1</div>
+                    <h3>Retroalimentacion grupal sobre patrones</h3>
+                    <p>Identifique los 3-4 errores mas frecuentes y abordelos en un video o documento compartido. Reserve los comentarios individuales para lo unico de cada trabajo.</p>
+                    <span class="time-badge">30-45 min para toda la clase</span>
+                </div>
+                <div class="strategy-card">
+                    <div class="strategy-number">2</div>
+                    <h3>Rubricas con comentarios modulares</h3>
+                    <p>Cree un banco de comentarios frecuentes por criterio y nivel. Seleccione el comentario base y personalice con 1-2 oraciones especificas.</p>
+                    <span class="time-badge">5-8 min por estudiante</span>
+                </div>
+                <div class="strategy-card">
+                    <div class="strategy-number">3</div>
+                    <h3>Retroalimentacion en audio o video</h3>
+                    <p>Hablar es mas rapido que escribir. Un audio de 3 minutos transmite mas informacion que un parrafo escrito y se percibe como mas personal.</p>
+                    <span class="time-badge">3-4 min por estudiante</span>
+                </div>
+                <div class="strategy-card">
+                    <div class="strategy-number">4</div>
+                    <h3>Retroalimentacion selectiva y focalizada</h3>
+                    <p>Retroalimente solo 1-2 criterios por entrega. Rote el foco: entrega 1 = argumentacion, entrega 2 = evidencia, entrega 3 = estructura.</p>
+                    <span class="time-badge">3-5 min por estudiante</span>
+                </div>
+                <div class="strategy-card strategy-full">
+                    <div class="strategy-number">5</div>
+                    <h3>Retroalimentacion entre pares estructurada</h3>
+                    <p>Los companeros revisan con rubrica compartida y protocolo claro. Beneficio doble: quien da retroalimentacion desarrolla pensamiento critico; quien recibe obtiene perspectivas adicionales. El docente supervisa y complementa.</p>
+                    <span class="time-badge">2-3 min docente por estudiante</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Comparison table -->
+        <div class="section">
+            <h2>Comparativa de estrategias</h2>
+            <table class="comp-table">
+                <thead>
+                    <tr>
+                        <th>Estrategia</th>
+                        <th>Tiempo / estudiante</th>
+                        <th>Calidad</th>
+                        <th>Mejor para grupos de...</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Grupal sobre patrones</td>
+                        <td>1-2 min (amortizado)</td>
+                        <td><span class="quality-med">Media-Alta</span></td>
+                        <td>30+ estudiantes con errores recurrentes</td>
+                    </tr>
+                    <tr>
+                        <td>Rubrica + comentarios modulares</td>
+                        <td>5-8 min</td>
+                        <td><span class="quality-high">Alta</span></td>
+                        <td>Cualquier tamano, evaluaciones con criterios claros</td>
+                    </tr>
+                    <tr>
+                        <td>Audio / Video</td>
+                        <td>3-4 min</td>
+                        <td><span class="quality-high">Muy alta</span></td>
+                        <td>15-40 estudiantes, trabajos complejos</td>
+                    </tr>
+                    <tr>
+                        <td>Selectiva / Focalizada</td>
+                        <td>3-5 min</td>
+                        <td><span class="quality-high">Alta (en el foco)</span></td>
+                        <td>Cualquier tamano, entregas multiples</td>
+                    </tr>
+                    <tr>
+                        <td>Entre pares estructurada</td>
+                        <td>2-3 min docente</td>
+                        <td><span class="quality-var">Variable*</span></td>
+                        <td>20-60 estudiantes, desarrollo de pensamiento critico</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p style="font-size:0.75em; color:#718096; margin-top:8px;">*La calidad depende del entrenamiento previo y la estructura del protocolo proporcionado.</p>
+        </div>
+
+        <!-- Decision diagram -->
+        <div class="section">
+            <h2>Diagrama de decision: ¿individual o grupal?</h2>
+
+            <div class="decision-container">
+                <div class="decision-node decision-question">
+                    ¿El error aparece en mas del 30% de los trabajos?
+                </div>
+
+                <div class="decision-arrows">
+                    <div class="decision-branch">
+                        <div class="decision-arrow-label">SI</div>
+                        <div class="decision-result result-grupal">
+                            <strong>Retroalimentacion GRUPAL</strong><br>
+                            Video, documento compartido o sesion sincrona sobre el patron comun. Luego solo comentarios individuales sobre lo unico.
+                        </div>
+                    </div>
+                    <div class="decision-branch">
+                        <div class="decision-arrow-label">NO</div>
+                        <div class="decision-result result-individual">
+                            <strong>Retroalimentacion INDIVIDUAL</strong><br>
+                            Use rubrica + comentarios modulares, audio, o focalizada. Priorice donde el estudiante puede actuar.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="decision-node" style="background:#f7fafc; border:2px solid #718096; color:#4a5568; font-size:0.82em; font-weight:400; margin-top:8px;">
+                    <strong>Regla de oro:</strong> Invierta mas tiempo cuando el estudiante tiene mas oportunidad de actuar sobre la retroalimentacion.
+                </div>
+            </div>
+        </div>
+
+        <!-- Formula -->
+        <div class="section">
+            <h2>El ecosistema de retroalimentacion</h2>
+            <p style="font-size:0.88em; color:#4a5568; margin-bottom:16px;">Un protocolo integrado combina tres capas que se complementan:</p>
+
+            <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px; margin-bottom:20px;">
+                <div style="background:#ebf8ff; border-radius:10px; padding:18px; text-align:center;">
+                    <div style="font-size:1.5em; margin-bottom:4px;">1</div>
+                    <div style="font-weight:700; color:#2b6cb0; font-size:0.88em;">Autoevaluacion</div>
+                    <div style="font-size:0.78em; color:#4a5568; margin-top:4px;">El estudiante evalua su trabajo con la rubrica antes de entregar</div>
+                </div>
+                <div style="background:#f0fff4; border-radius:10px; padding:18px; text-align:center;">
+                    <div style="font-size:1.5em; margin-bottom:4px;">2</div>
+                    <div style="font-weight:700; color:#276749; font-size:0.88em;">Coevaluacion</div>
+                    <div style="font-size:0.78em; color:#4a5568; margin-top:4px;">Un par revisa con protocolo estructurado y ofrece Feed back + Feed forward</div>
+                </div>
+                <div style="background:#fffaf0; border-radius:10px; padding:18px; text-align:center;">
+                    <div style="font-size:1.5em; margin-bottom:4px;">3</div>
+                    <div style="font-weight:700; color:#c05621; font-size:0.88em;">Docente focalizado</div>
+                    <div style="font-size:0.78em; color:#4a5568; margin-top:4px;">El docente se enfoca en profundidad disciplinar y orientacion metacognitiva</div>
+                </div>
+            </div>
+
+            <div class="formula-box">
+                <div class="formula">Retroalimentacion eficiente = Calidad del mensaje x Frecuencia viable x Combinacion de fuentes</div>
+                <div class="formula-desc">No se trata de trabajar mas, sino de disenar sistemas mas inteligentes donde multiples actores contribuyen al aprendizaje.</div>
+            </div>
+        </div>
+
+        <div class="footer">
+            Curso: Evaluacion Formativa en Educacion Superior | Modulo 3, Unidad 3.3<br>
+            Basado en: Boud & Molloy (2013); Shute (2008); Topping (2009).
+        </div>
+
+    </div>
+</body>
+</html>

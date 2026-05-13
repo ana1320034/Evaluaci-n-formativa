@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa Conceptual - M&oacute;dulo 5: Herramientas Digitales para la Evaluaci&oacute;n Formativa</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f4f8; color: #2d3748; line-height: 1.5; }
+        .container { max-width: 940px; margin: 0 auto; padding: 20px; }
+        .header { background: linear-gradient(135deg, #553c9a, #805ad5); color: white; padding: 32px; border-radius: 16px; text-align: center; margin-bottom: 24px; }
+        .header h1 { font-size: 1.5em; margin-bottom: 6px; }
+        .header p { font-size: 0.88em; opacity: 0.92; }
+        .instructions { background: white; border-radius: 12px; padding: 16px 20px; margin-bottom: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); font-size: 0.85em; color: #718096; border-left: 4px solid #805ad5; }
+
+        /* Central Node */
+        .central { background: linear-gradient(135deg, #553c9a, #805ad5); color: white; padding: 24px; border-radius: 16px; text-align: center; margin-bottom: 8px; box-shadow: 0 4px 16px rgba(85,60,154,0.3); }
+        .central h2 { font-size: 1.3em; }
+        .central p { font-size: 0.85em; opacity: 0.9; margin-top: 4px; }
+
+        /* Connector line */
+        .connector { text-align: center; padding: 4px 0; }
+        .connector .line { display: inline-block; width: 3px; height: 20px; background: #805ad5; border-radius: 2px; }
+
+        /* Branches */
+        .branch { margin-bottom: 16px; }
+        .branch-header { padding: 16px 22px; border-radius: 14px; cursor: pointer; display: flex; align-items: center; justify-content: space-between; transition: transform 0.2s; color: white; }
+        .branch-header:hover { transform: translateX(4px); }
+        .branch-header h3 { font-size: 1em; display: flex; align-items: center; gap: 10px; }
+        .branch-num { width: 30px; height: 30px; border-radius: 50%; background: rgba(255,255,255,0.25); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.9em; flex-shrink: 0; }
+        .branch-arrow { transition: transform 0.3s; font-size: 0.85em; }
+        .branch-arrow.open { transform: rotate(180deg); }
+
+        .b1 .branch-header { background: linear-gradient(135deg, #2b6cb0, #3182ce); }
+        .b2 .branch-header { background: linear-gradient(135deg, #276749, #38a169); }
+        .b3 .branch-header { background: linear-gradient(135deg, #c05621, #dd6b20); }
+        .b4 .branch-header { background: linear-gradient(135deg, #805ad5, #9f7aea); }
+        .b5 .branch-header { background: linear-gradient(135deg, #2b6cb0, #553c9a); }
+
+        .branch-content { max-height: 0; overflow: hidden; transition: max-height 0.5s ease; }
+        .branch-content.open { max-height: 1200px; }
+        .branch-body { padding: 16px 22px; background: white; border-radius: 0 0 14px 14px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); margin-top: -4px; }
+
+        .sub-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+        .sub-card { border-radius: 10px; padding: 14px; font-size: 0.83em; }
+        .sub-card h4 { font-size: 0.88em; margin-bottom: 4px; }
+        .sub-card p { font-size: 0.78em; color: #4a5568; }
+        .sub-card .tooltip-text { display: none; font-size: 0.75em; color: #718096; margin-top: 6px; padding-top: 6px; border-top: 1px solid rgba(0,0,0,0.08); }
+        .sub-card:hover .tooltip-text { display: block; }
+
+        .b1 .sub-card { background: #ebf8ff; border: 1px solid #bee3f8; }
+        .b1 .sub-card h4 { color: #2b6cb0; }
+        .b2 .sub-card { background: #f0fff4; border: 1px solid #c6f6d5; }
+        .b2 .sub-card h4 { color: #276749; }
+        .b3 .sub-card { background: #fffaf0; border: 1px solid #feebc8; }
+        .b3 .sub-card h4 { color: #c05621; }
+        .b4 .sub-card { background: #faf5ff; border: 1px solid #e9d8fd; }
+        .b4 .sub-card h4 { color: #553c9a; }
+        .b5 .sub-card { background: #ebf8ff; border: 1px solid #c3dafe; }
+        .b5 .sub-card h4 { color: #2b6cb0; }
+
+        /* Relationships */
+        .relations { background: white; border-radius: 14px; padding: 22px; margin-top: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); }
+        .relations h2 { font-size: 1.05em; color: #553c9a; margin-bottom: 14px; text-align: center; }
+        .rel-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 10px; }
+        .rel-item { display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: 8px; background: #f7fafc; font-size: 0.8em; }
+        .rel-from { font-weight: 700; color: #2b6cb0; white-space: nowrap; }
+        .rel-arrow { color: #805ad5; font-weight: 700; flex-shrink: 0; }
+        .rel-to { font-weight: 700; color: #38a169; white-space: nowrap; }
+        .rel-label { color: #718096; font-size: 0.9em; }
+
+        .footer { text-align: center; padding: 20px; color: #a0aec0; font-size: 0.78em; }
+
+        @media (max-width: 768px) {
+            .container { padding: 12px; }
+            .header { padding: 24px 16px; }
+            .header h1 { font-size: 1.2em; }
+            .sub-grid { grid-template-columns: 1fr; }
+            .rel-grid { grid-template-columns: 1fr; }
+            .rel-item { flex-wrap: wrap; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Mapa Conceptual &mdash; M&oacute;dulo 5</h1>
+            <p>Herramientas Digitales para la Evaluaci&oacute;n Formativa</p>
+        </div>
+
+        <div class="instructions">
+            <strong>Instrucciones:</strong> Haga clic en cada rama para expandir los subconceptos. Pase el cursor sobre las tarjetas para ver informaci&oacute;n adicional. Las relaciones entre conceptos se muestran al final del mapa.
+        </div>
+
+        <!-- Central Node -->
+        <div class="central">
+            <h2>Evaluaci&oacute;n Formativa Digital</h2>
+            <p>Uso intencional de herramientas tecnol&oacute;gicas para recoger evidencia de aprendizaje, retroalimentar y ajustar la ense&ntilde;anza</p>
+        </div>
+
+        <div class="connector"><span class="line"></span></div>
+
+        <!-- Branch 1: Tool Categories -->
+        <div class="branch b1">
+            <div class="branch-header" onclick="toggleBranch(this)">
+                <h3><span class="branch-num">1</span> Categor&iacute;as de Herramientas Digitales</h3>
+                <span class="branch-arrow">&#9660;</span>
+            </div>
+            <div class="branch-content">
+                <div class="branch-body">
+                    <div class="sub-grid">
+                        <div class="sub-card">
+                            <h4>Encuestas r&aacute;pidas</h4>
+                            <p>Kahoot, Socrative, Quizizz, Poll Everywhere</p>
+                            <div class="tooltip-text">Recogen respuestas en tiempo real. Ideales para verificar comprensi&oacute;n r&aacute;pida en momentos sincr&oacute;nicos.</div>
+                        </div>
+                        <div class="sub-card">
+                            <h4>Presentaciones interactivas</h4>
+                            <p>Nearpod, Mentimeter, Pear Deck</p>
+                            <div class="tooltip-text">Transforman diapositivas pasivas en experiencias participativas con preguntas y actividades integradas.</div>
+                        </div>
+                        <div class="sub-card">
+                            <h4>Video interactivo</h4>
+                            <p>Edpuzzle, PlayPosit</p>
+                            <div class="tooltip-text">Insertan preguntas en videos para convertirlos en experiencias de aprendizaje activo con anal&iacute;ticas de visualizaci&oacute;n.</div>
+                        </div>
+                        <div class="sub-card">
+                            <h4>Discusi&oacute;n y colaboraci&oacute;n</h4>
+                            <p>Padlet, Flip, FigJam/Miro</p>
+                            <div class="tooltip-text">Espacios para construir conocimiento colectivo. Valiosas para evaluaci&oacute;n formativa cualitativa y desarrollo de pensamiento cr&iacute;tico.</div>
+                        </div>
+                        <div class="sub-card">
+                            <h4>Portafolios digitales</h4>
+                            <p>Google Sites, Seesaw, Mahara</p>
+                            <div class="tooltip-text">Documentan el proceso de aprendizaje longitudinalmente. Facilitan la reflexi&oacute;n metacognitiva y la evaluaci&oacute;n de proceso.</div>
+                        </div>
+                        <div class="sub-card">
+                            <h4>Evaluaci&oacute;n con IA</h4>
+                            <p>Gradescope, Cadmus</p>
+                            <div class="tooltip-text">Automatizan retroalimentaci&oacute;n y calificaci&oacute;n. Liberan tiempo docente para intervenciones pedag&oacute;gicas significativas.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Branch 2: Pedagogical Purposes -->
+        <div class="branch b2">
+            <div class="branch-header" onclick="toggleBranch(this)">
+                <h3><span class="branch-num">2</span> Prop&oacute;sitos Pedag&oacute;gicos</h3>
+                <span class="branch-arrow">&#9660;</span>
+            </div>
+            <div class="branch-content">
+                <div class="branch-body">
+                    <div class="sub-grid">
+                        <div class="sub-card">
+                            <h4>Diagn&oacute;stico</h4>
+                            <p>Conocimientos previos, concepciones err&oacute;neas</p>
+                            <div class="tooltip-text">Se realiza antes de iniciar un tema. Herramientas ideales: Mentimeter (nubes de palabras), Socrative (preguntas previas), Kahoot (sondeo inicial).</div>
+                        </div>
+                        <div class="sub-card">
+                            <h4>Monitoreo</h4>
+                            <p>Comprensi&oacute;n en proceso, progreso continuo</p>
+                            <div class="tooltip-text">Se realiza durante el desarrollo. Herramientas ideales: Nearpod (check-in), Edpuzzle (compresi&oacute;n de video), cuestionarios LMS.</div>
+                        </div>
+                        <div class="sub-card">
+                            <h4>Retroalimentaci&oacute;n</h4>
+                            <p>Feedback espec&iacute;fico, oportuno, orientado a mejora</p>
+                            <div class="tooltip-text">Herramientas: Loom (video-feedback), Gradescope (r&uacute;bricas), Google Docs (comentarios), Flip (respuesta en video).</div>
+                        </div>
+                        <div class="sub-card">
+                            <h4>Reflexi&oacute;n metacognitiva</h4>
+                            <p>Autoconciencia del propio aprendizaje</p>
+                            <div class="tooltip-text">Herramientas: Portafolios digitales, diarios de aprendizaje, Padlet (muros reflexivos), foros estructurados.</div>
+                        </div>
+                        <div class="sub-card">
+                            <h4>Toma de decisiones</h4>
+                            <p>Ajuste del ritmo, contenido y estrategias</p>
+                            <div class="tooltip-text">Herramientas: Anal&iacute;ticas LMS, informes de cuestionarios, datos de participaci&oacute;n. El docente interpreta y act&uacute;a.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Branch 3: Virtual/Async Strategies -->
+        <div class="branch b3">
+            <div class="branch-header" onclick="toggleBranch(this)">
+                <h3><span class="branch-num">3</span> Estrategias Virtuales y Asincr&oacute;nicas</h3>
+                <span class="branch-arrow">&#9660;</span>
+            </div>
+            <div class="branch-content">
+                <div class="branch-body">
+                    <div class="sub-grid">
+                        <div class="sub-card">
+                            <h4>Foros reflexivos</h4>
+                            <p>Discusi&oacute;n estructurada con protocolos</p>
+                            <div class="tooltip-text">Preguntas de orden superior, protocolo de respuesta, intervenci&oacute;n estrat&eacute;gica del docente, s&iacute;ntesis semanal.</div>
+                        </div>
+                        <div class="sub-card">
+                            <h4>Cuestionarios auto-feedback</h4>
+                            <p>M&uacute;ltiples intentos con retroalimentaci&oacute;n espec&iacute;fica</p>
+                            <div class="tooltip-text">Retroalimentaci&oacute;n por opci&oacute;n, 2-3 intentos, diagn&oacute;stico de errores conceptuales, explicaciones post-intento.</div>
+                        </div>
+                        <div class="sub-card">
+                            <h4>Portafolios + checkpoints</h4>
+                            <p>Documentaci&oacute;n progresiva con revisiones intermedias</p>
+                            <div class="tooltip-text">4 checkpoints a lo largo del periodo: planificaci&oacute;n, borrador, revisi&oacute;n entre pares, entrega final con metarreflexion.</div>
+                        </div>
+                        <div class="sub-card">
+                            <h4>Feedback audio/video</h4>
+                            <p>Retroalimentaci&oacute;n personalizada grabada</p>
+                            <div class="tooltip-text">2-3 minutos por estudiante. M&aacute;s eficiente que escribir. Percibida como m&aacute;s personal y detallada.</div>
+                        </div>
+                        <div class="sub-card">
+                            <h4>Anal&iacute;ticas como feedback</h4>
+                            <p>Datos del LMS para decisiones formativas</p>
+                            <div class="tooltip-text">Conexi&oacute;n, progreso, evaluaciones, foros, recursos. Se interpretan para identificar riesgo, ajustar ritmo, reforzar.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Branch 4: Learning Analytics -->
+        <div class="branch b4">
+            <div class="branch-header" onclick="toggleBranch(this)">
+                <h3><span class="branch-num">4</span> Anal&iacute;ticas de Aprendizaje</h3>
+                <span class="branch-arrow">&#9660;</span>
+            </div>
+            <div class="branch-content">
+                <div class="branch-body">
+                    <div class="sub-grid">
+                        <div class="sub-card">
+                            <h4>Tipos de datos</h4>
+                            <p>Conexi&oacute;n, progreso, evaluaciones, foros, recursos</p>
+                            <div class="tooltip-text">Cada tipo de dato tiene un significado pedag&oacute;gico diferente y requiere acciones formativas espec&iacute;ficas.</div>
+                        </div>
+                        <div class="sub-card">
+                            <h4>Interpretaci&oacute;n</h4>
+                            <p>De datos a decisiones pedag&oacute;gicas</p>
+                            <div class="tooltip-text">Tres escenarios: identificar estudiantes en riesgo, ajustar el ritmo del curso, reforzar contenidos espec&iacute;ficos.</div>
+                        </div>
+                        <div class="sub-card">
+                            <h4>Herramientas LMS</h4>
+                            <p>Moodle, Canvas, Blackboard</p>
+                            <div class="tooltip-text">Cada LMS ofrece funcionalidades nativas y plugins para anal&iacute;ticas: informes, predicci&oacute;n, dashboards, alertas.</div>
+                        </div>
+                        <div class="sub-card">
+                            <h4>&Eacute;tica de datos</h4>
+                            <p>Transparencia, proporcionalidad, no estigmatizaci&oacute;n</p>
+                            <div class="tooltip-text">Informar a estudiantes, recopilar solo lo necesario, evitar etiquetas, considerar sesgos, clarificar propiedad de datos.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Branch 5: DUA Integration -->
+        <div class="branch b5">
+            <div class="branch-header" onclick="toggleBranch(this)">
+                <h3><span class="branch-num">5</span> Integraci&oacute;n del DUA</h3>
+                <span class="branch-arrow">&#9660;</span>
+            </div>
+            <div class="branch-content">
+                <div class="branch-body">
+                    <div class="sub-grid">
+                        <div class="sub-card">
+                            <h4>Representaci&oacute;n</h4>
+                            <p>M&uacute;ltiples formatos para el contenido</p>
+                            <div class="tooltip-text">Texto + video + audio + infograf&iacute;a. Subt&iacute;tulos, texto alternativo, t&eacute;rminos definidos, organizadores gr&aacute;ficos.</div>
+                        </div>
+                        <div class="sub-card">
+                            <h4>Acci&oacute;n y expresi&oacute;n</h4>
+                            <p>Opciones para demostrar aprendizaje</p>
+                            <div class="tooltip-text">Elegir formato (escrito, video, audio, visual). Plantillas, checkpoints, accesibilidad m&oacute;vil, flexibilidad de plazos.</div>
+                        </div>
+                        <div class="sub-card">
+                            <h4>Compromiso</h4>
+                            <p>Estrategias de motivaci&oacute;n y relevancia</p>
+                            <div class="tooltip-text">Problemas reales, autonom&iacute;a, colaboraci&oacute;n, retroalimentaci&oacute;n frecuente, reconocimiento del progreso.</div>
+                        </div>
+                        <div class="sub-card">
+                            <h4>Selecci&oacute;n de herramientas</h4>
+                            <p>6 criterios: prop&oacute;sito, curva, accesibilidad, costo, LMS, datos</p>
+                            <div class="tooltip-text">El marco de selecci&oacute;n integra accesibilidad como criterio fundamental. La herramienta debe cumplir DUA desde el dise&ntilde;o.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Relationships -->
+        <div class="relations">
+            <h2>Relaciones entre Conceptos</h2>
+            <div class="rel-grid">
+                <div class="rel-item">
+                    <span class="rel-from">Herramientas</span>
+                    <span class="rel-arrow">&rarr;</span>
+                    <span class="rel-label">habilitan</span>
+                    <span class="rel-arrow">&rarr;</span>
+                    <span class="rel-to">Prop&oacute;sitos pedag&oacute;gicos</span>
+                </div>
+                <div class="rel-item">
+                    <span class="rel-from">Prop&oacute;sitos</span>
+                    <span class="rel-arrow">&rarr;</span>
+                    <span class="rel-label">gu&iacute;an la selecci&oacute;n de</span>
+                    <span class="rel-arrow">&rarr;</span>
+                    <span class="rel-to">Herramientas</span>
+                </div>
+                <div class="rel-item">
+                    <span class="rel-from">Estrategias async</span>
+                    <span class="rel-arrow">&rarr;</span>
+                    <span class="rel-label">se implementan con</span>
+                    <span class="rel-arrow">&rarr;</span>
+                    <span class="rel-to">Herramientas</span>
+                </div>
+                <div class="rel-item">
+                    <span class="rel-from">Anal&iacute;ticas</span>
+                    <span class="rel-arrow">&rarr;</span>
+                    <span class="rel-label">informan ajustes en</span>
+                    <span class="rel-arrow">&rarr;</span>
+                    <span class="rel-to">Estrategias</span>
+                </div>
+                <div class="rel-item">
+                    <span class="rel-from">DUA</span>
+                    <span class="rel-arrow">&rarr;</span>
+                    <span class="rel-label">permea el dise&ntilde;o de</span>
+                    <span class="rel-arrow">&rarr;</span>
+                    <span class="rel-to">Todo el ciclo</span>
+                </div>
+                <div class="rel-item">
+                    <span class="rel-from">Herramientas IA</span>
+                    <span class="rel-arrow">&rarr;</span>
+                    <span class="rel-label">generan datos para</span>
+                    <span class="rel-arrow">&rarr;</span>
+                    <span class="rel-to">Anal&iacute;ticas</span>
+                </div>
+                <div class="rel-item">
+                    <span class="rel-from">Anal&iacute;ticas</span>
+                    <span class="rel-arrow">&rarr;</span>
+                    <span class="rel-label">requieren</span>
+                    <span class="rel-arrow">&rarr;</span>
+                    <span class="rel-to">Consideraciones &eacute;ticas</span>
+                </div>
+                <div class="rel-item">
+                    <span class="rel-from">Portafolios</span>
+                    <span class="rel-arrow">&rarr;</span>
+                    <span class="rel-label">facilitan</span>
+                    <span class="rel-arrow">&rarr;</span>
+                    <span class="rel-to">Reflexi&oacute;n metacognitiva</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            Evaluaci&oacute;n Formativa en Educaci&oacute;n Superior &bull; M&oacute;dulo 5 &bull; Mapa Conceptual Integrador
+        </div>
+    </div>
+
+    <script>
+        function toggleBranch(el) {
+            var content = el.nextElementSibling;
+            var arrow = el.querySelector('.branch-arrow');
+            content.classList.toggle('open');
+            arrow.classList.toggle('open');
+        }
+        // Open all branches by default
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.branch-content').forEach(function(c) { c.classList.add('open'); });
+            document.querySelectorAll('.branch-arrow').forEach(function(a) { a.classList.add('open'); });
+        });
+    </script>
+</body>
+</html>
